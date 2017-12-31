@@ -70,33 +70,15 @@
             </div>
         </div>
     </header>
-	
+
 	<section id="contact">
 	 <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2>#FF</h2>
                     <hr class="star-primary">
-					<p> Here is your tiny URL to SHARE</p>
-					<?php
-					//gets the data from a URL  
-						function get_tiny_url($url)  {  
-						$ch = curl_init();  
-						$timeout = 5;  
-						curl_setopt($ch,CURLOPT_URL,'http://tinyurl.com/api-create.php?url='.$url);  
-						curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);  
-						curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,$timeout);  
-						$data = curl_exec($ch);  
-						curl_close($ch);  
-						return $data;  
-					}
-
-					//test it out!
-					$new_url = get_tiny_url('http://carelesslabs.co.uk/ff/ff.php?users='.$_GET["users"]);
-
-					//returns http://tinyurl.com/65gqpp
-					echo "<a href=$new_url>$new_url</a>"
-					?>
+										<p> Here is your tiny URL to SHARE</p>
+										<a id="link" href="#"></a>
                 </div>
             </div>
         </div>
@@ -154,5 +136,19 @@
     <script src="js/jqBootstrapValidation.js"></script>
     <!-- Custom Theme JavaScript -->
     <script src="js/freelancer.js"></script>
+		<script>
+			function getUrlVar(key){
+				var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search);
+				return result && unescape(result[1]) || "";
+			}
+
+			var longURL = "http://carelesslabs.co.uk/ff/ff.html?users=" + getUrlVar("users");
+			var API = 'http://tinyurl.com/api-create.php?url=' + longURL;
+
+			$.get(API, function(shorturl){
+				$("#link").attr("href", shorturl);
+				$('#link').text(shorturl);
+			});
+		</script>
 </body>
 </html>

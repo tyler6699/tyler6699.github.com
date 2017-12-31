@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Careless labs #FF Generator</title>
+    <title>Careless labs FF Generator</title>
 	<!-- PROCESSING JS -->
 	<script src="processing.js"></script>
     <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
@@ -64,29 +64,43 @@
                     <div class="intro-text">
                         <span class="name">Careless Labs FF Fun</span>
                         <hr class="star-light">
-                        <span class="skills">Generate a fun Follow Friday for Twitter</span>
+                        <span class="skills">Generate a fun Follow Friday game for Twitter</span>
                     </div>
                 </div>
             </div>
         </div>
     </header>
-	
+
 	<section id="contact">
 	 <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2>#FF</h2>
                     <hr class="star-primary">
+					<p>Enter all the people you would like to #FF comma separated i,e "carelesslabs,notch,themeatly" max of 10</p>
                 </div>
             </div>
-			<div class="row text-center">
-				<p>Click to activate game, hit boxes to reveal Twitter users to follow. A & D or Arrows to move, space to jump.</p>
-				<!-- CARELESS LABS WORK HERE -->
-				<canvas data-processing-sources="careless_ff.pde"></canvas>
-				<h3>Please Follow</h3>
-				<div id="msg"></div>
-				<!-- THAT IS ALL -->
-			</div>
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <form id="ff" action="generate.html" method="get" novalidate>
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 floating-label-form-group controls">
+                                <label>Users</label>
+                                <input type="text" class="form-control" placeholder="Users" name="users" id="users" required data-validation-required-message="Please enter users.">
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <br>
+                        <div id="success"></div>
+                        <div class="row">
+                            <div class="form-group col-xs-12">
+                                <button type="submit" class="btn btn-success btn-lg">Send</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
         </div>
     </section>
 
@@ -142,11 +156,5 @@
     <script src="js/jqBootstrapValidation.js"></script>
     <!-- Custom Theme JavaScript -->
     <script src="js/freelancer.js"></script>
-	<script type="application/javascript">
-		var jsString = "<?php echo $_GET["users"] ?>";
-		var printMessage = function (msg) {
-			document.getElementById('msg').innerHTML = msg;
-		};
-	</script>
 </body>
 </html>
