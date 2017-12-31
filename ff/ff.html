@@ -9,6 +9,7 @@
     <title>Careless labs #FF Generator</title>
 	<!-- PROCESSING JS -->
 	<script src="processing.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
     <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
@@ -148,6 +149,7 @@
 			return result && unescape(result[1]) || "";
 		}
 		var jsString = getUrlVar("users");
+		var users = CryptoJS.AES.decrypt(jsString, "careless");
 		var printMessage = function (msg) {
 			document.getElementById('msg').innerHTML = msg;
 		};
