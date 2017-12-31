@@ -99,7 +99,7 @@ void get_users(){
 	String output = "";
 	for(User u : user_array){
 		if(u.hit){
-			output += "<a class='btn btn-primary' style='padding:5px' href='" +u.url + "'>" + u.name +"</a></br>";
+			output += "<a class='btn btn-primary' style='margin:5px' href='" +u.url + "'>" + u.name +"</a></br>";
 		}
 	}
 	printMessage(output);
