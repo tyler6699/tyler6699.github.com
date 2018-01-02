@@ -28,34 +28,34 @@ function heroObj(width, height, color, x, y, type) {
     }
 
     // logic
-    this.tick = function(){
-      // HERO
-      this.moveAngle = 0;
-      if(this.power > 0){
-          this.power -= 0.4;
-          if (this.power < 0) this.power = 0;
-      } else if(this.power < 0){
-        this.power += 0.4;
-        if (this.power > 0) this.power = 0;
-      }
+    this.tick = function() {
+        // HERO
+        this.moveAngle = 0;
+        if (this.power > 0) {
+            this.power -= 0.4;
+            if (this.power < 0) this.power = 0;
+        } else if (this.power < 0) {
+            this.power += 0.4;
+            if (this.power > 0) this.power = 0;
+        }
 
-      this.rotateSpeed = this.maxRotate;
+        this.rotateSpeed = this.maxRotate;
 
-      if (mainGame.keys && (mainGame.keys[UP] || mainGame.keys[W])){
-        this.power = this.maxSpeed;
-      }
+        if (mainGame.keys && (mainGame.keys[UP] || mainGame.keys[W])) {
+            this.power = this.maxSpeed;
+        }
 
-      if (mainGame.keys && (mainGame.keys[DOWN] || mainGame.keys[S])) {
-        this.power = -this.reverseSpeed;
-        this.rotateSpeed = this.slowRotate;
-      }
+        if (mainGame.keys && (mainGame.keys[DOWN] || mainGame.keys[S])) {
+            this.power = -this.reverseSpeed;
+            this.rotateSpeed = this.slowRotate;
+        }
 
-      if (mainGame.keys && (mainGame.keys[LEFT] || mainGame.keys[A])){
-        this.moveAngle = -this.rotateSpeed;
-      }
+        if (mainGame.keys && (mainGame.keys[LEFT] || mainGame.keys[A])) {
+            this.moveAngle = -this.rotateSpeed;
+        }
 
-      if (mainGame.keys && (mainGame.keys[RIGHT] || mainGame.keys[D])){
-        this.moveAngle = this.rotateSpeed;
-      }
+        if (mainGame.keys && (mainGame.keys[RIGHT] || mainGame.keys[D])) {
+            this.moveAngle = this.rotateSpeed;
+        }
     }
 }
