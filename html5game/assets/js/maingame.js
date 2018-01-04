@@ -1,21 +1,20 @@
 var mainGame;
 var tiles = [];
 var sqr = 20;
-var tileSize = 16;
+var tileSize = 32;
 var hero;
 
 for (x = 0; x < sqr; x++) {
     for (y = 0; y < sqr; y++) {
         xx = x * tileSize;
         yy = y * tileSize;
-
-        if ((xx < 100 || xx > 500) || (yy < 90 || yy > 500)) {
-            color = "#000080";
+        var tile;
+        if ( xx < 60 || xx > 350 || yy < 40 || yy > 400 ) {
+          tile = new tileObj(tileSize, xx, yy, "tile", true);
         } else {
-            color = "#228B22";
+          tile = new tileObj(tileSize, xx, yy, "tile", false);
         }
 
-        var tile = new tileObj(tileSize, color, xx, yy, "tile");
         tiles.push(tile);
     }
 }
@@ -60,6 +59,6 @@ function updateGameArea() {
     }
 
     hero.tick();
-    hero.newPos();
+    hero.newPos(tiles);
     hero.update();
 }
