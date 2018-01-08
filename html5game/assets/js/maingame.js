@@ -3,6 +3,8 @@ var tiles = [];
 var sqr = 20;
 var tileSize = 32;
 var hero;
+var controllers = [];
+var buttonsPressed = [];
 
 for (x = 0; x < sqr; x++) {
     for (y = 0; y < sqr; y++) {
@@ -41,6 +43,13 @@ var mainGame = {
         window.addEventListener('keyup', function(e) {
             mainGame.keys[e.keyCode] = (e.type == "keydown");
         })
+
+        window.addEventListener("gamepadconnected", function(e) {
+            var gp = navigator.getGamepads()[e.gamepad.index];
+            console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.", gp.index, gp.id,gp.buttons.length, gp.axes.length);
+            controllers[e.gamepad.index] = e.gamepad;
+        });
+
     },
     stop: function() {
         clearInterval(this.interval);
@@ -51,6 +60,8 @@ var mainGame = {
 }
 
 function updateGameArea() {
+    // Update Gamepads
+    navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     mainGame.clear();
 
     for (i = 0; i < tiles.length; i++) {
