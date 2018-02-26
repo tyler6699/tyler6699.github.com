@@ -99,5 +99,27 @@ function heroObj(width, height, color, x, y, type) {
         if (mainGame.keys && (mainGame.keys[RIGHT] || mainGame.keys[D])) {
             this.moveAngle = this.rotateSpeed;
         }
+
+        // CONTROLLERS
+        if(controllers.length > 0){
+            // LEFT
+            if(controllers[0].axes[0] < -.8 || controllers[0].axes[2] < -.8 || controllers[0].buttons[14].pressed){
+                this.moveAngle = -this.rotateSpeed;
+            }
+            // RIGHT
+            if(controllers[0].axes[0] > .8 || controllers[0].axes[2] > .8 || controllers[0].buttons[15].pressed){
+                this.moveAngle = this.rotateSpeed;
+            }
+            // FORWARD
+            if(controllers[0].axes[1] < -.8 || controllers[0].axes[3] < -.8 || controllers[0].buttons[12].pressed){
+                this.power = this.maxSpeed;
+            }
+            // BACK
+            if(controllers[0].axes[1] > .8 || controllers[0].axes[3] > .8 ||controllers[0].buttons[13].pressed){
+                this.power = -this.reverseSpeed;
+                this.rotateSpeed = this.slowRotate;
+            }
+        }
+
     }
 }
