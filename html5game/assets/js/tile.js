@@ -4,11 +4,11 @@ function tileObj(size, x, y, type, solid) {
 
   this.image = new Image();
   if (this.isSolid) {
-    this.image.src = "assets/8x8/water/water_01.png";
+    this.image.src = water;
     this.color = "blue";
   } else {
     this.color = "green";
-    this.image.src = "assets/8x8/grass/grass_04_32.png";
+    this.image.src = grass;
   }
 
   this.update = function() {
@@ -20,14 +20,15 @@ function tileObj(size, x, y, type, solid) {
 
     // If Hero is over tile make it orange
     // TODO Remove this test
-    if (hero.hbX < this.entity.x + this.entity.width &&
-        hero.hbX > this.entity.x &&
-        hero.hbY < this.entity.y + this.entity.height &&
-        hero.hbY > this.entity.y) {
-          ctx.fillStyle = "orange";
-          ctx.fillRect(this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
+    if ( heroColliding(this) ) {
+      ctx.fillStyle = "orange";
+      ctx.fillRect(this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
     }
 
     ctx.restore();
   }
+}
+
+function heroColliding(e){
+  return hero.hbX < e.entity.x + e.entity.width && hero.hbX > e.entity.x && hero.hbY < e.entity.y + e.entity.height && hero.hbY > e.entity.y
 }

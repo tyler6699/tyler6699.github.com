@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta content="IE=edge" http-equiv="X-UA-Compatible">
+	<meta content="width=device-width, initial-scale=1" name="viewport">
+	<meta content="Indie slash hobbyist game developer mostly working with Java LibGDX. Making small games for fun and sharing my gamedev experiences." name="description">
+	<meta content="Careless Labs" name="author">
+	<link href="http://getbootstrap.com/favicon.ico" rel="icon">
+	<title>CARELESS // LABS</title><!-- Bootstrap core CSS -->
+	<link href="../index_files/bootstrap.css" rel="stylesheet"><!-- Custom styles for this template -->
+	<link href="../index_files/sticky-footer-navbar.css" rel="stylesheet">
+	<script src="../index_files/ie-emulation-modes-warning.js">
+	</script><!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+
+	<script src="../index_files/ie10-viewport-bug-workaround.js">
+	</script><!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
+	<link href="../index_files/careless.css" rel="stylesheet">
+  <link href="../index_files/slider.css" rel="stylesheet">
+</head>
+<body>
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-default navbar-fixed-top" id="navbar" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li>
+						<a class="active" href="#home">Home</a>
+					</li>
+					<li>
+						<a href="about.html">About</a>
+					</li>
+					<li>
+						<a href="games.html">Games</a>
+					</li>
+					<li>
+						<a href="http://carelesslabs.wordpress.com/" target="_blank">Blog</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div><!-- END NAV -->
+	<!-- CONTENT -->
+	<div class="container text-center" role="main">
+		<div class="row header">
+			<div class="visible-lg visible-md">
+				<h2>CARELESS LABS <i class="fa fa-flask"></i></h2>
+			</div>
+			<div class="visible-xs visible-sm">
+				<h2>CARELESS</h2>
+				<h2><i class="fa fa-flask"></i></h2>
+				<h2>LABS</h2>
+			</div>
+			<h3>MAKING TEA & DRINKING GAMES</h3>
+		</div>
+    <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#home">Speed</a></li>
+          <li><a data-toggle="tab" href="#menu1">Time</a></li>
+          <li><a data-toggle="tab" href="#menu2">Minute Miles</a></li>
+        </ul>
+        <!-- TABS -->
+        <div class="tab-content">
+          <!-- TAB 01 -->
+          <div id="home" class="tab-pane fade in active">
+            <div class="panel panel-default">
+              <div class="panel-heading">Average Speed</div>
+              <div class="panel-body">
+                <form>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <span class="input-group-addon">Distance</span>
+                      <input type="number" name="distance" id="distance" required="required" class="form-control calc" value="0" min="0">
+                      <span class="input-group-addon">-</span>
+                      <select id="unit" class="form-control calc">
+                          <option value="mile">Miles</option>
+                          <option value="km">KM</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="input-group">
+                      <span class="input-group-addon" id="timelbl">Hour</span>
+                      <input type="number" name="hour" id="hour" required="required" class="form-control calc" value="0" max="59" min="0">
+                      <span class="input-group-addon">Min</span>
+                      <input type="number" name="minute" id="minute" required="required" class="form-control calc" value="0" max="59" min="0">
+                      <span class="input-group-addon">Sec</span>
+                      <input type="number" name="second" id="second" required="required" class="form-control calc" value="0" max="59" min="0">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="input-group">
+                      <ul id="output">
+
+                      </ul>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 02 -->
+          <div id="menu1" class="tab-pane fade">
+          <div class="panel panel-default">
+            <div class="panel-heading">Time</div>
+            <div class="panel-body">
+              <form>
+                <div class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon">Distance</span>
+                    <input type="number" name="distanceSpd" id="distanceSpd" required="required" class="form-control calcSpd" value="0" min="0">
+                    <span class="input-group-addon">-</span>
+                    <select id="dstUnit" class="form-control calcSpd">
+                        <option value="mile">Miles</option>
+                        <option value="km">KM</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon">Speed</span>
+                    <input type="number" name="speed" id="speed" required="required" class="form-control calcSpd" value="0" min="0">
+                    <span class="input-group-addon">-</span>
+                    <select id="unitSpd" class="form-control calcSpd">
+                        <option value="mph">MPH</option>
+                        <option value="kmh">KMH</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="input-group">
+                    <ul id="outputSpd">
+
+                    </ul>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 03 -->
+        <div id="menu2" class="tab-pane fade">
+          <div class="panel panel-default">
+            <div class="panel-heading">Minute Mile Event Calculator</div>
+            <div class="panel-body">
+              <form>
+                <div class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon">Distance</span>
+                    <input type="number" name="distanceEvent" id="distanceEvent" required="required" class="form-control calc" value="0" min="0">
+                    <span class="input-group-addon">-</span>
+                    <select id="unitEvent" class="form-control calc">
+                        <option value="mile">Miles</option>
+                        <option value="km">KM</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="input-group">
+                    Minutes: <input id="minSlider" data-slider-id='minSlider' type="text" data-slider-value="7"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="input-group">
+                    Seconds: <input id="secSlider" data-slider-id='secSlider' type="text" data-slider-value="0"/>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+	<div class="footer">
+		<div class="bot1"></div>
+		<div class="container"></div>
+	</div>
+	<script src="../index_files/jquery.js"></script>
+	<script src="../index_files/bootstrap.js"></script>
+  <script src="../index_files/slider.js"></script>
+  <script>
+    $(document).ready(function() {
+      console.log( "ready!" );
+
+      $('.calc').on('input', function() {
+        // distance
+        var dst = $("#distance").val();
+        var unit = $("#unit").val();
+
+        // Time
+        var hour = $("#hour").val();
+        var minute = $("#minute").val();
+        var second = $("#second").val();
+
+        // Totals
+        var totalSeconds = (+hour) * 60 * 60 + (+minute) * 60 + (+second);
+        var mph = 0;
+        var kmh = 0;
+        var ul = $("#output");
+
+        if(dst != 0 && totalSeconds != 0){
+          if(unit == "mile"){
+            var mph = (dst / totalSeconds) * 3600;
+            var kmh = mph * 1.609344;
+          } else {
+            var kmh = (dst / totalSeconds) * 3600;
+            var mph = kmh * 0.6213711922;
+          }
+
+          ul.empty();
+          createListItem(ul, "KMH: " + kmh.toFixed(2));
+          createListItem(ul, "MPH: " + mph.toFixed(2));
+        } else {
+          ul.empty();
+        }
+
+      });
+
+      $('.calcSpd').on('input', function() {
+        // distance
+        var dst = $("#distanceSpd").val();
+        var dstUnit = $("#dstUnit").val();
+        var unitSpeed = $("#unitSpd").val();
+        var speed = $("#speed").val();
+        var totalTime = 0;
+        var ul = $("#outputSpd");
+
+        if(dst != 0 && speed != 0){
+          if(dstUnit == "mile"){
+            if(unitSpeed == "mph"){
+              totalTime = (dst / speed);
+            } else {
+              totalTime = (dst / (speed * 0.6213711922));
+            }
+          } else {
+            if(unitSpeed == "kmh"){
+              totalTime = (dst / speed);
+            } else {
+              totalTime = (dst / (speed * 1.60934));
+            }
+          }
+
+          var hours = parseInt(totalTime);
+          var rMins = (totalTime - hours) * 60;
+          var minutes = parseInt(rMins);
+          var rSecs = (rMins - minutes) * 60;
+          var split = rSecs.toFixed(2).toString().split(".");
+
+          if (split.length > 1) {
+               split = split[1];
+           } else {
+             split = "00";
+          }
+
+          ul.empty();
+          createListItem(ul, padNum(hours) + ":" + padNum(minutes) + ":" + padNum(parseInt(rSecs)) + "." + split);
+        } else {
+          ul.empty();
+        }
+      });
+
+      function createListItem(list, txt){
+        var x = document.createElement("li");
+        var t = document.createTextNode(txt);
+        x.appendChild(t);
+        list.append(x)
+      }
+
+      function padNum(num){
+        if(num < 10){
+          return "0" + num;
+        } else {
+          return num;
+        }
+      }
+
+      $("#secSlider").slider({
+	       tooltip: 'always',
+         step: 1,
+	       min: 0,
+	       max: 59,
+         formatter: function(value) {
+           if(value < 10){
+             return '0' + value;
+           } else {
+             return value;
+           }
+         }
+       });
+       $("#minSlider").slider({
+          tooltip: 'always',
+          step: 1,
+          min: 3,
+          max: 20
+        });
+      //
+      // Trying to create a slider thats base 60
+      // Possible but messy!
+      //
+      //  $( "#ex8" ).on( "slide", function( event ) {
+      //    var minutes = Math.floor(event.value);
+      //    var seconds = (event.value - (minutes)) * 60;
+      //    var time = minutes + ":" + parseInt(seconds);
+      //    //if(minutes.toString().length == 1) minutes = '0' + minutes;
+      //    if(seconds.toString().length == 1) seconds = '0' + seconds;
+      //    var ttip = $("#ex1Slider.tooltip-inner");
+      //    $('#ex1Slider .tooltip-inner').text(minutes + ":" + parseInt(seconds));
+      //    $("#ex8").val("boop");
+       //
+      //    console.log($("#ex8").val());
+      //  } );
+    });
+  </script>
+  <style>
+    .tab-pane{
+      margin-top: 10px;
+    }
+  </style>
+</body>
+</html>
