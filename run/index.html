@@ -62,7 +62,7 @@
 			<h3>MAKING TEA & DRINKING GAMES</h3>
 		</div>
     <div class="row">
-      <div class="col-sm-6 col-sm-offset-3">
+      <div class="col-sm-8 col-sm-offset-2">
         <ul class="nav nav-tabs">
           <li class="active"><a data-toggle="tab" href="#home">Speed</a></li>
           <li><a data-toggle="tab" href="#menu1">Time</a></li>
@@ -162,9 +162,9 @@
                 <div class="form-group">
                   <div class="input-group">
                     <span class="input-group-addon">Distance</span>
-                    <input type="number" name="distanceEvent" id="distanceEvent" required="required" class="form-control calc" value="0" min="0">
+                    <input type="number" name="distanceEvent" id="distanceEvent" required="required" class="form-control calcPace" value="0" min="0">
                     <span class="input-group-addon">-</span>
-                    <select id="unitEvent" class="form-control calc">
+                    <select id="unitEvent" class="form-control calcPace">
                         <option value="mile">Miles</option>
                         <option value="km">KM</option>
                     </select>
@@ -173,16 +173,34 @@
 
                 <div class="form-group">
                   <div class="input-group">
-                    Minutes: <input id="minSlider" data-slider-id='minSlider' type="text" data-slider-value="7"/>
+                    Minutes: <input id="minSlider" class="calcPace" data-slider-id='minutesSlider' type="text" data-slider-value="7"/>
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="input-group">
-                    Seconds: <input id="secSlider" data-slider-id='secSlider' type="text" data-slider-value="0"/>
+                    Seconds: <input id="secSlider" class="calcPace" data-slider-id='secondsSlider' type="text" data-slider-value="0"/>
                   </div>
                 </div>
               </form>
             </div>
+						<div class="panel panel-default">
+						  <!-- Default panel contents -->
+						  <div class="panel-heading" id="paceTime">Break down</div>
+						  <div class="panel-body">
+								<!-- Table -->
+							 <table class="table">
+								 <thead>
+									 <tr>
+										 <th>#</th>
+										 <th>Time</th>
+									 </tr>
+								 </thead>
+								 <tbody id="breakdownTable">
+								 <!-- rows -->
+								 </tbody>
+							 </table>
+						  </div>
+						</div>
           </div>
         </div>
       </div>
@@ -277,57 +295,110 @@
         }
       });
 
-      function createListItem(list, txt){
-        var x = document.createElement("li");
-        var t = document.createTextNode(txt);
-        x.appendChild(t);
-        list.append(x)
-      }
-
-      function padNum(num){
-        if(num < 10){
-          return "0" + num;
-        } else {
-          return num;
-        }
-      }
-
       $("#secSlider").slider({
-	       tooltip: 'always',
-         step: 1,
-	       min: 0,
-	       max: 59,
-         formatter: function(value) {
-           if(value < 10){
-             return '0' + value;
-           } else {
-             return value;
-           }
-         }
-       });
-       $("#minSlider").slider({
-          tooltip: 'always',
-          step: 1,
-          min: 3,
-          max: 20
-        });
-      //
-      // Trying to create a slider thats base 60
-      // Possible but messy!
-      //
-      //  $( "#ex8" ).on( "slide", function( event ) {
-      //    var minutes = Math.floor(event.value);
-      //    var seconds = (event.value - (minutes)) * 60;
-      //    var time = minutes + ":" + parseInt(seconds);
-      //    //if(minutes.toString().length == 1) minutes = '0' + minutes;
-      //    if(seconds.toString().length == 1) seconds = '0' + seconds;
-      //    var ttip = $("#ex1Slider.tooltip-inner");
-      //    $('#ex1Slider .tooltip-inner').text(minutes + ":" + parseInt(seconds));
-      //    $("#ex8").val("boop");
-       //
-      //    console.log($("#ex8").val());
-      //  } );
+	    	tooltip: 'always',
+        step: 1,
+	      min: 0,
+	      max: 59,
+        formatter: function(value) {
+        	if(value < 10){
+        		return '0' + value;
+          } else {
+          	return value;
+          }
+        }
+      });
+
+			$("#minSlider").slider({
+			  tooltip: 'always',
+			  step: 1,
+			  min: 3,
+			  max: 20
+			});
+
+			$('.calcPace').on('change input', function() {
+				// Calculate minute miling
+				var table = $("#breakdownTable");
+				var distance = $("#distanceEvent").val();
+				var distanceInt = Math.ceil(distance);
+				var mins = $("#minSlider").val();
+				var seconds = $("#secSlider").val();
+				var secsPerUnit = (parseInt(mins) * 60);
+				secsPerUnit = add(secsPerUnit, seconds);
+
+				table.empty();
+
+				if(distance > 0){
+					for(i = 1; i <= distanceInt; i++) {
+						var time = (i * secsPerUnit);
+						var timeStr = getTime(time);
+
+						if(i < distanceInt || distance == distanceInt){
+							console.log("Mile: " + i + " - " + timeStr);
+							createTableRow(table, i, timeStr);
+						} else {
+							var over = subtract(distanceInt,distance,8);
+							console.log("over: " + over);
+							var extra = subtract(1,over,8);
+							time = (i-1) * secsPerUnit;
+							time = time + (extra * secsPerUnit)
+							timeStr = getTime(time);
+
+							createTableRow(table, distance, timeStr);
+						}
+					}
+
+					$("#paceTime").text(timeStr);
+				}
+			});
+
     });
+
+		function getTime(time){
+			var rem = 0;
+			var hours = Math.floor(time / 3600);
+			var hoursSeconds = hours * 3600;
+			rem = subtract(time,hoursSeconds);
+
+			var minutes = Math.floor(rem / 60);
+			var minuteSeconds = minutes * 60;
+
+			rem = subtract(rem,minuteSeconds);
+			var seconds = rem;
+			return padNum(hours) + ":" + padNum(minutes) + ":" + padNum(seconds);
+		}
+
+		function createTableRow(table, unit, time){
+				var row = "<tr><th scope='row'>" + unit + "</th><td>" + time + "</td></tr>";
+				table.append(row);
+		}
+
+		function createListItem(list, txt){
+			var x = document.createElement("li");
+			var t = document.createTextNode(txt);
+			x.appendChild(t);
+			list.append(x)
+		}
+
+		// Work arounds for floating point issues
+		function add(a, b, precision) {
+			var x = Math.pow(10, precision || 2);
+			return (Math.round(a * x) + Math.round(b * x)) / x;
+		}
+
+		function subtract(a, b, precision) {
+			var x = Math.pow(10, precision || 2);
+			return (Math.round(a * x) - Math.round(b * x)) / x;
+		}
+
+		function padNum(num){
+			if(num < 10){
+				return "0" + num;
+			} else {
+				return num;
+			}
+		}
+
   </script>
   <style>
     .tab-pane{
