@@ -56,145 +56,147 @@
     <div class="row">
       <div class="col-sm-8 col-sm-offset-2">
         <ul class="nav nav-tabs">
-          <li class="active"><a data-toggle="tab" href="#home">Speed</a></li>
-          <li><a data-toggle="tab" href="#menu1">Time</a></li>
-          <li><a data-toggle="tab" href="#menu2">Minute Miles</a></li>
+          <li class="active"><a data-toggle="tab" href="#home">Pace</a></li>
+          <li><a data-toggle="tab" href="#menu1">Speed</a></li>
+          <li><a data-toggle="tab" href="#menu2">Time</a></li>
         </ul>
         <!-- TABS -->
         <div class="tab-content">
           <!-- TAB 01 -->
-          <div id="home" class="tab-pane fade in active">
-            <div class="panel panel-default">
-              <div class="panel-heading">Average Speed</div>
-              <div class="panel-body">
-                <form>
-                  <div class="form-group">
-                    <div class="input-group">
-                      <span class="input-group-addon">Distance</span>
-                      <input type="number" name="distance" id="distance" required="required" class="form-control calc" value="0" min="0">
-                      <span class="input-group-addon">-</span>
-                      <select id="unit" class="form-control calc">
-                          <option value="mile">Miles</option>
-                          <option value="km">KM</option>
-                      </select>
-                    </div>
-                  </div>
+					<div id="home" class="tab-pane fade in active">
+						<div class="panel panel-default">
+							<div class="panel-heading">Minute Mile Event Calculator</div>
+							<div class="panel-body">
+								<form>
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">Distance</span>
+											<input type="number" name="distanceEvent" id="distanceEvent" required="required" class="form-control calcPace" value="0" min="0">
+											<span class="input-group-addon">-</span>
+											<select id="unitEvent" class="form-control calcPace">
+													<option value="mile">Miles</option>
+													<option value="km">KM</option>
+											</select>
+										</div>
+									</div>
 
-                  <div class="form-group">
-                    <div class="input-group">
-                      <span class="input-group-addon" id="timelbl">Hour</span>
-                      <input type="number" name="hour" id="hour" required="required" class="form-control calc" value="0" max="59" min="0">
-                      <span class="input-group-addon">Min</span>
-                      <input type="number" name="minute" id="minute" required="required" class="form-control calc" value="0" max="59" min="0">
-                      <span class="input-group-addon">Sec</span>
-                      <input type="number" name="second" id="second" required="required" class="form-control calc" value="0" max="59" min="0">
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <div class="input-group">
-                      <ul id="output">
-
-                      </ul>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
+									<div class="form-group">
+										<div class="input-group">
+											Minutes: <input id="minSlider" class="calcPace" data-slider-id='minutesSlider' type="text" data-slider-value="7"/>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="input-group">
+											Seconds: <input id="secSlider" class="calcPace" data-slider-id='secondsSlider' type="text" data-slider-value="0"/>
+										</div>
+									</div>
+								</form>
+							</div>
+							<div class="panel panel-default">
+								<!-- Default panel contents -->
+								<div class="panel-heading" id="paceTime">Break down</div>
+								<div class="panel-body">
+									<!-- Table -->
+								 <table class="table">
+									 <thead>
+										 <tr>
+											 <th>#</th>
+											 <th>Time</th>
+										 </tr>
+									 </thead>
+									 <tbody id="breakdownTable">
+									 <!-- rows -->
+									 </tbody>
+								 </table>
+								</div>
+							</div>
+						</div>
+					</div>
 
           <!-- TAB 02 -->
-          <div id="menu1" class="tab-pane fade">
-          <div class="panel panel-default">
-            <div class="panel-heading">Time</div>
-            <div class="panel-body">
-              <form>
-                <div class="form-group">
-                  <div class="input-group">
-                    <span class="input-group-addon">Distance</span>
-                    <input type="number" name="distanceSpd" id="distanceSpd" required="required" class="form-control calcSpd" value="0" min="0">
-                    <span class="input-group-addon">-</span>
-                    <select id="dstUnit" class="form-control calcSpd">
-                        <option value="mile">Miles</option>
-                        <option value="km">KM</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="input-group">
-                    <span class="input-group-addon">Speed</span>
-                    <input type="number" name="speed" id="speed" required="required" class="form-control calcSpd" value="0" min="0">
-                    <span class="input-group-addon">-</span>
-                    <select id="unitSpd" class="form-control calcSpd">
-                        <option value="mph">MPH</option>
-                        <option value="kmh">KMH</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="input-group">
-                    <ul id="outputSpd">
-
-                    </ul>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tab 03 -->
-        <div id="menu2" class="tab-pane fade">
-          <div class="panel panel-default">
-            <div class="panel-heading">Minute Mile Event Calculator</div>
-            <div class="panel-body">
-              <form>
-                <div class="form-group">
-                  <div class="input-group">
-                    <span class="input-group-addon">Distance</span>
-                    <input type="number" name="distanceEvent" id="distanceEvent" required="required" class="form-control calcPace" value="0" min="0">
-                    <span class="input-group-addon">-</span>
-                    <select id="unitEvent" class="form-control calcPace">
-                        <option value="mile">Miles</option>
-                        <option value="km">KM</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="input-group">
-                    Minutes: <input id="minSlider" class="calcPace" data-slider-id='minutesSlider' type="text" data-slider-value="7"/>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="input-group">
-                    Seconds: <input id="secSlider" class="calcPace" data-slider-id='secondsSlider' type="text" data-slider-value="0"/>
-                  </div>
-                </div>
-              </form>
-            </div>
+					<div id="menu1" class="tab-pane fade">
 						<div class="panel panel-default">
-						  <!-- Default panel contents -->
-						  <div class="panel-heading" id="paceTime">Break down</div>
-						  <div class="panel-body">
-								<!-- Table -->
-							 <table class="table">
-								 <thead>
-									 <tr>
-										 <th>#</th>
-										 <th>Time</th>
-									 </tr>
-								 </thead>
-								 <tbody id="breakdownTable">
-								 <!-- rows -->
-								 </tbody>
-							 </table>
-						  </div>
+							<div class="panel-heading">Average Speed</div>
+							<div class="panel-body">
+								<form>
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">Distance</span>
+											<input type="number" name="distance" id="distance" required="required" class="form-control calc" value="0" min="0">
+											<span class="input-group-addon">-</span>
+											<select id="unit" class="form-control calc">
+													<option value="mile">Miles</option>
+													<option value="km">KM</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon" id="timelbl">Hour</span>
+											<input type="number" name="hour" id="hour" required="required" class="form-control calc" value="0" max="59" min="0">
+											<span class="input-group-addon">Min</span>
+											<input type="number" name="minute" id="minute" required="required" class="form-control calc" value="0" max="59" min="0">
+											<span class="input-group-addon">Sec</span>
+											<input type="number" name="second" id="second" required="required" class="form-control calc" value="0" max="59" min="0">
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="input-group">
+											<ul id="output">
+
+											</ul>
+										</div>
+									</div>
+								</form>
+							</div>
 						</div>
+					</div>
+
+          <!-- TAB 03 -->
+          <div id="menu2" class="tab-pane fade">
+						<div class="panel panel-default">
+	            <div class="panel-heading">Time</div>
+	            <div class="panel-body">
+	              <form>
+	                <div class="form-group">
+	                  <div class="input-group">
+	                    <span class="input-group-addon">Distance</span>
+	                    <input type="number" name="distanceSpd" id="distanceSpd" required="required" class="form-control calcSpd" value="0" min="0">
+	                    <span class="input-group-addon">-</span>
+	                    <select id="dstUnit" class="form-control calcSpd">
+	                        <option value="mile">Miles</option>
+	                        <option value="km">KM</option>
+	                    </select>
+	                  </div>
+	                </div>
+
+	                <div class="form-group">
+	                  <div class="input-group">
+	                    <span class="input-group-addon">Speed</span>
+	                    <input type="number" name="speed" id="speed" required="required" class="form-control calcSpd" value="0" min="0">
+	                    <span class="input-group-addon">-</span>
+	                    <select id="unitSpd" class="form-control calcSpd">
+	                        <option value="mph">MPH</option>
+	                        <option value="kmh">KMH</option>
+	                    </select>
+	                  </div>
+	                </div>
+
+	                <div class="form-group">
+	                  <div class="input-group">
+	                    <ul id="outputSpd">
+
+	                    </ul>
+	                  </div>
+	                </div>
+	              </form>
+	            </div>
           </div>
         </div>
+
+				<!-- END TABS -->
       </div>
     </div>
   </div>
