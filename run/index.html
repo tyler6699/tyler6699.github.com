@@ -9,6 +9,7 @@
 	<link href="http://getbootstrap.com/favicon.ico" rel="icon">
 	<title>CARELESS // LABS</title><!-- Bootstrap core CSS -->
 	<link href="../index_files/bootstrap.css" rel="stylesheet"><!-- Custom styles for this template -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link href="../index_files/sticky-footer-navbar.css" rel="stylesheet">
 	<script src="../index_files/ie-emulation-modes-warning.js">
 	</script><!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -70,6 +71,17 @@
 								<form>
 									<div class="form-group">
 										<div class="input-group">
+											<div class="btn-group" role="group" aria-label="...">
+												<button type="button" class="btn btn-info">Set Distance</button>
+												<button type="button" class="btn btn-default paceDist" data-distance="5km">5KM</button>
+												<button type="button" class="btn btn-default paceDist" data-distance="10km">10KM</button>
+												<button type="button" class="btn btn-default paceDist" data-distance="half">Half Marathon</button>
+												<button type="button" class="btn btn-default paceDist" data-distance="mara">Marathon</button>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="input-group">
 											<span class="input-group-addon">Distance</span>
 											<input type="number" name="distanceEvent" id="distanceEvent" required="required" class="form-control calcPace" value="0" min="0">
 											<span class="input-group-addon">-</span>
@@ -121,6 +133,17 @@
 								<form>
 									<div class="form-group">
 										<div class="input-group">
+											<div class="btn-group" role="group" aria-label="...">
+												<button type="button" class="btn btn-info">Set Distance</button>
+											  <button type="button" class="btn btn-default speedDist" data-distance="5km">5KM</button>
+											  <button type="button" class="btn btn-default speedDist" data-distance="10km">10KM</button>
+											  <button type="button" class="btn btn-default speedDist" data-distance="half">Half Marathon</button>
+												<button type="button" class="btn btn-default speedDist" data-distance="mara">Marathon</button>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="input-group">
 											<span class="input-group-addon">Distance</span>
 											<input type="number" name="distance" id="distance" required="required" class="form-control calc" value="0" min="0">
 											<span class="input-group-addon">-</span>
@@ -143,10 +166,21 @@
 									</div>
 
 									<div class="form-group">
-										<div class="input-group">
-											<ul id="output">
-
-											</ul>
+										<div class="row">
+											<div class="col-sm-6">
+												<div class="alert alert-info" role="alert">
+												  <span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+												  <span class="sr-only">Time:</span>
+												  <span id="speedMPH">0 MPH</span>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<div class="alert alert-info" role="alert">
+												  <span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+												  <span class="sr-only">Time:</span>
+												  <span id="speedKMH">0 KMH</span>
+												</div>
+											</div>
 										</div>
 									</div>
 								</form>
@@ -160,6 +194,17 @@
 	            <div class="panel-heading">Time</div>
 	            <div class="panel-body">
 	              <form>
+									<div class="form-group">
+										<div class="input-group">
+											<div class="btn-group" role="group" aria-label="...">
+												<button type="button" class="btn btn-info">Set Distance</button>
+											  <button type="button" class="btn btn-default timeDist" data-distance="5km">5KM</button>
+											  <button type="button" class="btn btn-default timeDist" data-distance="10km">10KM</button>
+											  <button type="button" class="btn btn-default timeDist" data-distance="half">Half Marathon</button>
+												<button type="button" class="btn btn-default timeDist" data-distance="mara">Marathon</button>
+											</div>
+										</div>
+									</div>
 	                <div class="form-group">
 	                  <div class="input-group">
 	                    <span class="input-group-addon">Distance</span>
@@ -172,7 +217,8 @@
 	                  </div>
 	                </div>
 
-	                <div class="form-group">
+									<div class="form-group">
+
 	                  <div class="input-group">
 	                    <span class="input-group-addon">Speed</span>
 	                    <input type="number" name="speed" id="speed" required="required" class="form-control calcSpd" value="0" min="0">
@@ -184,13 +230,13 @@
 	                  </div>
 	                </div>
 
-	                <div class="form-group">
-	                  <div class="input-group">
-	                    <ul id="outputSpd">
-
-	                    </ul>
-	                  </div>
-	                </div>
+									<div class="form-group">
+											<div class="alert alert-info" role="alert">
+												<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+												<span class="sr-only">Time:</span>
+												<span id="outputSpd">00:00:00.00</span>
+											</div>
+									</div>
 	              </form>
 	            </div>
           </div>
@@ -212,48 +258,105 @@
     $(document).ready(function() {
       console.log( "ready!" );
 
+			$('.speedDist').on('click', function() {
+				var distance = $(this).data('distance');
+				var unit = $("#unit").val();
+				var control = $("#distance");
+				setDistance(distance, unit, control);
+				calcSpeed();
+			});
+
+			$('.timeDist').on('click', function() {
+				var distance = $(this).data('distance');
+				var unit = $("#dstUnit").val();
+				var control = $("#distanceSpd");
+				setDistance(distance, unit, control);
+				calcTimeSpeed();
+			});
+
+			$('.paceDist').on('click', function() {
+				var distance = $(this).data('distance');
+				var unit = $("#unitEvent").val();
+				var control = $("#distanceEvent");
+				setDistance(distance, unit, control);
+				calcPace();
+			});
+
+			function setDistance(distance, unit, control){
+				if(distance == "5km"){
+					if(unit == "mile"){
+						control.val(3.10686);
+					} else {
+						control.val(5);
+					}
+				} else if(distance == "10km"){
+					if(unit == "mile"){
+						control.val(6.21371);
+					} else {
+						control.val(10);
+					}
+				} else if(distance == "half"){
+					if(unit == "mile"){
+						control.val(13.1094);
+					} else {
+						control.val(21.0975);
+					}
+				} else if(distance == "mara"){
+					if(unit == "mile"){
+						control.val(26.2188);
+					} else {
+						control.val(42.195);
+					}
+				}
+			}
+
       $('.calc').on('input', function() {
-        // distance
-        var dst = $("#distance").val();
-        var unit = $("#unit").val();
-
-        // Time
-        var hour = $("#hour").val();
-        var minute = $("#minute").val();
-        var second = $("#second").val();
-
-        // Totals
-        var totalSeconds = (+hour) * 60 * 60 + (+minute) * 60 + (+second);
-        var mph = 0;
-        var kmh = 0;
-        var ul = $("#output");
-
-        if(dst != 0 && totalSeconds != 0){
-          if(unit == "mile"){
-            var mph = (dst / totalSeconds) * 3600;
-            var kmh = mph * 1.609344;
-          } else {
-            var kmh = (dst / totalSeconds) * 3600;
-            var mph = kmh * 0.6213711922;
-          }
-
-          ul.empty();
-          createListItem(ul, "KMH: " + kmh.toFixed(2));
-          createListItem(ul, "MPH: " + mph.toFixed(2));
-        } else {
-          ul.empty();
-        }
-
+      	calcSpeed();
       });
 
+			function calcSpeed(){
+				// distance
+				var dst = $("#distance").val();
+				var unit = $("#unit").val();
+
+				// Time
+				var hour = $("#hour").val();
+				var minute = $("#minute").val();
+				var second = $("#second").val();
+
+				// Totals
+				var totalSeconds = (+hour) * 60 * 60 + (+minute) * 60 + (+second);
+				var mph = 0;
+				var kmh = 0;
+
+				if(dst != 0 && totalSeconds != 0){
+					if(unit == "mile"){
+						var mph = (dst / totalSeconds) * 3600;
+						var kmh = mph * 1.609344;
+					} else {
+						var kmh = (dst / totalSeconds) * 3600;
+						var mph = kmh * 0.6213711922;
+					}
+
+					$("#speedMPH").text(mph.toFixed(2) + " MPH");
+					$("#speedKMH").text(kmh.toFixed(2) + " KHM");
+				} else {
+					$("#speedMPH").text("0 MPH");
+					$("#speedKMH").text("0 KHM");
+				}
+			}
+
       $('.calcSpd').on('input', function() {
-        // distance
+        calcTimeSpeed();
+      });
+
+			function calcTimeSpeed(){
+				// distance
         var dst = $("#distanceSpd").val();
         var dstUnit = $("#dstUnit").val();
         var unitSpeed = $("#unitSpd").val();
         var speed = $("#speed").val();
         var totalTime = 0;
-        var ul = $("#outputSpd");
 
         if(dst != 0 && speed != 0){
           if(dstUnit == "mile"){
@@ -282,12 +385,12 @@
              split = "00";
           }
 
-          ul.empty();
-          createListItem(ul, padNum(hours) + ":" + padNum(minutes) + ":" + padNum(parseInt(rSecs)) + "." + split);
+					var time = padNum(hours) + ":" + padNum(minutes) + ":" + padNum(parseInt(rSecs)) + "." + split;
+					$("#outputSpd").text(time);
         } else {
-          ul.empty();
+          $("#outputSpd").text("00:00:00:00.00");
         }
-      });
+			}
 
       $("#secSlider").slider({
 	    	tooltip: 'always',
@@ -311,6 +414,10 @@
 			});
 
 			$('.calcPace').on('change input', function() {
+				calcPace();
+			});
+
+			function calcPace(){
 				// Calculate minute miling
 				var table = $("#breakdownTable");
 				var distance = $("#distanceEvent").val();
@@ -344,7 +451,7 @@
 
 					$("#paceTime").text(timeStr);
 				}
-			});
+			}
 
     });
 
