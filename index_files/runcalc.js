@@ -79,6 +79,10 @@ $(document).ready(function() {
 
   $('.setPrecision').on('input', function() {
       precision = $('.setPrecision').val();
+      var unit = $("#unitEvent").val();
+      calcPace(unit);
+      calcSpeed();
+      calcTimeSpeed();
   });
 
   $('.calc').on('input', function() {
