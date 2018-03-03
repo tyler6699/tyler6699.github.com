@@ -94,8 +94,8 @@
 									<div class="form-group">
 										<div class="input-group">
 											<span class="input-group-addon">Pace</span>
-											<select id="unit" class="form-control calc">
-													<option value="mile">Miles</option>
+											<select id="paceUnit" class="form-control calcPace">
+													<option value="mile">Mile</option>
 													<option value="km">KM</option>
 											</select>
 										</div>
@@ -449,13 +449,26 @@
 				var seconds = $("#secSlider").val();
 				var secsPerUnit = (parseInt(mins) * 60);
 				secsPerUnit = add(secsPerUnit, seconds);
+				var paceUnit = $("#paceUnit").val();
+
+				// 7 minutes is 420 seconds
+				// 1 mile at 420 seconds per mile is 420
+				// 1 km in the same speed is 261 seconds
 
 				if(unit == "mile"){
-						$("#unitPace").text("Mile");
+					$("#unitPace").text("Mile");
+
+					// distance in miles but pace in KM
+					if(paceUnit == "km"){
+						secsPerUnit = secsPerUnit * 1.609344;
+					}
 				} else {
 					$("#unitPace").text("KM");
-				}
 
+					if(paceUnit == "mile"){
+						secsPerUnit = secsPerUnit * 0.6213711922;
+					}
+				}
 
 				table.empty();
 
@@ -465,11 +478,11 @@
 						var timeStr = getTime(time);
 
 						if(i < distanceInt || distance == distanceInt){
-							console.log("Mile: " + i + " - " + timeStr);
+							//console.log("Mile: " + i + " - " + timeStr);
 							createTableRow(table, i, timeStr);
 						} else {
 							var over = subtract(distanceInt,distance,8);
-							console.log("over: " + over);
+							//console.log("over: " + over);
 							var extra = subtract(1,over,8);
 							time = (i-1) * secsPerUnit;
 							time = time + (extra * secsPerUnit)
