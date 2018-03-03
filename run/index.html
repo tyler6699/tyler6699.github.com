@@ -127,6 +127,14 @@
 											<span id="paceTime">00:00:00.00</span>
 										</div>
 										<div class="panel-body">
+											<p class="text-left">
+												<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+												<span id="paceMPH">0 MPH</span>
+											</p>
+											<p class="text-left">
+												<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+												<span id="paceKMH">0 KMH</span>
+											</p>
 											<!-- Table -->
 										 <table class="table">
 											 <thead>
@@ -277,6 +285,9 @@
 	<script src="../index_files/bootstrap.js"></script>
   <script src="../index_files/slider.js"></script>
   <script>
+	var km2miles = 0.6213711922;
+	var miles2km = 1.609344;
+
     $(document).ready(function() {
       console.log( "ready!" );
 
@@ -354,10 +365,10 @@
 				if(dst != 0 && totalSeconds != 0){
 					if(unit == "mile"){
 						var mph = (dst / totalSeconds) * 3600;
-						var kmh = mph * 1.609344;
+						var kmh = mph * miles2km;
 					} else {
 						var kmh = (dst / totalSeconds) * 3600;
-						var mph = kmh * 0.6213711922;
+						var mph = kmh * km2miles;
 					}
 
 					$("#speedMPH").text(mph.toFixed(2) + " MPH");
@@ -385,13 +396,13 @@
             if(unitSpeed == "mph"){
               totalTime = (dst / speed);
             } else {
-              totalTime = (dst / (speed * 0.6213711922));
+              totalTime = (dst / (speed * km2miles));
             }
           } else {
             if(unitSpeed == "kmh"){
               totalTime = (dst / speed);
             } else {
-              totalTime = (dst / (speed * 1.60934));
+              totalTime = (dst / (speed * miles2km));
             }
           }
 
@@ -450,25 +461,37 @@
 				var secsPerUnit = (parseInt(mins) * 60);
 				secsPerUnit = add(secsPerUnit, seconds);
 				var paceUnit = $("#paceUnit").val();
+				var mph = 0;
+				var kmh = 0;
 
-				// 7 minutes is 420 seconds
-				// 1 mile at 420 seconds per mile is 420
-				// 1 km in the same speed is 261 seconds
+				$("#paceMPH").text("");
+				$("#paceKMH").text("");
 
 				if(unit == "mile"){
 					$("#unitPace").text("Mile");
 
-					// distance in miles but pace in KM
 					if(paceUnit == "km"){
-						secsPerUnit = secsPerUnit * 1.609344;
+						secsPerUnit = secsPerUnit * miles2km;
 					}
+
+					// Set Speeds
+					mph = (1/ secsPerUnit) * 3600;
+					kmh = mph * miles2km;
+
 				} else {
 					$("#unitPace").text("KM");
 
 					if(paceUnit == "mile"){
-						secsPerUnit = secsPerUnit * 0.6213711922;
+						secsPerUnit = secsPerUnit * km2miles;
 					}
+
+					// Set Speeds
+					kmh = (1/ secsPerUnit) * 3600;
+					mph = kmh * km2miles;
 				}
+
+				$("#paceMPH").text(mph.toFixed(2) + " MPH");
+				$("#paceKMH").text(kmh.toFixed(2) + " KMH");
 
 				table.empty();
 
@@ -478,11 +501,9 @@
 						var timeStr = getTime(time);
 
 						if(i < distanceInt || distance == distanceInt){
-							//console.log("Mile: " + i + " - " + timeStr);
 							createTableRow(table, i, timeStr);
 						} else {
 							var over = subtract(distanceInt,distance,8);
-							//console.log("over: " + over);
 							var extra = subtract(1,over,8);
 							time = (i-1) * secsPerUnit;
 							time = time + (extra * secsPerUnit)
