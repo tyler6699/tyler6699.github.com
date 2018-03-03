@@ -57,13 +57,13 @@
 		  evt.stopPropagation();
 		  evt.target.style.cursor = 'default';
 		}
-		
+
 		function handleMouseUp(evt) {
 		  evt.preventDefault();
 		  evt.stopPropagation();
 		  evt.target.style.cursor = '';
 		}
-		
+
 		document.getElementById('embed-careless.walker.GwtDefinition').addEventListener('mousedown', handleMouseDown, false);
 		document.getElementById('embed-careless.walker.GwtDefinition').addEventListener('mouseup', handleMouseUp, false);
 	</script>
@@ -109,12 +109,12 @@
 			<!-- GAME HERE -->
 			<div class="col-12">
 				<div align="center" id="embed-careless.walker.GwtDefinition"></div>
-			</div>			
-			<!-- ROW -->	
+			</div>
+			<!-- ROW -->
 			</div>
 			<a href="#"><i class="fa fa-arrow-up"></i></a>
 		</div>
-		<!-- END CONTENT --> 
+		<!-- END CONTENT -->
 		<div class="footer">
 			<div class="bot1"></div>
 			<div class="container">
@@ -131,6 +131,14 @@
 				$(".tip-left").tooltip({ placement : 'left'});
 			});
 		</script>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-114991742-1"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', 'UA-114991742-1');
+		</script>
 	</body>
 </html>
-
