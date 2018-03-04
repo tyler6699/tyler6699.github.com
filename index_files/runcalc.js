@@ -48,6 +48,7 @@
 var km2miles = 0.6213711922;
 var miles2km = 1.609344;
 var precision = 3;
+var splitSeconds = false;
 
 $(document).ready(function() {
   console.log( "CarelessLabs Running Calculator" );
@@ -78,11 +79,7 @@ $(document).ready(function() {
   });
 
   $('.setPrecision').on('input', function() {
-      precision = $('.setPrecision').val();
-      var unit = $("#unitEvent").val();
-      calcPace(unit);
-      calcSpeed();
-      calcTimeSpeed();
+      refreshTotals();
   });
 
   $('.calc').on('input', function() {
@@ -119,10 +116,23 @@ $(document).ready(function() {
     calcPace(unit);
   });
 
+  $('#splits').on('click', function() {
+    splitSeconds = $(this)[0].checked;
+    refreshTotals();
+  });
+
 });
 
 // FUNCTIONS
 
+// Update the Totals
+function refreshTotals(){
+  precision = $('.setPrecision').val();
+  var unit = $("#unitEvent").val();
+  calcPace(unit);
+  calcSpeed();
+  calcTimeSpeed();
+}
 // Set distance buttons update the value of a distance control
 function setDistance(distance, unit, control){
   if(distance == "5km"){
@@ -171,18 +181,29 @@ function calcSpeed(){
 
   if(dst != 0 && totalSeconds != 0){
     if(unit == "mile"){
-      var mph = (dst / totalSeconds) * 3600;
-      var kmh = mph * miles2km;
+      mph = (dst / totalSeconds) * 3600;
+      kmh = mph * miles2km;
     } else {
-      var kmh = (dst / totalSeconds) * 3600;
-      var mph = kmh * km2miles;
+      kmh = (dst / totalSeconds) * 3600;
+      mph = kmh * km2miles;
     }
 
     $("#speedMPH").text(mph.toFixed(precision) + " MPH");
     $("#speedKMH").text(kmh.toFixed(precision) + " KHM");
+
+    var seconds = (1 / mph.toFixed(precision));
+    var perMile = hoursToTime(seconds, splitSeconds);
+    $("#speedMPM").text(perMile + " / mile");
+
+    seconds = (1 / kmh.toFixed(precision));
+    var perKM = hoursToTime(seconds, splitSeconds);
+    $("#speedKMPM").text(perKM + " / km");
+
   } else {
     $("#speedMPH").text("0 MPH");
     $("#speedKMH").text("0 KHM");
+    $("#speedMPM").text("00:00:00 / mile");
+    $("#speedKMPM").text("00:00:00 / km");
   }
 }
 
@@ -211,22 +232,32 @@ function calcTimeSpeed(){
       }
     }
 
-    var hours = parseInt(totalTime);
-    var rMins = (totalTime - hours) * 60;
-    var minutes = parseInt(rMins);
-    var rSecs = (rMins - minutes) * 60;
-    var split = rSecs.toFixed(precision).toString().split(".");
+    var time = hoursToTime(totalTime, splitSeconds);
 
-    if (split.length > 1) {
-         split = split[1];
-     } else {
-       split = "00";
-    }
-
-    var time = padNum(hours) + ":" + padNum(minutes) + ":" + padNum(parseInt(rSecs)) + "." + split;
     $("#outputSpd").text(time);
   } else {
-    $("#outputSpd").text("00:00:00.00");
+    $("#outputSpd").text("00:00:00");
+  }
+}
+
+// Convert time in hours to time HH:MM:SS
+function hoursToTime(totalTime, splits){
+  var hours = parseInt(totalTime);
+  var rMins = (totalTime - hours) * 60;
+  var minutes = parseInt(rMins);
+  var rSecs = (rMins - minutes) * 60;
+  var split = rSecs.toFixed(precision).toString().split(".");
+
+  if (split.length > 1) {
+    split = split[1];
+  } else {
+    split = "00";
+  }
+
+  if(splits){
+    return padNum(hours) + ":" + padNum(minutes) + ":" + padNum(parseInt(rSecs)) + "." + split;
+  } else {
+    return padNum(hours) + ":" + padNum(minutes) + ":" + padNum(parseInt(rSecs));
   }
 }
 
@@ -279,7 +310,7 @@ function calcPace(unit){
   if(distance > 0){
     for(i = 1; i <= distanceInt; i++) {
       var time = (i * secsPerUnit);
-      var timeStr = getTime(time);
+      var timeStr = getTime(time, splitSeconds);
 
       if(i < distanceInt || distance == distanceInt){
         createTableRow(table, i, timeStr);
@@ -288,7 +319,7 @@ function calcPace(unit){
         var extra = subtract(1,over,8);
         time = (i-1) * secsPerUnit;
         time = time + (extra * secsPerUnit)
-        timeStr = getTime(time);
+        timeStr = getTime(time, splitSeconds);
 
         createTableRow(table, distance, timeStr);
       }
@@ -300,7 +331,7 @@ function calcPace(unit){
 
 // Convert time in seconds to hh:mm:ss.split
 // e.g 01:28:12.00
-function getTime(time){
+function getTime(time, splits){
   var rem = 0;
   var hours = Math.floor(time / 3600);
   var hoursSeconds = hours * 3600;
@@ -311,7 +342,21 @@ function getTime(time){
 
   rem = subtract(rem,minuteSeconds);
   var seconds = rem;
-  return padNum(hours) + ":" + padNum(minutes) + ":" + padNum(seconds);
+
+  if(splits){
+    return padNum(hours) + ":" + padNum(minutes) + ":" + padNum(seconds);
+  } else {
+    var split = seconds.toString().split(".");
+    seconds = split[0];
+    // if (split.length > 1) {
+    //   if (split[1] > .5) {
+    //     seconds = parseInt(split[0]) + 1;
+    //   }
+    // }
+
+    return padNum(hours) + ":" + padNum(minutes) + ":" + padNum(seconds);
+  }
+
 }
 
 // Append a new table row to an existing table
