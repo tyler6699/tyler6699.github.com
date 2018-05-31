@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>CARELESS // LABS</title>
+	<meta charset="utf-8">
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:site" content="@carelesslabs" />
+	<meta name="twitter:creator" content="@carelesslabs" />
+	<meta property="og:url" content="http://carelesslabs.co.uk/run" />
+	<meta property="og:title" content="Running Calculator (Pace, Speed & Time)" />
+	<meta property="og:description" content="Work out your time for an event based on your minute miling, your average speed given your time and distance or the time given your speed and distance." />
+	<meta property="og:image" content="http://carelesslabs.co.uk/assets/runcalc.png" />
+	<!-- Twitter -->
+	<!-- Facebook -->
+	<meta property=”og:type” content=”website”/>
+	<meta property=”og:site_name” content=”Careless Labs”/>
+	<!-- Facebook -->
+	<meta content="IE=edge" http-equiv="X-UA-Compatible">
+	<meta content="width=device-width, initial-scale=1" name="viewport">
+	<meta content="Indie slash hobbyist game developer mostly working with Java LibGDX. Making small games for fun and sharing my gamedev experiences." name="description">
+	<meta content="Careless Labs" name="author">
+	<meta name="description" content="A running calculator - average speed, time and pace with a mile or km breakdown.">
+  <meta name="keywords" content="running,calculator,calc,speed,average,minute,mile,km,miling,half,marathon,5km,10km">
+  <meta name="author" content="Ryan Tyler">
+	<!-- assests -->
+	<link href="http://getbootstrap.com/favicon.ico" rel="icon">
+	<link href="../index_files/bootstrap.css" rel="stylesheet"><!-- Custom styles for this template -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="../index_files/sticky-footer-navbar.css" rel="stylesheet">
+	<script src="../index_files/ie-emulation-modes-warning.js"></script>
+	<script src="../index_files/ie10-viewport-bug-workaround.js"></script>
+	<!--[if lt IE 9]>
+  	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
+	<link href="../index_files/careless.css" rel="stylesheet">
+  <link href="../index_files/slider.css" rel="stylesheet">
+</head>
+<body>
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-default navbar-fixed-top" id="navbar" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li>
+						<a class="active" href="../index.html">Home</a>
+					</li>
+					<li>
+						<a href="../about.html">About</a>
+					</li>
+					<li>
+						<a href="../games.html">Games</a>
+					</li>
+					<li>
+						<a href="http://carelesslabs.wordpress.com/" target="_blank">Blog</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div><!-- END NAV -->
+	<!-- CONTENT -->
+	<div class="container text-center" role="main">
+		<div class="row header">
+			<h3>Running Calculator</h3>
+		</div>
+    <div class="row">
+      <div class="col-sm-8 col-sm-offset-2">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#home">Pace</a></li>
+          <li><a data-toggle="tab" href="#menu1">Speed</a></li>
+          <li><a data-toggle="tab" href="#menu2">Time</a></li>
+					<li><a data-toggle="tab" href="#menu3">Settings</a></li>
+        </ul>
+        <!-- TABS -->
+        <div class="tab-content">
+          <!-- TAB 01 -->
+					<div id="home" class="tab-pane fade in active">
+						<div class="panel panel-default">
+							<div class="panel-heading">Minute Mile/KM Calculator</div>
+							<div class="panel-body">
+								<form>
+									<div class="form-group">
+										<div class="input-group">
+											<div class="btn-group" role="group" aria-label="...">
+												<button type="button" class="btn btn-info">Set Distance</button>
+												<button type="button" class="btn btn-default paceDist" data-distance="5km">5KM</button>
+												<button type="button" class="btn btn-default paceDist" data-distance="10km">10KM</button>
+												<button type="button" class="btn btn-default paceDist" data-distance="half">Half Marathon</button>
+												<button type="button" class="btn btn-default paceDist" data-distance="mara">Marathon</button>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">Distance</span>
+											<input type="number" name="distanceEvent" id="distanceEvent" required="required" class="form-control calcPace" value="0" min="0">
+											<span class="input-group-addon">-</span>
+											<select id="unitEvent" class="form-control calcPace">
+													<option value="mile">Miles</option>
+													<option value="km">KM</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">Pace</span>
+											<select id="paceUnit" class="form-control calcPace">
+													<option value="mile">Mile</option>
+													<option value="km">KM</option>
+											</select>
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="form-group">
+												<div class="input-group">
+													Minutes: <input id="minSlider" class="calcPace" data-slider-id='minutesSlider' type="text" data-slider-value="7"/>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="form-group">
+												<div class="input-group">
+													Seconds: <input id="secSlider" class="calcPace" data-slider-id='secondsSlider' type="text" data-slider-value="0"/>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<!-- RESULTS -->
+									<div class="panel panel-info">
+										<!-- Default panel contents -->
+									  <div class="panel-heading primary">
+											<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+											<span class="sr-only">Time:</span>
+											<span id="paceTime">00:00:00</span>
+										</div>
+										<div class="panel-body">
+											<p class="text-left">
+												<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+												<span id="paceMPH">0 MPH</span>
+											</p>
+											<p class="text-left">
+												<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+												<span id="paceKMH">0 KMH</span>
+											</p>
+											<!-- Table -->
+										 <table class="table">
+											 <thead>
+												 <tr>
+													 <th><span id="unitPace">Mile</span></th>
+													 <th><span class="glyphicon glyphicon-time" aria-hidden="true"></span></th>
+												 </tr>
+											 </thead>
+											 <tbody id="breakdownTable">
+											 <!-- rows -->
+											 </tbody>
+										 </table>
+										</div>
+									</div>
+
+								</form>
+							</div>
+						</div>
+					</div>
+
+          <!-- TAB 02 -->
+					<div id="menu1" class="tab-pane fade">
+						<div class="panel panel-default">
+							<div class="panel-heading">Average Speed</div>
+							<div class="panel-body">
+								<form>
+									<div class="form-group">
+										<div class="input-group">
+											<div class="btn-group" role="group" aria-label="...">
+												<button type="button" class="btn btn-info">Set Distance</button>
+											  <button type="button" class="btn btn-default speedDist" data-distance="5km">5KM</button>
+											  <button type="button" class="btn btn-default speedDist" data-distance="10km">10KM</button>
+											  <button type="button" class="btn btn-default speedDist" data-distance="half">Half Marathon</button>
+												<button type="button" class="btn btn-default speedDist" data-distance="mara">Marathon</button>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">Distance</span>
+											<input type="number" name="distance" id="distance" required="required" class="form-control calc" value="0" min="0">
+											<span class="input-group-addon">-</span>
+											<select id="unit" class="form-control calc">
+													<option value="mile">Miles</option>
+													<option value="km">KM</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon" id="timelbl">Hour</span>
+											<input type="number" name="hour" id="hour" required="required" class="form-control calc" value="0" max="59" min="0">
+											<span class="input-group-addon">Min</span>
+											<input type="number" name="minute" id="minute" required="required" class="form-control calc" value="0" max="59" min="0">
+											<span class="input-group-addon">Sec</span>
+											<input type="number" name="second" id="second" required="required" class="form-control calc" value="0" max="59" min="0">
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-6">
+												<div class="alert alert-info" role="alert">
+													<p class="text-left">
+												  	<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+												  	<span id="speedMPH">0 MPH</span>
+													</p>
+													<p class="text-left">
+														<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+												  	<span id="speedMPM">00:00:00 / mile</span>
+													</p>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<div class="alert alert-info" role="alert">
+													<p class="text-left">
+												  	<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+												  	<span id="speedKMH">0 KMH</span>
+													</p>
+													<p class="text-left">
+														<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+												  	<span id="speedKMPM">00:00:00 / km</span>
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+          <!-- TAB 03 -->
+          <div id="menu2" class="tab-pane fade">
+						<div class="panel panel-default">
+	            <div class="panel-heading">Time</div>
+	            <div class="panel-body">
+	              <form>
+									<div class="form-group">
+										<div class="input-group">
+											<div class="btn-group" role="group" aria-label="...">
+												<button type="button" class="btn btn-info">Set Distance</button>
+											  <button type="button" class="btn btn-default timeDist" data-distance="5km">5KM</button>
+											  <button type="button" class="btn btn-default timeDist" data-distance="10km">10KM</button>
+											  <button type="button" class="btn btn-default timeDist" data-distance="half">Half Marathon</button>
+												<button type="button" class="btn btn-default timeDist" data-distance="mara">Marathon</button>
+											</div>
+										</div>
+									</div>
+	                <div class="form-group">
+	                  <div class="input-group">
+	                    <span class="input-group-addon">Distance</span>
+	                    <input type="number" name="distanceSpd" id="distanceSpd" required="required" class="form-control calcSpd" value="0" min="0">
+	                    <span class="input-group-addon">-</span>
+	                    <select id="dstUnit" class="form-control calcSpd">
+	                        <option value="mile">Miles</option>
+	                        <option value="km">KM</option>
+	                    </select>
+	                  </div>
+	                </div>
+
+									<div class="form-group">
+
+	                  <div class="input-group">
+	                    <span class="input-group-addon">Speed</span>
+	                    <input type="number" name="speed" id="speed" required="required" class="form-control calcSpd" value="0" min="0">
+	                    <span class="input-group-addon">-</span>
+	                    <select id="unitSpd" class="form-control calcSpd">
+	                        <option value="mph">MPH</option>
+	                        <option value="kmh">KMH</option>
+	                    </select>
+	                  </div>
+	                </div>
+
+									<div class="form-group">
+											<div class="alert alert-info" role="alert">
+												<span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+												<span class="sr-only">Time:</span>
+												<span id="outputSpd">00:00:00</span>
+											</div>
+									</div>
+	              </form>
+	            </div>
+          	</div>
+					</div>
+
+					<!-- SETTINGS TAB -->
+					<div id="menu3" class="tab-pane fade">
+						<div class="panel panel-default">
+							<div class="panel-heading">Settings</div>
+							<div class="panel-body">
+								<p class="text-left">
+									Set the number of decimal places to show after speed in MPH or KMH, e.g:
+								<p>
+								<ul class="text-left">
+									<li>Precision of 2: <b>12.45 MPH</b></li>
+									<li>Precision of 5: <b>12.12353 KMH</b></li>
+								</ul>
+								<form>
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">Precision</span>
+											<input type="number" name="precision" id="precision" required="required" class="form-control setPrecision" value="2" min="0">
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="input-group">
+											<div class="checkbox">
+										    <label>
+										      <input type="checkbox" id="splits"> Show split seconds
+										    </label>
+										  </div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- END TABS -->
+      </div>
+    </div>
+  </div>
+</div>
+	<div class="footer">
+		<div class="bot1"></div>
+		<div class="container"></div>
+	</div>
+	<script src="../index_files/jquery.js"></script>
+	<script src="../index_files/bootstrap.js"></script>
+  <script src="../index_files/slider.js"></script>
+  <script src="../index_files/runcalc.js?v=1.014"></script>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-114991742-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-114991742-1');
+	</script>
+  <style>
+    .tab-pane{
+      margin-top: 10px;
+    }
+  </style>
+</body>
+</html>
