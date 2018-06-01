@@ -11,10 +11,10 @@ function tileObj(size, x, y, type, solid) {
     this.image.src = grass;
   }
 
-  this.update = function() {
+  this.update = function(camera) {
     ctx = mainGame.context;
     ctx.save();
-    ctx.translate(this.entity.x, this.entity.y);
+    ctx.translate(this.entity.x - camera.entity.x, this.entity.y - camera.entity.y);
     ctx.rotate(this.angle);
     ctx.drawImage(this.image, this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
 

@@ -17,10 +17,10 @@ function heroObj(width, height, color, x, y, type) {
     this.hbY2 = this.entity.y + this.entity.height;
 
     // Render
-    this.update = function() {
+    this.update = function(camera) {
         ctx = mainGame.context;
         ctx.save();
-        ctx.translate(this.entity.x, this.entity.y);
+        ctx.translate(this.entity.x - camera.entity.x, this.entity.y - camera.entity.y);
         ctx.rotate(this.entity.angle);
         ctx.fillStyle = this.entity.color;
         ctx.fillRect(this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);

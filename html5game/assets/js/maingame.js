@@ -6,6 +6,9 @@ var hero;
 var controllers = [];
 var buttonsPressed = [];
 
+// Camera Test
+var camera = new Camera(0, 0);
+
 for (x = 0; x < sqr; x++) {
     for (y = 0; y < sqr; y++) {
         xx = x * tileSize;
@@ -23,6 +26,7 @@ for (x = 0; x < sqr; x++) {
 
 function startGame() {
     hero = new heroObj(30, 30, "white", 115, 115);
+    camera.newPos(hero);
     mainGame.start();
 }
 
@@ -66,10 +70,11 @@ function updateGameArea() {
 
     for (i = 0; i < tiles.length; i++) {
         tile = tiles[i];
-        tile.update();
+        tile.update(camera);
     }
 
-    hero.tick();
+    hero.tick(camera);
     hero.newPos(tiles);
-    hero.update();
+    hero.update(camera);
+    camera.newPos(hero);
 }
