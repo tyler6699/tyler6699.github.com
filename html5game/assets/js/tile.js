@@ -30,5 +30,8 @@ function tileObj(size, x, y, type, solid) {
 }
 
 function heroColliding(e){
-  return hero.hbX < e.entity.x + e.entity.width && hero.hbX > e.entity.x && hero.hbY < e.entity.y + e.entity.height && hero.hbY > e.entity.y
+  return hero.hbX < e.entity.x + e.entity.width &&
+  hero.hbX > e.entity.x &&
+  hero.hbY < e.entity.y + e.entity.height &&
+  hero.hbY > e.entity.y
 }
