@@ -1,6 +1,8 @@
-function tileObj(size, x, y, type, solid) {
+function tileObj(size, x, y, type, solid, column, row) {
   this.entity = new entityObj(size, size, "null", x, y, "tile");
   this.isSolid = solid;
+  this.column = column;
+  this.row = row;
 
   this.image = new Image();
   if (this.isSolid) {

@@ -1,9 +1,9 @@
 var mainGame;
 var tiles = [];
-var sqr = 16;
-var islandSize = 8;
+var sqr = 100;
+var islandSize = 6;
 var tileSize = 32;
-var midPoint = (sqr/2) * tileSize;
+var midPoint = Math.ceil(sqr/2) * tileSize;
 var hero;
 var controllers = [];
 var buttonsPressed = [];
@@ -16,9 +16,8 @@ var canvasHalfH = canvasH / 2;
 var camera = new Camera(0, 0);
 
 // Initial Map
-xOffset = 2 * tileSize;
-minX =  xOffset;
-maxX = sqr * tileSize - (1.5 * xOffset);
+minX = midPoint - ((islandSize/2) * tileSize);
+maxX = midPoint + ((islandSize/2) * tileSize);
 
 for (x = 0; x < sqr; x++) {
     for (y = 0; y < sqr; y++) {
@@ -27,9 +26,9 @@ for (x = 0; x < sqr; x++) {
 
       var tile;
       if ( xx < minX || xx > maxX || yy < minX || yy > maxX ) {
-        tile = new tileObj(tileSize, xx, yy, "tile", true);
+        tile = new tileObj(tileSize, xx, yy, "tile", true, x, y);
       } else {
-        tile = new tileObj(tileSize, xx, yy, "tile", false);
+        tile = new tileObj(tileSize, xx, yy, "tile", false, x, y);
       }
 
       tiles.push(tile);
