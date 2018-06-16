@@ -1,49 +1,18 @@
 var mainGame;
-var tiles = [];
-var sqr = 100;
-var islandSize = 6;
-var tileSize = 32;
-var midPoint = Math.ceil(sqr/2) * tileSize;
+var island;
 var hero;
 var controllers = [];
 var buttonsPressed = [];
 var canvasW = 800;
 var canvasH = 600;
-var canvasHalfW = canvasW / 2;
-var canvasHalfH = canvasH / 2;
+var camera;
 
-// Camera Test
-var camera = new Camera(0, 0);
-
-// Initial Map
-minX = midPoint - ((islandSize/2) * tileSize);
-maxX = midPoint + ((islandSize/2) * tileSize);
-
-for (x = 0; x < sqr; x++) {
-    for (y = 0; y < sqr; y++) {
-      xx = x * tileSize;
-      yy = y * tileSize;
-
-      var tile;
-      if ( xx < minX || xx > maxX || yy < minX || yy > maxX ) {
-        tile = new tileObj(tileSize, xx, yy, "tile", true, x, y);
-      } else {
-        tile = new tileObj(tileSize, xx, yy, "tile", false, x, y);
-      }
-
-      tiles.push(tile);
-    }
-}
-
-// Code tiles
-for (i = 0; i < tiles.length; i++) {
-  tile = tiles[i];
-
-}
-
+// Called by body onload on index page
 function startGame() {
-  hero = new heroObj(30, 30, "white", midPoint, midPoint);
-  camera.newPos(hero);
+  camera = new Camera(0, 0);
+  island = new island(canvasW, canvasH);
+  hero = new heroObj(30, 30, "white", island.midPoint, island.midPoint);
+  camera.newPos(hero, island);
   mainGame.start();
 }
 
@@ -85,23 +54,9 @@ function updateGameArea() {
     navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
     mainGame.clear();
 
-    for (i = 0; i < tiles.length; i++) {
-      tile = tiles[i];
-
-      // Only draw tiles on screen
-      xCheck = (tile.entity.x > (hero.entity.x - canvasHalfW)) && (tile.entity.x < (hero.entity.x + canvasHalfW + tileSize));
-      yCheck = false;
-      if(xCheck){
-        yCheck = (tile.entity.y > (hero.entity.y - canvasHalfH)) && (tile.entity.y < (hero.entity.y + canvasHalfH + tileSize));
-      }
-      if( xCheck && yCheck ){
-        tile.update(camera);
-      }
-    }
-
+    island.draw(hero, camera);
     hero.tick(camera);
-    hero.newPos(tiles);
+    hero.newPos(island.tiles);
     hero.update(camera);
-
-    camera.newPos(hero);
+    camera.newPos(hero, island);
 }
