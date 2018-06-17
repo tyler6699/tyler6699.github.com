@@ -1,3 +1,8 @@
+// ╔═══════════════════════════════╗
+// ║ HTML 5 Game by @CarelessLabs  ║
+// ╚═══════════════════════════════╝
+var debug = true;
+
 var mainGame;
 var island;
 var hero;
@@ -25,6 +30,7 @@ var mainGame = {
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
         this.interval = setInterval(updateGameArea, 20);
+        // Keyboard
         window.addEventListener('keydown', function(e) {
             e.preventDefault();
             mainGame.keys = (mainGame.keys || []);
@@ -33,7 +39,21 @@ var mainGame = {
         window.addEventListener('keyup', function(e) {
             mainGame.keys[e.keyCode] = (e.type == "keydown");
         })
-
+        // Mouse Buttons
+        window.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            mainGame.keys = (mainGame.keys || []);
+            mainGame.keys[e.button] = true;
+        })
+        window.addEventListener('mouseup', function(e) {
+            e.preventDefault();
+            mainGame.keys = (mainGame.keys || []);
+            mainGame.keys[e.button] = false;
+        })
+        // Disable right click context menu
+        this.canvas.oncontextmenu = function (e) {
+          e.preventDefault();
+        };
         window.addEventListener("gamepadconnected", function(e) {
             var gp = navigator.getGamepads()[e.gamepad.index];
             console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.", gp.index, gp.id, gp.buttons.length, gp.axes.length);

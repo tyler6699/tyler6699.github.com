@@ -21,10 +21,11 @@ function tileObj(size, x, y, type, solid, column, row) {
     ctx.drawImage(this.image, this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
 
     // If Hero is over tile make it orange
-    // TODO Remove this test
-    if ( heroColliding(this) ) {
-      ctx.fillStyle = "orange";
-      ctx.fillRect(this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
+    if(debug){
+      if ( heroColliding(this) ) {
+        ctx.fillStyle = "orange";
+        ctx.fillRect(this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
+      }
     }
 
     ctx.restore();
