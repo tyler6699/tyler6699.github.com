@@ -2,7 +2,7 @@
 // ║ HTML 5 Game by @CarelessLabs  ║
 // ╚═══════════════════════════════╝
 var debug = false;
-var offset = 100;
+var offset = 70;
 var mainGame;
 var level;
 var hero;
@@ -17,7 +17,7 @@ function startGame() {
   camera = new Camera(0, 0);
   level = new level(canvasW, canvasH, 1);
   level.reset(1);
-  hero = new heroObj(25, 25, "pink", level.startX, level.startY);
+  hero = new heroObj(25, 25, "green", level.startX, level.startY);
   camera.newPos(hero, level);
   mainGame.start();
 }

@@ -1,18 +1,14 @@
 function heroObj(width, height, color, x, y, type) {
     this.entity = new entityObj(width, height, color, x, y, "hero");
-
     this.speed = 1;
-    this.power = 0;
     this.hPower = 0;
-    this.rotateSpeed = 10;
-    this.reverseSpeed = 3;
     this.maxSpeed = 3;
     this.slowRotate = 5;
     this.maxRotate = 10;
     this.color = color;
     this.startX = x;
     this.startY = y;
-    this.reset = false;
+    //this.reset = false;
     this.currentLevel=1;
     var jPower = 0;
     var maxJPower = 19;
@@ -37,15 +33,13 @@ function heroObj(width, height, color, x, y, type) {
 
       // Centre used for checking hero current block
       this.hbX = this.entity.x + this.entity.width / 2;
-      this.hbY= this.entity.y + this.entity.height / 2;
+      this.hbY = this.entity.y + this.entity.height / 2;
 
       // Calculate new position
       var newX = this.entity.x + (this.hPower * this.speed);
       var newY = this.entity.y + gravity - jPower;
 
-      if(jPower > 0){
-        jPower --;
-      }
+      if(jPower > 0){jPower --;}
 
       // Move Booleans
       var canMoveY = true;
@@ -70,10 +64,12 @@ function heroObj(width, height, color, x, y, type) {
       // Check if X or Y can be updated
       if(canMoveX){this.entity.x = newX}
       if(canMoveY){this.entity.y = newY}
+
+      // Fallen off the screen
       if(this.entity.y > maxDrop){
         this.entity.y = this.startY;
         this.entity.x = this.startX;
-        this.reset = true;
+        //this.reset = true;
       }
     }
 
@@ -113,21 +109,22 @@ function heroObj(width, height, color, x, y, type) {
         if(controllers.length > 0){
             // LEFT
             if(controllers[0].axes[0] < -.8 || controllers[0].axes[2] < -.8 || controllers[0].buttons[14].pressed){
-
+              this.hPower --;
             }
             // RIGHT
             if(controllers[0].axes[0] > .8 || controllers[0].axes[2] > .8 || controllers[0].buttons[15].pressed){
-
+              this.hPower ++;
             }
             // FORWARD
             if(controllers[0].axes[1] < -.8 || controllers[0].axes[3] < -.8 || controllers[0].buttons[12].pressed){
-
+              if(jPower == 0 && touchingY == true){
+                jPower = maxJPower;
+              }
             }
             // BACK
             if(controllers[0].axes[1] > .8 || controllers[0].axes[3] > .8 ||controllers[0].buttons[13].pressed){
 
             }
         }
-
     }
 }
