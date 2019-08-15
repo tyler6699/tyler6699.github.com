@@ -70,11 +70,10 @@ var mainGame = {
 }
 
 function updateGameArea() {
-  //
-  if(hero.reset){
-    hero.reset = false;
-    level.reset(hero.currentLevel);
-  }
+  // if(hero.reset){
+  //   hero.reset = false;
+  //   level.reset(hero.currentLevel);
+  // }
 
   // Update Gamepads
   navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);

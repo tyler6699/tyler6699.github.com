@@ -2,25 +2,24 @@ function level(canvasW, canvasH, id) {
   this.tiles = [];
   this.backTiles = [];
   this.coins = [];
-  this.levelSize = 6;
-  this.tileSize = 32;
   this.startX=0;
   this.startY=0;
+  this.canvasHalfW = canvasW / 2;
+  this.canvasHalfH = canvasH / 2;
+  var tileSize = 32;
   var coinCount=0;
   var maxCoinCount=0;
   var levelArray;
-  this.canvasHalfW = canvasW / 2;
-  this.canvasHalfH = canvasH / 2;
 
   this.draw = function(hero, camera){
     for (i = 0; i < this.backTiles.length; i++) {
       tile = this.backTiles[i];
 
       // Only draw tiles on screen
-      xCheck = (tile.entity.x > (hero.entity.x - this.canvasHalfW)) && (tile.entity.x < (hero.entity.x + this.canvasHalfW + this.tileSize));
+      xCheck = (tile.entity.x > (hero.entity.x - this.canvasHalfW)) && (tile.entity.x < (hero.entity.x + this.canvasHalfW + tileSize));
       yCheck = false;
       if(xCheck){
-        yCheck = (tile.entity.y > (hero.entity.y - this.canvasHalfH) - offset) && (tile.entity.y < (hero.entity.y + this.canvasHalfH + this.tileSize - offset));
+        yCheck = (tile.entity.y > (hero.entity.y - this.canvasHalfH) - offset) && (tile.entity.y < (hero.entity.y + this.canvasHalfH + tileSize - offset));
       }
       if( xCheck && yCheck ){
         tile.update(camera);
@@ -39,6 +38,7 @@ function level(canvasW, canvasH, id) {
       tile.update(camera);
 
       if(heroColliding(tile)){
+        coinSFX.play();
         tile.collected = true;
         coinCount ++;
         this.coins.splice(i, 1);;
@@ -66,36 +66,36 @@ function level(canvasW, canvasH, id) {
 
     if(id == 1){
       levelArray = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                       [0,0,0,0,0,0,0,0,0,4,4,4,4,4,0,0,0,0,0,0],
+                       [4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                        [0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                        [0,0,0,0,1,1,1,1,1,0,0,0,0,0,2,0,0,0,0,0],
-                       [1,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,0,0,0,1],
+                       [1,0,0,0,0,0,0,0,1,4,4,0,0,1,1,1,0,0,0,1],
                        [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,2,0,0,0,1],
                        [1,0,0,1,1,1,0,0,1,0,3,0,1,1,1,0,0,0,0,1],
                        [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1],
-                       [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];
+                       [1,4,4,4,4,4,4,4,1,4,4,4,4,4,4,4,4,4,4,1]];
     } else if(id == 2){
-      levelArray = [[0,0,3,0,0,0],
+      levelArray = [[0,0,0,0,0,0],
                     [0,0,0,2,0,0],
                     [0,0,0,0,0,0],
-                    [0,0,0,0,0,0],
+                    [0,3,0,0,0,0],
                     [1,1,1,1,1,1]];
     } else if(id == 3){
-      levelArray = [[1,0,3,0,0,1],
+      levelArray = [[1,0,0,0,0,1],
                     [1,0,0,2,0,1],
-                    [1,0,1,1,0,1],
-                    [1,2,0,0,2,1],
+                    [1,0,4,4,0,1],
+                    [1,2,0,3,2,1],
                     [1,1,1,1,1,1]];
     } else if(id == 4){
       levelArray = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                     [0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0],
-                    [0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0],
-                    [0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0],
-                    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,4,4,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,1,4,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,0,0],
                     [1,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,0,0,0,1],
-                    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,1],
-                    [1,0,0,1,1,1,1,1,1,0,3,0,1,1,1,0,0,0,0,1],
+                    [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,2,0,0,0,1],
+                    [1,0,0,4,4,4,4,4,1,0,3,0,1,1,1,0,0,0,0,1],
                     [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1],
                     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];;
 
@@ -108,27 +108,29 @@ function level(canvasW, canvasH, id) {
 
     for (row = 0; row < rows; row++) {
       for (col = 0; col < cols; col++) {
-        xx = col * this.tileSize;
-        yy = row * this.tileSize;
+        xx = col * tileSize;
+        yy = row * tileSize;
 
         var tile;
         var type = levelArray[row][col];
-        if(type == 1){
-          tile = new tileObj(this.tileSize, xx, yy, "brick", true, col, row, "red");
+        // Set tile type
+        if(type == BRICK || type == LEDGE){
+          tile = new tileObj(tileSize, xx, yy, type, true, col, row, "none");
           this.tiles.push(tile);
-        } else if (type == 2) {
-          tile = new tileObj(this.tileSize, xx, yy, "coin", false, col, row, "gold");
+        } else if (type == COIN) {
+          tile = new tileObj(tileSize, xx, yy, type, false, col, row, "none");
           this.coins.push(tile);
           maxCoinCount ++;
-        } else if (type == 3){
+        } else if (type == HERO){
           this.startX = xx;
           this.startY= yy;
-          console.log(xx + " : " + yy);
         }
 
         // Always push a tile to the back
-        tile = new tileObj(this.tileSize, xx, yy, "back", false, col, row, "#e6e6e6");
-        this.backTiles.push(tile);
+        if(Math.random() > .8){
+          tile = new tileObj(tileSize, xx, yy, WALL, false, col, row, "none");
+          this.backTiles.push(tile);
+        }
       }
     }
 
@@ -138,7 +140,6 @@ function level(canvasW, canvasH, id) {
       hero.startY = this.startY;
       hero.entity.x = hero.startX;
       hero.entity.y = hero.startY;
-      // hero.reset = true;
       hero.hPower = 0;
       hero.jumping = false;
     }

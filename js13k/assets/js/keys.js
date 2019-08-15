@@ -10,3 +10,9 @@ var D = 68;
 var LMB = 0;
 var RMB = 2;
 var SPACE = 32;
+// TILES
+var WALL=0;
+var BRICK=1;
+var COIN=2;
+var HERO=3;
+var LEDGE=4;

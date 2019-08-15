@@ -8,9 +8,14 @@ function tileObj(size, x, y, type, solid, column, row, color) {
   this.collected = false;
   this.type = type;
 
-  if (this.type == "brick") {
+  // SET IMAGE
+  if (this.type == BRICK) {
     this.image.src = brick;
-  } else {
+  } else if (this.type == COIN) {
+    this.image.src = coin;
+  } else if (this.type == LEDGE) {
+    this.image.src = ledge;
+  } else if(this.type == WALL) {
     this.image.src = wall;
   }
 
@@ -20,23 +25,24 @@ function tileObj(size, x, y, type, solid, column, row, color) {
     ctx.translate(this.entity.x - camera.entity.x, this.entity.y - camera.entity.y);
     ctx.rotate(this.angle);
 
-    if(this.type == "brick"){
-      ctx.drawImage(this.image, this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
-    } else if(this.type == "coin") {
-      if(this.collected == false){
+    if(this.image == null){
         ctx.fillStyle = this.color;
         ctx.fillRect(this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
-      }
     } else {
-      ctx.fillStyle = this.color;
-      ctx.fillRect(this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
+      if(this.type == "coin") {
+        if(this.collected == false){
+          ctx.drawImage(this.image, this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
+        }
+      } else {
+        ctx.drawImage(this.image, this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
+      }
     }
 
-    // If Hero is over tile make it orange
+    // Hero Current Tile
     if(debug){
       if ( heroColliding(this) ) {
         ctx.fillStyle = "orange";
-        ctx.fillRect(this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
+        ctx.fillRect(this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height);
       }
     }
 
