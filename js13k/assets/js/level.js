@@ -34,31 +34,28 @@ function level(canvasW, canvasH, id) {
 
     // Coins
     for (i = 0; i < this.coins.length; i++) {
-      tile = this.coins[i];
-      tile.update(camera);
+      var coin = this.coins[i];
+      coin.update(camera);
 
-      if(heroColliding(tile)){
-        //coinSFX.play();
+      if(heroColliding(coin) && this.active && coin.active){
         playSound(COINFX);
-        //example4(87.31, 'triangle');
-        tile.collected = true;
+        coin.active = false;
         coinCount ++;
-        this.coins.splice(i, 1);;
-
-        // Change the level
-        if(coinCount == maxCoinCount){
-          hero.currentLevel ++;
-          console.log("Change Level: " + hero.currentLevel);
-          this.reset(hero.currentLevel, hero);
-          coinCount = 0;
-        } else {
-          console.log("coin(s):" + coinCount + " / " + maxCoinCount);
-        }
       }
+    }
+
+    // Change the level
+    if(coinCount == maxCoinCount){
+      hero.currentLevel ++;
+      hero.active = false;
+      this.active = false;
+      this.reset(hero.currentLevel, hero);
+      console.log("coin(s):" + coinCount + " / " + maxCoinCount);
     }
   }
 
   this.reset = function(id, hero){
+    if(hero != null){ hero.active = false; }
     console.log("Reset Level: " + id);
     maxCoinCount = 0;
     coinCount = 0;
@@ -79,14 +76,14 @@ function level(canvasW, canvasH, id) {
                        [1,4,4,4,4,4,4,4,1,4,4,4,4,4,4,4,4,4,4,1]];
     } else if(id == 2){
       levelArray = [[0,0,0,0,0,0],
-                    [0,0,0,2,0,0],
                     [0,0,0,0,0,0],
-                    [0,3,0,0,0,0],
+                    [0,0,0,0,0,0],
+                    [0,3,0,0,2,2],
                     [1,1,1,1,1,1]];
     } else if(id == 3){
-      levelArray = [[1,0,0,0,0,1],
-                    [1,0,0,2,0,1],
-                    [1,0,4,4,0,1],
+      levelArray = [[1,2,2,2,2,1],
+                    [1,2,2,2,2,1],
+                    [1,2,4,4,2,1],
                     [1,2,0,3,2,1],
                     [1,1,1,1,1,1]];
     } else if(id == 4){
@@ -138,12 +135,9 @@ function level(canvasW, canvasH, id) {
 
     // Update the HERO
     if(hero != null){
-      hero.startX = this.startX;
-      hero.startY = this.startY;
-      hero.entity.x = hero.startX;
-      hero.entity.y = hero.startY;
-      hero.hPower = 0;
-      hero.jumping = false;
+      hero.resetPos(this.startX, this.startY);
     }
+
+    this.active = true;
   }
 }

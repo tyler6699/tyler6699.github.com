@@ -7,6 +7,7 @@ function tileObj(size, x, y, type, solid, column, row, color) {
   this.image = new Image();
   this.collected = false;
   this.type = type;
+  this.active = true;
 
   // SET IMAGE
   if (this.type == BRICK) {
@@ -29,11 +30,7 @@ function tileObj(size, x, y, type, solid, column, row, color) {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
     } else {
-      if(this.type == "coin") {
-        if(this.collected == false){
-          ctx.drawImage(this.image, this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
-        }
-      } else {
+      if(this.active) {
         ctx.drawImage(this.image, this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
       }
     }
