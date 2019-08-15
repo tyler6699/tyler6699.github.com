@@ -64,6 +64,7 @@ function heroObj(width, height, color, x, y, type) {
 
     // Fallen off the screen
       if(this.entity.y > maxDrop){
+        playSound(FALLFX);
         this.entity.y = this.startY;
         this.entity.x = this.startX;
       }
@@ -82,11 +83,12 @@ function heroObj(width, height, color, x, y, type) {
       if (mainGame.keys && !this.jumping && (mainGame.keys[UP] || mainGame.keys[W] || mainGame.keys[SPACE])) {
         if(jPower == 0 && touchingY == true){
           jPower = maxJPower;
-          jumpSFX.play();
+          playSound(JUMPFX);
         }
       }
 
       if (mainGame.keys && (mainGame.keys[DOWN] || mainGame.keys[S])) {
+
       }
 
       if (mainGame.keys && (mainGame.keys[LEFT] || mainGame.keys[A])) {

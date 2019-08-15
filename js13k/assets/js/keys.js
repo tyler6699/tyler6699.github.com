@@ -16,3 +16,8 @@ var BRICK=1;
 var COIN=2;
 var HERO=3;
 var LEDGE=4;
+// NOISES
+var NOISEFX=0;
+var COINFX=1;
+var JUMPFX=2;
+var FALLFX=3;

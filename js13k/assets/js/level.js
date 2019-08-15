@@ -38,7 +38,9 @@ function level(canvasW, canvasH, id) {
       tile.update(camera);
 
       if(heroColliding(tile)){
-        coinSFX.play();
+        //coinSFX.play();
+        playSound(COINFX);
+        //example4(87.31, 'triangle');
         tile.collected = true;
         coinCount ++;
         this.coins.splice(i, 1);;
