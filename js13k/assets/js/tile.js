@@ -9,7 +9,7 @@ function tileObj(size, x, y, type, solid, column, row, color) {
   this.type = type;
   this.active = true;
   this.time = 0;
-  var meltRate = 0.3;
+  var meltRate = .8;
 
   // SET IMAGE
   switch(this.type) {
@@ -48,7 +48,7 @@ function tileObj(size, x, y, type, solid, column, row, color) {
   }
 
   this.tick = function(hero){
-    if(this.type == ICE && this.entity.height >= 0 && heroOnIce()){
+    if(this.type == ICE && this.entity.height >= 0 && heroOnIce(hero, this)){
       this.time += meltRate;
       this.entity.height -= meltRate;
       this.entity.y += meltRate;
@@ -56,19 +56,17 @@ function tileObj(size, x, y, type, solid, column, row, color) {
       this.active = false;
     }
   }
-}
 
-function heroOnIce(e){
-  if(e != null){
-    return hero.hbX < this.entity.x + this.entity.width &&
-    hero.hbX > this.entity.x &&
-    hero.hbY < this.entity.y + this.entity.height &&
-    hero.hbY > this.entity.y
-  } else {
-    return false;
+  function heroOnIce (hero, ice){
+    if(ice.entity != null){
+      return rectColiding(hero.entity.x, hero.entity.y + 20, hero.entity.width, hero.entity.height, ice.entity.x, ice.entity.y, ice.entity.width, ice.entity.height);
+    } else {
+      return false;
+    }
   }
 
 }
+
 
 function heroColliding(e){
   return hero.hbX < e.entity.x + e.entity.width &&
