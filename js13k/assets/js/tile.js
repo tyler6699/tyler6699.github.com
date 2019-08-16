@@ -8,16 +8,26 @@ function tileObj(size, x, y, type, solid, column, row, color) {
   this.collected = false;
   this.type = type;
   this.active = true;
+  this.time = 0;
+  var meltRate = 0.3;
 
   // SET IMAGE
-  if (this.type == BRICK) {
+  switch(this.type) {
+  case BRICK:
     this.image.src = brick;
-  } else if (this.type == COIN) {
+    break;
+  case COIN:
     this.image.src = coin;
-  } else if (this.type == LEDGE) {
+    break;
+  case LEDGE:
     this.image.src = ledge;
-  } else if(this.type == WALL) {
+    break;
+  case WALL:
     this.image.src = wall;
+    break;
+  case ICE:
+    this.image.src = ice;
+    break;
   }
 
   this.update = function(camera) {
@@ -28,23 +38,36 @@ function tileObj(size, x, y, type, solid, column, row, color) {
 
     if(this.image == null){
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
+        ctx.fillRect(this.mhWidth, this.mhHeight, this.entity.width, this.entity.height);
     } else {
       if(this.active) {
-        ctx.drawImage(this.image, this.entity.width / -2, this.entity.height / -2, this.entity.width, this.entity.height);
+        ctx.drawImage(this.image, this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height);
       }
     }
-
-    // Hero Current Tile
-    if(debug){
-      if ( heroColliding(this) ) {
-        ctx.fillStyle = "orange";
-        ctx.fillRect(this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height);
-      }
-    }
-
     ctx.restore();
   }
+
+  this.tick = function(hero){
+    if(this.type == ICE && this.entity.height >= 0 && heroOnIce()){
+      this.time += meltRate;
+      this.entity.height -= meltRate;
+      this.entity.y += meltRate;
+    } else if (this.entity.height <= 0){
+      this.active = false;
+    }
+  }
+}
+
+function heroOnIce(e){
+  if(e != null){
+    return hero.hbX < this.entity.x + this.entity.width &&
+    hero.hbX > this.entity.x &&
+    hero.hbY < this.entity.y + this.entity.height &&
+    hero.hbY > this.entity.y
+  } else {
+    return false;
+  }
+
 }
 
 function heroColliding(e){

@@ -13,23 +13,15 @@ function level(canvasW, canvasH, id) {
 
   this.draw = function(hero, camera){
     for (i = 0; i < this.backTiles.length; i++) {
-      tile = this.backTiles[i];
-
-      // Only draw tiles on screen
-      xCheck = (tile.entity.x > (hero.entity.x - this.canvasHalfW)) && (tile.entity.x < (hero.entity.x + this.canvasHalfW + tileSize));
-      yCheck = false;
-      if(xCheck){
-        yCheck = (tile.entity.y > (hero.entity.y - this.canvasHalfH) - offset) && (tile.entity.y < (hero.entity.y + this.canvasHalfH + tileSize - offset));
-      }
-      if( xCheck && yCheck ){
-        tile.update(camera);
-      }
+      var tile = this.backTiles[i];
+      tile.update(camera);
     }
 
     // Collision Tiles
     for (i = 0; i < this.tiles.length; i++) {
-      tile = this.tiles[i];
+      var tile = this.tiles[i];
       tile.update(camera);
+      tile.tick(hero);
     }
 
     // Coins
@@ -50,13 +42,15 @@ function level(canvasW, canvasH, id) {
       hero.active = false;
       this.active = false;
       this.reset(hero.currentLevel, hero);
-      console.log("coin(s):" + coinCount + " / " + maxCoinCount);
+    } else if(hero.reset){
+      hero.reset = false;
+      hero.active = false;
+      this.active = false;
+      this.reset(hero.currentLevel, hero);
     }
   }
 
   this.reset = function(id, hero){
-    if(hero != null){ hero.active = false; }
-    console.log("Reset Level: " + id);
     maxCoinCount = 0;
     coinCount = 0;
     this.tiles = [];
@@ -73,7 +67,7 @@ function level(canvasW, canvasH, id) {
                        [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,2,0,0,0,1],
                        [1,0,0,1,1,1,0,0,1,0,3,0,1,1,1,0,0,0,0,1],
                        [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1],
-                       [1,4,4,4,4,4,4,4,1,4,4,4,4,4,4,4,4,4,4,1]];
+                       [1,4,4,4,4,4,4,4,1,4,4,4,4,5,5,5,5,5,4,1]];
     } else if(id == 2){
       levelArray = [[0,0,0,0,0,0],
                     [0,0,0,0,0,0],
@@ -113,7 +107,7 @@ function level(canvasW, canvasH, id) {
         var tile;
         var type = levelArray[row][col];
         // Set tile type
-        if(type == BRICK || type == LEDGE){
+        if(type == BRICK || type == LEDGE || type == ICE){
           tile = new tileObj(tileSize, xx, yy, type, true, col, row, "none");
           this.tiles.push(tile);
         } else if (type == COIN) {

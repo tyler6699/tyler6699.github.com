@@ -6,6 +6,7 @@ function heroObj(width, height, color, x, y, type) {
   this.startY = y;
   this.currentLevel=1;
   this.active = false;
+  this.reset = false;
   var hPower = 0;
   var maxSpeed = 3;
   var jPower = 0;
@@ -43,7 +44,7 @@ function heroObj(width, height, color, x, y, type) {
 
     for (i = 0; i < tiles.length; i++) {
       t = tiles[i];
-      if(t.isSolid){
+      if(t.isSolid && t.active){
         if(rectColiding(newX, this.hbY1, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
           canMoveX = false;
         }
@@ -66,6 +67,7 @@ function heroObj(width, height, color, x, y, type) {
         playSound(FALLFX);
         this.entity.y = this.startY;
         this.entity.x = this.startX;
+        this.reset=true;
       }
     }
 
