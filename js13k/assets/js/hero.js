@@ -9,6 +9,7 @@ function heroObj(width, height, color, x, y, type) {
   this.reset = false;
   this.jumping = false;
   this.onLadder = false;
+  this.exitLadder = false;
   var hPower = 0;
   var maxSpeed = 3;
   var jPower = 0;
@@ -30,6 +31,7 @@ function heroObj(width, height, color, x, y, type) {
   }
 
   this.newPos = function(tiles) {
+    gravity = this.onLadder ? 0 : 6;
     // Update hitbox X and Y
     this.hbX1 = this.entity.x;
     this.hbY1 = this.entity.y;
@@ -44,7 +46,7 @@ function heroObj(width, height, color, x, y, type) {
       newY -= gravity;
       newY += jPower;
 
-      if(ladderUp){
+      if(ladderUp && !this.exitLadder){
         newY -= 3;
         ladderUp = false;
       } else if(ladderDown){
@@ -52,6 +54,7 @@ function heroObj(width, height, color, x, y, type) {
         ladderDown = false;
       }
     }
+    this.exitLadder = false;
 
     if(jPower > 0){
       jPower --;
@@ -77,6 +80,12 @@ function heroObj(width, height, color, x, y, type) {
           canMoveY = false;
         } else if(t.type == LADDER || t.type == LADDERTOP){
           this.onLadder = true;
+        }
+      }
+
+      if(t.type == LADDERTOP){
+        if(rectColiding(this.hbX1, newY+24, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
+          this.exitLadder = true;
         }
       }
     }

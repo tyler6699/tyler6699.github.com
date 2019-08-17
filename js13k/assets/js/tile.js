@@ -24,7 +24,6 @@ function tileObj(size, x, y, type, solid, column, row, color) {
     this.isSolid = false;
     break;
   case LADDERTOP:
-    this.image.src = brick;
     this.isSolid = false;
     this.entity.height = 16;
     this.entity.y += 16;
