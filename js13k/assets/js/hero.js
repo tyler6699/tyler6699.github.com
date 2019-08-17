@@ -31,7 +31,8 @@ function heroObj(width, height, color, x, y, type) {
   }
 
   this.newPos = function(tiles) {
-    gravity = this.onLadder ? 0 : 6;
+    gravity = this.onLadder && !this.exitLadder ? 0 : 6;
+
     // Update hitbox X and Y
     this.hbX1 = this.entity.x;
     this.hbY1 = this.entity.y;
@@ -43,12 +44,11 @@ function heroObj(width, height, color, x, y, type) {
     var newY = this.entity.y + gravity - jPower;
 
     if(this.onLadder){
-      newY -= gravity;
-      newY += jPower;
-
       if(ladderUp && !this.exitLadder){
         newY -= 3;
         ladderUp = false;
+        // Cancel out jump
+        newY += jPower;
       } else if(ladderDown){
         newY += 3;
         ladderDown = false;
@@ -84,7 +84,7 @@ function heroObj(width, height, color, x, y, type) {
       }
 
       if(t.type == LADDERTOP){
-        if(rectColiding(this.hbX1, newY+24, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
+        if(rectColiding(this.hbX1, newY+30, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
           this.exitLadder = true;
         }
       }
@@ -117,7 +117,7 @@ function heroObj(width, height, color, x, y, type) {
     }
 
     if (mainGame.keys && !this.jumping && (mainGame.keys[UP] || mainGame.keys[W] || mainGame.keys[SPACE])) {
-      if(jPower == 0 && touchingY == true){
+      if(jPower == 0 && (touchingY == true || this.exitLadder == true)){
         this.jumping = true;
         jPower = maxJPower;
         playSound(JUMPFX,.5);
