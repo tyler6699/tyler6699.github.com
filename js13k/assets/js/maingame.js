@@ -11,6 +11,7 @@ var buttonsPressed = [];
 var canvasW = 800;
 var canvasH = 600;
 var camera;
+var gameStart = false;
 
 // Called by body onload on index page
 function startGame() {
@@ -19,6 +20,7 @@ function startGame() {
   level.reset(1);
   hero = new heroObj(25, 25, "green", level.startX, level.startY);
   camera.newPos(hero, level);
+  intro = new intro();
   mainGame.start();
 }
 
@@ -70,17 +72,17 @@ var mainGame = {
 }
 
 function updateGameArea() {
-  // if(hero.reset){
-  //   hero.reset = false;
-  //   level.reset(hero.currentLevel);
-  // }
-
   // Update Gamepads
   navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
-  mainGame.clear();
-  level.draw(hero, camera);
-  hero.tick(camera);
-  hero.newPos(level.tiles);
-  hero.update(camera);
-  camera.newPos(hero, level);
+
+  if(gameStart){
+    mainGame.clear();
+    level.draw(hero, camera);
+    hero.tick(camera);
+    hero.newPos(level.tiles);
+    hero.update(camera);
+    camera.newPos(hero, level);
+  } else {
+    intro.tick();
+  }
 }

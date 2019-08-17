@@ -1,15 +1,16 @@
 // Sound
-var context = new AudioContext();
+var audioCtx;
+var oscArr = [];
 
 function playSound(name){
-  m = context.createBuffer(1,96e3,48e3);
+  m = audioCtx.createBuffer(1,96e3,48e3);
   b = m.getChannelData(0)
   for(i=96e3;i--;){
     b[i]=getSound(name,i);
   }
-  s = context.createBufferSource();
+  s = audioCtx.createBufferSource();
   s.buffer = m;
-  s.connect(context.destination);
+  s.connect(audioCtx.destination);
   s.start();
 }
 
@@ -64,12 +65,19 @@ function getCoin(i){
 
 //https://xem.github.io/miniMusic/simple.html
 function playMusic(){
+  // Stop all current sounds
+  for(os of oscArr){
+    if(os!=null) os.stop(0);
+  }
+  oscArr = [];
+
   data = [12,12,11,11,11,10,10,10,11,11,11,12,12,12];
   audio = new AudioContext();
   for(d in data){
     if(data[d]){
       gain = audio.createGain();
       osc = audio.createOscillator();
+      oscArr.push(osc);
       osc.connect(gain);
       gain.connect(audio.destination);
       osc.start(d*.4);

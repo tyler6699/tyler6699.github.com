@@ -132,6 +132,8 @@ function level(canvasW, canvasH, id) {
       hero.resetPos(this.startX, this.startY);
     }
 
+    // Trigger Level Song
+    if(audioCtx != null){ playMusic(); }
     this.active = true;
   }
 }
