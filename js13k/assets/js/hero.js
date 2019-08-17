@@ -117,13 +117,7 @@ function heroObj(width, height, color, x, y, type) {
     }
 
     if (mainGame.keys && !this.jumping && (mainGame.keys[UP] || mainGame.keys[W] || mainGame.keys[SPACE])) {
-      if(jPower == 0 && (touchingY == true || this.exitLadder == true)){
-        this.jumping = true;
-        jPower = maxJPower;
-        playSound(JUMPFX,.5);
-      }
-
-      if(this.onLadder){ ladderUp = true; }
+      this.moveUp();
     }
 
     if (mainGame.keys && (mainGame.keys[DOWN] || mainGame.keys[S])) {
@@ -148,15 +142,13 @@ function heroObj(width, height, color, x, y, type) {
       if(controllers[0].axes[0] > .8 || controllers[0].axes[2] > .8 || controllers[0].buttons[15].pressed){
         if(hPower < maxSpeed){ hPower ++; }
       }
-      // FORWARD
+      // UP
       if(controllers[0].axes[1] < -.8 || controllers[0].axes[3] < -.8 || controllers[0].buttons[12].pressed){
-        if(jPower == 0 && touchingY == true){
-          jPower = maxJPower;
-          jumpSFX.play();
-        }
+        this.moveUp();
       }
       // BACK
       if(controllers[0].axes[1] > .8 || controllers[0].axes[3] > .8 ||controllers[0].buttons[13].pressed){
+        if(this.onLadder){ ladderDown = true; }
       }
     }
   }
@@ -180,5 +172,14 @@ function heroObj(width, height, color, x, y, type) {
     // Centre used for checking hero current block
     hero.hbX = hero.entity.x + hero.entity.hWidth;
     hero.hbY = hero.entity.y + hero.entity.hHeight / 2;
+  }
+
+  this.moveUp = function(){
+    if(jPower == 0 && (touchingY == true || this.exitLadder == true)){
+      this.jumping = true;
+      jPower = maxJPower;
+      playSound(JUMPFX,1);
+    }
+    if(this.onLadder){ ladderUp = true; }
   }
 }
