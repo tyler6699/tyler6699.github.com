@@ -70,7 +70,7 @@ function tileObj(size, x, y, type, solid, column, row, color) {
       if(this.entity.yOffset > -30 && heroOnIce(hero, this)){
         this.time += meltRate;
         this.entity.yOffset -= meltRate;
-        this.entity.y += meltRate;
+        //this.entity.y += meltRate; This makes it hard for walking.
       } else if (this.entity.yOffset < -30){
         this.active = false;
       }

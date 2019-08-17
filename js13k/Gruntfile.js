@@ -3,6 +3,14 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
+      options: {
+        mangle: {
+          toplevel: true,
+          eval: true,
+          keep_fnames: false,
+          reserved: ["startGame"]
+        }
+      },
       build: {
         files: [{
           expand: false,
