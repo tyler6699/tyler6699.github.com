@@ -30,7 +30,7 @@ function level(canvasW, canvasH, id) {
       coin.update(camera);
 
       if(heroColliding(coin) && this.active && coin.active){
-        playSound(COINFX);
+        playSound(COINFX,1);
         coin.active = false;
         coinCount ++;
       }

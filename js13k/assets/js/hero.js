@@ -99,7 +99,7 @@ function heroObj(width, height, color, x, y, type) {
 
     // Fallen off the screen
     if(this.entity.y > maxDrop){
-      playSound(FALLFX);
+      playSound(FALLFX,1);
       this.entity.y = this.startY;
       this.entity.x = this.startX;
       this.reset=true;
@@ -120,7 +120,7 @@ function heroObj(width, height, color, x, y, type) {
       if(jPower == 0 && touchingY == true){
         this.jumping = true;
         jPower = maxJPower;
-        playSound(JUMPFX);
+        playSound(JUMPFX,.5);
       }
 
       if(this.onLadder){ ladderUp = true; }

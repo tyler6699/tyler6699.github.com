@@ -2,15 +2,20 @@
 var audioCtx;
 var oscArr = [];
 
-function playSound(name){
+function playSound(name, vol){
   m = audioCtx.createBuffer(1,96e3,48e3);
+  gainNode = audioCtx.createGain();
+
   b = m.getChannelData(0)
   for(i=96e3;i--;){
     b[i]=getSound(name,i);
   }
+
   s = audioCtx.createBufferSource();
   s.buffer = m;
-  s.connect(audioCtx.destination);
+  s.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+  gainNode.gain.value = .05;
   s.start();
 }
 
@@ -83,7 +88,7 @@ function playMusic(){
       osc.start(d*.4);
       osc.frequency.setValueAtTime(440*1.06 ** (13-data[d]),d*.4);
       osc.type='triangle';
-      gain.gain.setValueAtTime(1,d*.4),
+      gain.gain.setValueAtTime(0,d*.4),
       gain.gain.setTargetAtTime(.0001,d*.4+.38,.005);
       osc.stop(d*.4+.39);
     }
