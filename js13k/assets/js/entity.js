@@ -6,6 +6,7 @@ function entityObj(width, height, color, x, y, type) {
     this.mhHeight = height/-2;
     this.hWidth = width/2;
     this.hHeight = height/2;
+    this.yOffset = 0;
     this.angle = 0;
     this.x = x;
     this.y = y;

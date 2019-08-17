@@ -19,6 +19,16 @@ function tileObj(size, x, y, type, solid, column, row, color) {
   case COIN:
     this.image.src = coin;
     break;
+  case LADDER:
+    this.image.src = ladder;
+    this.isSolid = false;
+    break;
+  case LADDERTOP:
+    this.image.src = brick;
+    this.isSolid = false;
+    this.entity.height = 16;
+    this.entity.y += 16;
+    break;
   case LEDGE:
     this.image.src = ledge;
     break;
@@ -41,19 +51,30 @@ function tileObj(size, x, y, type, solid, column, row, color) {
         ctx.fillRect(this.mhWidth, this.mhHeight, this.entity.width, this.entity.height);
     } else {
       if(this.active) {
-        ctx.drawImage(this.image, this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height);
+        if(this.type == ICE){
+          // ctx.drawImage(image, dx, dy);
+          // ctx.drawImage(image, dx, dy, dWidth, dHeight);
+          // ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+
+          // As ice drops only draw visible
+          ctx.drawImage(this.image, 0, this.entity.yOffset, 30, 30, this.entity.mhWidth, this.entity.mhHeight + this.entity.yOffset, this.entity.width, this.entity.height);
+        } else {
+          ctx.drawImage(this.image, this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height);
+        }
       }
     }
     ctx.restore();
   }
 
   this.tick = function(hero){
-    if(this.type == ICE && this.entity.height >= 0 && heroOnIce(hero, this)){
-      this.time += meltRate;
-      this.entity.height -= meltRate;
-      this.entity.y += meltRate;
-    } else if (this.entity.height <= 0){
-      this.active = false;
+    if(this.type == ICE ){
+      if(this.entity.yOffset > -30 && heroOnIce(hero, this)){
+        this.time += meltRate;
+        this.entity.yOffset -= meltRate;
+        this.entity.y += meltRate;
+      } else if (this.entity.yOffset < -30){
+        this.active = false;
+      }
     }
   }
 
@@ -64,9 +85,7 @@ function tileObj(size, x, y, type, solid, column, row, color) {
       return false;
     }
   }
-
 }
-
 
 function heroColliding(e){
   return hero.hbX < e.entity.x + e.entity.width &&

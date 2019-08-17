@@ -17,6 +17,8 @@ var COIN=2;
 var HERO=3;
 var LEDGE=4;
 var ICE=5;
+var LADDER=6;
+var LADDERTOP=7;
 // NOISES
 var NOISEFX=0;
 var COINFX=1;

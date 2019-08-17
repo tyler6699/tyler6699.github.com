@@ -7,6 +7,8 @@ function heroObj(width, height, color, x, y, type) {
   this.currentLevel=1;
   this.active = false;
   this.reset = false;
+  this.jumping = false;
+  this.onLadder = false;
   var hPower = 0;
   var maxSpeed = 3;
   var jPower = 0;
@@ -14,6 +16,8 @@ function heroObj(width, height, color, x, y, type) {
   var touchingY = false;
   var gravity = 6;
   var maxDrop = 400;
+  var ladderUp = false;
+  var ladderDown = false;
 
   // Render
   this.update = function(camera) {
@@ -36,11 +40,29 @@ function heroObj(width, height, color, x, y, type) {
     var newX = this.entity.x + (hPower * this.speed);
     var newY = this.entity.y + gravity - jPower;
 
-    if(jPower > 0){jPower --;}
+    if(this.onLadder){
+      newY -= gravity;
+      newY += jPower;
+
+      if(ladderUp){
+        newY -= 3;
+        ladderUp = false;
+      } else if(ladderDown){
+        newY += 3;
+        ladderDown = false;
+      }
+    }
+
+    if(jPower > 0){
+      jPower --;
+    } else {
+      this.jumping = false;
+    }
 
     // Move Booleans
     var canMoveY = true;
     var canMoveX = true;
+    this.onLadder = false;
 
     for (i = 0; i < tiles.length; i++) {
       t = tiles[i];
@@ -48,9 +70,13 @@ function heroObj(width, height, color, x, y, type) {
         if(rectColiding(newX, this.hbY1, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
           canMoveX = false;
         }
+      }
 
-        if(rectColiding(this.hbX1, newY, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
+      if(rectColiding(this.hbX1, newY, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
+        if(t.isSolid && t.active){
           canMoveY = false;
+        } else if(t.type == LADDER || t.type == LADDERTOP){
+          this.onLadder = true;
         }
       }
     }
@@ -63,13 +89,13 @@ function heroObj(width, height, color, x, y, type) {
     if(canMoveY){this.entity.y = newY}
 
     // Fallen off the screen
-      if(this.entity.y > maxDrop){
-        playSound(FALLFX);
-        this.entity.y = this.startY;
-        this.entity.x = this.startX;
-        this.reset=true;
-      }
+    if(this.entity.y > maxDrop){
+      playSound(FALLFX);
+      this.entity.y = this.startY;
+      this.entity.x = this.startX;
+      this.reset=true;
     }
+  }
 
   // logic
   this.tick = function() {
@@ -83,13 +109,16 @@ function heroObj(width, height, color, x, y, type) {
 
     if (mainGame.keys && !this.jumping && (mainGame.keys[UP] || mainGame.keys[W] || mainGame.keys[SPACE])) {
       if(jPower == 0 && touchingY == true){
+        this.jumping = true;
         jPower = maxJPower;
         playSound(JUMPFX);
       }
+
+      if(this.onLadder){ ladderUp = true; }
     }
 
     if (mainGame.keys && (mainGame.keys[DOWN] || mainGame.keys[S])) {
-
+      if(this.onLadder){ ladderDown = true; }
     }
 
     if (mainGame.keys && (mainGame.keys[LEFT] || mainGame.keys[A])) {
@@ -132,6 +161,10 @@ function heroObj(width, height, color, x, y, type) {
     hero.hPower = 0;
     hero.jumping = false;
     hero.active = true;
+  }
+
+  this.updateHitbox = function(){
+    updateHitbox();
   }
 
   function updateHitbox(){
