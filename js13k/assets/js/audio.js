@@ -1,7 +1,5 @@
 // Sound
 var context = new AudioContext();
-var o = null
-var g = null
 
 function playSound(name){
   m = context.createBuffer(1,96e3,48e3);
@@ -62,4 +60,24 @@ function getCoin(i){
   var t = (n-i)/n;
   var q=Math.pow(t,2.1);
   return (Math.pow(i,3)&(i<c?16:99))?q:-q;
+}
+
+//https://xem.github.io/miniMusic/simple.html
+function playMusic(){
+  data = [12,12,11,11,11,10,10,10,11,11,11,12,12,12];
+  audio = new AudioContext();
+  for(d in data){
+    if(data[d]){
+      gain = audio.createGain();
+      osc = audio.createOscillator();
+      osc.connect(gain);
+      gain.connect(audio.destination);
+      osc.start(d*.4);
+      osc.frequency.setValueAtTime(440*1.06 ** (13-data[d]),d*.4);
+      osc.type='triangle';
+      gain.gain.setValueAtTime(1,d*.4),
+      gain.gain.setTargetAtTime(.0001,d*.4+.38,.005);
+      osc.stop(d*.4+.39);
+    }
+  }
 }
