@@ -74,13 +74,15 @@ function heroObj(width, height, color, x, y, type) {
       t = tiles[i];
       if(t.isSolid && t.active){
         if(rectColiding(newX, this.hbY1, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
-          canMoveX = false;
+          if(!t.oneWay){
+            canMoveX = false;
+          }
         }
       }
 
       if(rectColiding(this.hbX1, newY, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
         if(t.isSolid && t.active){
-          if(t.type == LEDGE){
+          if(t.oneWay){
             if (this.entity.y + this.entity.height < t.entity.y){
               canMoveY = false;
             }

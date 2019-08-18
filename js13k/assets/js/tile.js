@@ -9,6 +9,7 @@ function tileObj(size, x, y, type, solid, column, row, color) {
   this.type = type;
   this.active = true;
   this.time = 0;
+  this.oneWay = false;
   var meltRate = .8;
 
   // SET IMAGE
@@ -30,6 +31,7 @@ function tileObj(size, x, y, type, solid, column, row, color) {
     break;
   case LEDGE:
     this.image.src = ledge;
+    this.oneWay = true;
     break;
   case WALL:
     this.image.src = wall;
