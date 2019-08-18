@@ -49,6 +49,13 @@ function tileObj(size, x, y, type, solid, column, row, color) {
     ctx.translate(this.entity.x - camera.entity.x, this.entity.y - camera.entity.y);
     ctx.rotate(this.angle);
 
+    if(this.type == PORTAL){
+      this.time += .001;
+      ctx.globalAlpha = getAlhpa(this.time);
+    } else {
+      ctx.globalAlpha = 1;
+    }
+
     if(this.image == null){
         ctx.fillStyle = this.color;
         ctx.fillRect(this.mhWidth, this.mhHeight, this.entity.width, this.entity.height);
@@ -88,6 +95,12 @@ function tileObj(size, x, y, type, solid, column, row, color) {
       return false;
     }
   }
+}
+
+function getAlhpa(time){
+  var pi = 3.14;
+  var frequency = 25;
+  return 0.5*(1+Math.sin(2 * pi * frequency * time));
 }
 
 function heroColliding(e){
