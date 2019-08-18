@@ -20,9 +20,6 @@ function heroObj(width, height, color, x, y, type) {
   var ladderUp = false;
   var ladderDown = false;
 
-  // REMOVE
-  var hitIt = false;
-
   // Render
   this.update = function(camera) {
     ctx = mainGame.context;
@@ -83,7 +80,7 @@ function heroObj(width, height, color, x, y, type) {
       if(rectColiding(this.hbX1, newY, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
         if(t.isSolid && t.active){
           if(t.oneWay){
-            if (this.entity.y + this.entity.height < t.entity.y){
+            if (this.entity.y + this.entity.height <= t.entity.y){
               canMoveY = false;
             }
           } else {
