@@ -25,3 +25,4 @@ var NOISEFX=0;
 var COINFX=1;
 var JUMPFX=2;
 var FALLFX=3;
+var PORTALFX=4;

@@ -34,6 +34,9 @@ getSound = function (name,i){
   case FALLFX:
     val = getFall(i);
     break;
+  case PORTALFX:
+    val = getPortal(i);
+    break
   default:
     return 1;
   }
@@ -66,6 +69,14 @@ function getCoin(i){
   var t = (n-i)/n;
   var q=Math.pow(t,2.1);
   return (Math.pow(i,3)&(i<c?16:99))?q:-q;
+}
+
+function getPortal(i){
+  var n=2e4;
+  if (i > n) return null;
+  var t = (n-i)/n;
+  var q = t;
+  return Math.sin(-i*0.003*Math.sin(0.09*i+Math.sin(i/200))+Math.sin(i/100))*q*q;
 }
 
 //https://xem.github.io/miniMusic/simple.html

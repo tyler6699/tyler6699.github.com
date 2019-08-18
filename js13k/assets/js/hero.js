@@ -20,6 +20,9 @@ function heroObj(width, height, color, x, y, type) {
   var ladderUp = false;
   var ladderDown = false;
 
+  // REMOVE
+  var hitIt = false;
+
   // Render
   this.update = function(camera) {
     ctx = mainGame.context;
@@ -77,7 +80,13 @@ function heroObj(width, height, color, x, y, type) {
 
       if(rectColiding(this.hbX1, newY, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
         if(t.isSolid && t.active){
-          canMoveY = false;
+          if(t.type == LEDGE){
+            if (this.entity.y + this.entity.height < t.entity.y){
+              canMoveY = false;
+            }
+          } else {
+            canMoveY = false;
+          }
         } else if(t.type == LADDER || t.type == LADDERTOP){
           this.onLadder = true;
         }
@@ -154,14 +163,15 @@ function heroObj(width, height, color, x, y, type) {
   }
 
   this.resetPos = function(x, y){
-    hero.startX = x;
-    hero.startY = y;
-    hero.entity.x = hero.startX;
-    hero.entity.y = hero.startY;
+    this.startX = x;
+    this.startY = y;
+    this.entity.x = this.startX;
+    this.entity.y = this.startY;
     updateHitbox();
-    hero.hPower = 0;
-    hero.jumping = false;
-    hero.active = true;
+    hPower = 0;
+    jumping = false;
+    jPower = 0;
+    this.active = true;
   }
 
   this.updateHitbox = function(){
