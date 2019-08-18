@@ -6,6 +6,7 @@ function level(canvasW, canvasH, id) {
   this.startY=0;
   this.canvasHalfW = canvasW / 2;
   this.canvasHalfH = canvasH / 2;
+  this.showPortal=false;
   var tileSize = 32;
   var coinCount=0;
   var maxCoinCount=0;
@@ -29,19 +30,29 @@ function level(canvasW, canvasH, id) {
       var coin = this.coins[i];
       coin.update(camera);
 
-      if(heroColliding(coin) && this.active && coin.active){
+      if(coin.type == COIN && heroColliding(coin) && this.active && coin.active){
         playSound(COINFX,1);
         coin.active = false;
         coinCount ++;
+      } else if (coin.type == PORTAL){
+        if(this.showPortal){
+          if(!coin.active){
+            coin.active = true;
+          } else if(coin.active && heroColliding(coin)){
+            console.log("level complete!");
+            this.showPortal=false;
+            hero.currentLevel ++;
+            hero.active = false;
+            this.active = false;
+            this.reset(hero.currentLevel, hero);
+          }
+        }
       }
     }
 
     // Change the level
     if(coinCount == maxCoinCount){
-      hero.currentLevel ++;
-      hero.active = false;
-      this.active = false;
-      this.reset(hero.currentLevel, hero);
+      this.showPortal = true;
     } else if(hero.reset){
       hero.reset = false;
       hero.active = false;
@@ -59,26 +70,26 @@ function level(canvasW, canvasH, id) {
 
     if(id == 1){
       levelArray = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                       [0,0,0,0,0,0,0,0,0,4,4,4,4,4,0,0,0,0,0,0],
-                       [4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                       [0,0,0,7,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                       [0,0,0,6,1,1,1,1,1,0,0,0,7,0,2,0,0,0,0,0],
-                       [1,0,0,6,0,0,0,0,1,4,4,0,6,1,1,1,0,0,0,1],
-                       [1,0,0,6,0,0,0,0,1,0,0,0,6,0,0,2,0,0,0,1],
-                       [1,0,0,1,1,1,0,0,1,0,3,0,1,1,1,0,0,0,0,1],
-                       [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1],
-                       [1,4,4,4,4,4,4,4,1,4,4,4,4,5,5,5,5,5,4,1]];
+                    [0,0,0,0,0,0,0,0,0,4,4,4,4,4,0,0,0,0,0,0],
+                    [4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,7,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,6,1,1,1,1,1,0,0,0,7,0,2,0,0,0,0,0],
+                    [1,0,0,6,0,0,0,0,1,4,4,0,6,1,1,1,0,0,0,1],
+                    [1,0,0,6,0,0,0,0,1,0,0,0,6,0,0,2,0,0,0,1],
+                    [1,0,0,1,1,1,0,0,1,0,3,0,1,1,1,0,0,0,0,1],
+                    [1,0,0,8,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1],
+                    [1,4,4,4,4,4,4,4,1,4,4,4,4,5,5,5,5,5,4,1]];
     } else if(id == 2){
       levelArray = [[0,0,0,0,0,0],
                     [0,0,0,0,0,0],
-                    [0,0,0,0,0,0],
+                    [0,0,0,0,8,0],
                     [0,3,0,0,2,2],
                     [5,5,5,5,4,4]];
     } else if(id == 3){
       levelArray = [[1,2,2,2,2,1],
                     [1,2,2,2,2,1],
                     [1,2,4,4,2,1],
-                    [1,2,0,3,2,1],
+                    [1,2,8,3,2,1],
                     [1,5,5,5,5,1]];
     } else if(id == 4){
       levelArray = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
@@ -87,7 +98,7 @@ function level(canvasW, canvasH, id) {
                     [0,0,0,0,0,0,0,0,1,4,0,0,0,0,0,0,0,0,6,0],
                     [0,0,0,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,6,0],
                     [1,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,0,0,6,1],
-                    [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,6,0,0,6,1],
+                    [1,0,0,8,0,0,0,0,1,0,0,0,0,0,0,6,0,0,6,1],
                     [1,0,0,4,4,4,4,4,1,0,3,0,1,1,1,6,0,0,6,1],
                     [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,6,0,0,6,1],
                     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];;
@@ -110,10 +121,10 @@ function level(canvasW, canvasH, id) {
         if([BRICK, LEDGE, ICE, LADDER, LADDERTOP].includes(type)){
           tile = new tileObj(tileSize, xx, yy, type, true, col, row, "none");
           this.tiles.push(tile);
-        } else if (type == COIN) {
+        } else if (type == COIN || type == PORTAL) {
           tile = new tileObj(tileSize, xx, yy, type, false, col, row, "none");
           this.coins.push(tile);
-          maxCoinCount ++;
+          if(type == COIN) maxCoinCount ++;
         } else if (type == HERO){
           this.startX = xx;
           this.startY= yy;

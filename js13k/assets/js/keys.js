@@ -19,6 +19,7 @@ var LEDGE=4;
 var ICE=5;
 var LADDER=6;
 var LADDERTOP=7;
+var PORTAL=8;
 // NOISES
 var NOISEFX=0;
 var COINFX=1;

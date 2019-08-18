@@ -37,6 +37,10 @@ function tileObj(size, x, y, type, solid, column, row, color) {
   case ICE:
     this.image.src = ice;
     break;
+  case PORTAL:
+    this.image.src = portal;
+    this.active = false;
+    break;
   }
 
   this.update = function(camera) {
