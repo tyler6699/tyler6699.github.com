@@ -12,46 +12,56 @@ function tileObj(size, x, y, type, solid, column, row, color) {
   this.oneWay = false;
   this.leftPush = false;
   this.rightPush = false;
-
+  this.image.src = atlas;
+  this.draw=true;
+  this.sx=0;
+  this.sy=0;
+  this.sw=30;
+  this.sh=30;
   var meltRate = .8;
 
   // SET IMAGE
   switch(this.type) {
   case BRICK:
-    this.image.src = brick;
+    this.sx = 60;
     break;
   case COIN:
-    this.image.src = coin;
+    this.sx=90;
     break;
   case LADDER:
-    this.image.src = ladder;
+    this.sx=30;
     this.isSolid = false;
     break;
   case LADDERTOP:
+    this.draw=false;
     this.isSolid = false;
     this.entity.height = 16;
     this.entity.y += 16;
     break;
   case LEDGE:
-    this.image.src = ledge;
+    this.sx=120;
     this.oneWay = true;
     break;
   case WALL:
-    this.image.src = wall;
+    this.sy=30;
     break;
   case ICE:
-    this.image.src = ice;
+    this.sx=30;
+    this.sy=30;
     break;
   case PORTAL:
-    this.image.src = portal;
+    this.sx=60;
+    this.sy=30;
     this.active = false;
     break;
   case LEFTA:
-    this.image.src = lefta;
+    this.sx=0;
+    this.sy=0;
     this.leftPush = true;
     break;
   case RIGHTA:
-    this.image.src = lefta;
+    this.sx=60;
+    this.sy=30;
     this.rightPush = true;
     this.entity.angle = 2 * Math.PI - 180 * Math.PI / 180;
     break;
@@ -71,9 +81,11 @@ function tileObj(size, x, y, type, solid, column, row, color) {
     if((this.type == LEFTA || this.type == RIGHTA) && this.active){
       this.time += 0.01;
       if(this.time > .5){
-        this.image.src = leftalt;
+        this.sx=0;
+        this.sy=0;
       } else {
-        this.image.src = lefta;
+        this.sx=90;
+        this.sy=30;
       }
       if(this.time > 1) this.time=0;
     }
@@ -82,17 +94,10 @@ function tileObj(size, x, y, type, solid, column, row, color) {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.mhWidth, this.mhHeight, this.entity.width, this.entity.height);
     } else {
-      if(this.active) {
-        if(this.type == ICE){
-          // ctx.drawImage(image, dx, dy);
-          // ctx.drawImage(image, dx, dy, dWidth, dHeight);
-          // ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-
-          // As ice drops only draw visible
-          ctx.drawImage(this.image, 0, this.entity.yOffset, 30, 30, this.entity.mhWidth, this.entity.mhHeight + this.entity.yOffset, this.entity.width, this.entity.height);
-        } else {
-          ctx.drawImage(this.image, this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height);
-        }
+      if(this.active && this.draw) {
+        ctx.scale(1,1.01);
+        ctx.drawImage(this.image, this.sx, this.sy, this.sw, this.sh + this.entity.yOffset, this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height + this.entity.yOffset);
+        //ctx.drawImage(this.image, this.sx, this.sy, 30, 30, -15, -15, this.entity.width, this.entity.height);
       }
     }
     ctx.restore();

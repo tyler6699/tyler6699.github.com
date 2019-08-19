@@ -8,7 +8,7 @@ function level(canvasW, canvasH, id) {
   this.canvasHalfH = canvasH / 2;
   this.showPortal=false;
   this.levels = [];
-  var tileSize = 32;
+  var tileSize = 30;
   var coinCount=0;
   var maxCoinCount=0;
   var levelArray;
@@ -84,7 +84,6 @@ function level(canvasW, canvasH, id) {
       for (col = 0; col < cols; col++) {
         xx = col * tileSize;
         yy = row * tileSize;
-
         var tile;
         var type = levelArray[row][col];
         // Set tile type
@@ -122,8 +121,8 @@ function level(canvasW, canvasH, id) {
   // 0
   this.levels.push([[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
           [0,0,0,0,0,0,0,0,0,4,4,4,4,4,0,0,0,0,0,0],
-          [4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-          [0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+          [4,4,4,0,0,0,0,0,0,0,0,4,4,0,0,0,0,0,0,0],
+          [0,0,0,7,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0],
           [0,0,0,6,1,L,L,L,1,0,0,0,7,0,0,0,0,0,0,0],
           [1,0,0,6,0,0,0,0,1,4,4,4,6,1,R,R,R,1,0,1],
           [1,0,0,6,0,0,0,0,1,0,0,0,6,1,0,2,0,0,0,1],

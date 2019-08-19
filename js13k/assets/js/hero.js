@@ -102,7 +102,7 @@ function heroObj(width, height, color, x, y, type) {
       }
 
       if(t.type == LADDERTOP){
-        if(rectColiding(this.hbX1, newY+30, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
+        if(rectColiding(this.hbX1, newY+28, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
           this.exitLadder = true;
         }
       } else if(t.type == LEFTA){
