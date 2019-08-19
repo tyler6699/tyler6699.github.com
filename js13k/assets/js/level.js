@@ -7,10 +7,13 @@ function level(canvasW, canvasH, id) {
   this.canvasHalfW = canvasW / 2;
   this.canvasHalfH = canvasH / 2;
   this.showPortal=false;
+  this.levels = [];
   var tileSize = 32;
   var coinCount=0;
   var maxCoinCount=0;
   var levelArray;
+  var L = 9;
+  var R = 10;
 
   this.draw = function(hero, camera){
     for (i = 0; i < this.backTiles.length; i++) {
@@ -44,7 +47,10 @@ function level(canvasW, canvasH, id) {
             hero.currentLevel ++;
             hero.active = false;
             this.active = false;
-            this.reset(hero.currentLevel, hero);
+            // Last Level - Reset to 0
+            if(hero.currentLevel == 4 ) hero.currentLevel = 0;
+            // Reset the level
+            this.reset(hero);
           }
         }
       }
@@ -58,55 +64,18 @@ function level(canvasW, canvasH, id) {
       hero.reset = false;
       hero.active = false;
       this.active = false;
-      this.reset(hero.currentLevel, hero);
+      this.reset(hero);
     }
   }
 
-  this.reset = function(id, hero){
+  this.reset = function(hero){
+    var id = hero != null ? hero.currentLevel : 0;
     maxCoinCount = 0;
     coinCount = 0;
     this.tiles = [];
     this.backTiles = [];
     this.coins = [];
-
-    if(id == 1){
-      levelArray = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                    [0,0,0,0,0,0,0,0,0,4,4,4,4,4,0,0,0,0,0,0],
-                    [4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                    [0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                    [0,0,0,6,1,1,1,1,1,0,0,0,7,0,0,0,0,0,0,0],
-                    [1,0,0,6,0,0,0,0,1,4,4,0,6,1,1,1,0,0,0,1],
-                    [1,0,0,6,0,0,0,0,1,0,0,0,6,0,0,2,0,0,0,1],
-                    [1,0,0,1,1,1,0,0,1,4,3,0,1,1,1,0,0,0,0,1],
-                    [1,0,0,0,0,0,0,0,1,0,0,8,0,0,0,0,0,0,0,1],
-                    [1,4,4,4,4,4,4,4,1,4,4,4,4,5,5,5,5,5,4,1]];
-    } else if(id == 2){
-      levelArray = [[0,0,0,0,0,0],
-                    [0,0,0,0,0,0],
-                    [0,0,0,0,8,0],
-                    [0,3,0,0,2,2],
-                    [5,5,5,5,4,4]];
-    } else if(id == 3){
-      levelArray = [[1,2,2,2,2,1],
-                    [1,2,2,2,2,1],
-                    [1,2,4,4,2,1],
-                    [1,2,8,3,2,1],
-                    [1,5,5,5,5,1]];
-    } else if(id == 4){
-      levelArray = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
-                    [0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,6,0],
-                    [0,0,0,0,0,0,0,4,4,0,0,0,0,0,0,0,0,0,6,0],
-                    [0,0,0,0,0,0,0,0,1,4,0,0,0,0,0,0,0,0,6,0],
-                    [0,0,0,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,6,0],
-                    [1,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,0,0,6,1],
-                    [1,0,0,8,0,0,0,0,1,0,0,0,0,0,0,6,0,0,6,1],
-                    [1,0,0,4,4,4,4,4,1,0,3,0,1,1,1,6,0,0,6,1],
-                    [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,6,0,0,6,1],
-                    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];;
-
-      // reset the level
-      hero.currentLevel = 0;
-    }
+    levelArray = this.levels[id];
 
     var rows = levelArray.length;
     var cols = levelArray[0].length;
@@ -119,7 +88,7 @@ function level(canvasW, canvasH, id) {
         var tile;
         var type = levelArray[row][col];
         // Set tile type
-        if([BRICK, LEDGE, ICE, LADDER, LADDERTOP].includes(type)){
+        if([BRICK, LEDGE, ICE, LADDER, LADDERTOP, LEFTA, RIGHTA].includes(type)){
           tile = new tileObj(tileSize, xx, yy, type, true, col, row, "none");
           this.tiles.push(tile);
         } else if (type == COIN || type == PORTAL) {
@@ -148,4 +117,42 @@ function level(canvasW, canvasH, id) {
     if(audioCtx != null){ playMusic(); }
     this.active = true;
   }
+
+  // Setup Levels
+  // 0
+  this.levels.push([[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+          [0,0,0,0,0,0,0,0,0,4,4,4,4,4,0,0,0,0,0,0],
+          [4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+          [0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+          [0,0,0,6,1,L,L,L,1,0,0,0,7,0,0,0,0,0,0,0],
+          [1,0,0,6,0,0,0,0,1,4,4,4,6,1,R,R,R,1,0,1],
+          [1,0,0,6,0,0,0,0,1,0,0,0,6,1,0,2,0,0,0,1],
+          [1,0,0,1,1,1,0,0,1,0,3,0,6,1,1,1,1,4,4,1],
+          [1,0,0,0,0,0,0,0,1,0,0,8,0,0,0,0,0,0,2,1],
+          [1,4,4,4,4,4,4,4,1,4,4,4,4,5,5,5,5,5,4,1]]);
+  // 1
+  this.levels.push([[0,0,0,0,0,0],
+               [0,0,0,0,0,0],
+               [0,0,0,0,8,0],
+               [0,3,0,0,2,2],
+               [5,5,5,5,4,4]]);
+
+  // 2
+  this.levels.push([[1,2,2,2,2,1],
+                [1,2,2,2,2,1],
+                [1,2,4,4,2,1],
+                [1,2,8,3,2,1],
+                [1,5,5,5,5,1]]);
+
+  // 3
+  this.levels.push([[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+                [0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,6,0],
+                [0,0,0,0,0,0,0,4,4,0,0,0,0,0,0,0,0,0,6,0],
+                [0,0,0,0,0,0,0,0,1,4,0,0,0,0,0,0,0,0,6,0],
+                [0,0,0,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,6,0],
+                [1,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,0,0,6,1],
+                [1,0,0,8,0,0,0,0,1,0,0,0,0,0,0,6,0,0,6,1],
+                [1,0,0,4,4,4,4,4,1,0,3,0,1,1,1,6,0,0,6,1],
+                [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,6,0,0,6,1],
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]);
 }

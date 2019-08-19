@@ -17,7 +17,7 @@ var gameStart = false;
 function startGame() {
   camera = new Camera(0, 0);
   level = new level(canvasW, canvasH, 1);
-  level.reset(1);
+  level.reset(null);
   hero = new heroObj(25, 25, "green", level.startX, level.startY);
   camera.newPos(hero, level);
   intro = new intro();

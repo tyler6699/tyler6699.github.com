@@ -4,12 +4,14 @@ function heroObj(width, height, color, x, y, type) {
   this.color = color;
   this.startX = x;
   this.startY = y;
-  this.currentLevel=1;
+  this.currentLevel=0;
   this.active = false;
   this.reset = false;
   this.jumping = false;
   this.onLadder = false;
   this.exitLadder = false;
+  this.onLeftA = false;
+  this.onRightA = false
   var hPower = 0;
   var maxSpeed = 3;
   var jPower = 0;
@@ -43,6 +45,12 @@ function heroObj(width, height, color, x, y, type) {
     var newX = this.entity.x + (hPower * this.speed);
     var newY = this.entity.y + gravity - jPower;
 
+    if(this.onLeftA){
+      newX -= 3;
+    } else if(this.onRightA){
+      newX += 3;
+    }
+
     if(this.onLadder){
       if(ladderUp && !this.exitLadder){
         newY -= 3;
@@ -66,6 +74,8 @@ function heroObj(width, height, color, x, y, type) {
     var canMoveY = true;
     var canMoveX = true;
     this.onLadder = false;
+    this.onLeftA = false;
+    this.onRightA = false
 
     for (i = 0; i < tiles.length; i++) {
       t = tiles[i];
@@ -94,6 +104,14 @@ function heroObj(width, height, color, x, y, type) {
       if(t.type == LADDERTOP){
         if(rectColiding(this.hbX1, newY+30, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
           this.exitLadder = true;
+        }
+      } else if(t.type == LEFTA){
+        if(rectColiding(this.hbX1, newY+10, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
+          this.onLeftA = true;
+        }
+      } else if(t.type == RIGHTA){
+        if(rectColiding(this.hbX1, newY+10, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
+          this.onRightA = true;
         }
       }
     }

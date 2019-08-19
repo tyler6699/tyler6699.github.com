@@ -5,3 +5,5 @@ var ledge = "assets/ledge.png";
 var ice = "assets/ice.png";
 var ladder = "assets/ladder.png";
 var portal = "assets/portal.png";
+var lefta = "assets/left.png";
+var leftalt = "assets/leftalt.png";

@@ -10,6 +10,9 @@ function tileObj(size, x, y, type, solid, column, row, color) {
   this.active = true;
   this.time = 0;
   this.oneWay = false;
+  this.leftPush = false;
+  this.rightPush = false;
+
   var meltRate = .8;
 
   // SET IMAGE
@@ -43,19 +46,36 @@ function tileObj(size, x, y, type, solid, column, row, color) {
     this.image.src = portal;
     this.active = false;
     break;
+  case LEFTA:
+    this.image.src = lefta;
+    this.leftPush = true;
+    break;
+  case RIGHTA:
+    this.image.src = lefta;
+    this.rightPush = true;
+    this.entity.angle = 2 * Math.PI - 180 * Math.PI / 180;
+    break;
   }
 
   this.update = function(camera) {
     ctx = mainGame.context;
     ctx.save();
     ctx.translate(this.entity.x - camera.entity.x, this.entity.y - camera.entity.y);
-    ctx.rotate(this.angle);
+    ctx.rotate(this.entity.angle);
 
-    if(this.type == PORTAL){
+    if(this.type == PORTAL && this.active){
       this.time += .001;
       ctx.globalAlpha = getAlhpa(this.time);
-    } else {
-      ctx.globalAlpha = 1;
+    }
+
+    if((this.type == LEFTA || this.type == RIGHTA) && this.active){
+      this.time += 0.01;
+      if(this.time > .5){
+        this.image.src = leftalt;
+      } else {
+        this.image.src = lefta;
+      }
+      if(this.time > 1) this.time=0;
     }
 
     if(this.image == null){
