@@ -101,8 +101,7 @@ function tileObj(size, x, y, type, solid, column, row, color) {
         ctx.fillRect(this.mhWidth, this.mhHeight, this.entity.width, this.entity.height);
     } else {
       if(this.active && this.draw) {
-        ctx.scale(1,1.01);
-        ctx.drawImage(this.image, this.sx, this.sy + this.entity.yOffset, this.sw, this.sh, this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height);
+        ctx.drawImage(this.image, this.sx, this.sy + this.entity.yOffset, this.sw, this.sh-1, this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height);
       }
     }
     ctx.restore();
