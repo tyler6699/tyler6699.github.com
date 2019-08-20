@@ -29,7 +29,7 @@ function tileObj(size, x, y, type, solid, column, row, color) {
     this.sx=90;
     break;
   case LADDER:
-    this.sx=30;
+    this.sy=60;
     this.isSolid = false;
     break;
   case LADDERTOP:
@@ -46,6 +46,7 @@ function tileObj(size, x, y, type, solid, column, row, color) {
     this.sy=30;
     break;
   case ICE:
+    this.time = 1;
     this.sx=30;
     this.sy=30;
     break;
@@ -76,18 +77,23 @@ function tileObj(size, x, y, type, solid, column, row, color) {
     if(this.type == PORTAL && this.active){
       this.time += .001;
       ctx.globalAlpha = getAlhpa(this.time);
+    } else if(this.type == ICE){
+      ctx.globalAlpha = this.time;
     }
 
     if((this.type == LEFTA || this.type == RIGHTA) && this.active){
       this.time += 0.01;
-      if(this.time > .5){
-        this.sx=0;
-        this.sy=0;
-      } else {
+      if(this.time < .2){
+        this.sx=120;
+        this.sy=30;
+      } else if(this.time < .4) {
         this.sx=90;
         this.sy=30;
+      } else {
+        this.sx=0;
+        this.sy=0;
       }
-      if(this.time > 1) this.time=0;
+      if(this.time > .6) this.time=0;
     }
 
     if(this.image == null){
@@ -96,8 +102,7 @@ function tileObj(size, x, y, type, solid, column, row, color) {
     } else {
       if(this.active && this.draw) {
         ctx.scale(1,1.01);
-        ctx.drawImage(this.image, this.sx, this.sy, this.sw, this.sh + this.entity.yOffset, this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height + this.entity.yOffset);
-        //ctx.drawImage(this.image, this.sx, this.sy, 30, 30, -15, -15, this.entity.width, this.entity.height);
+        ctx.drawImage(this.image, this.sx, this.sy + this.entity.yOffset, this.sw, this.sh, this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height);
       }
     }
     ctx.restore();
@@ -106,9 +111,8 @@ function tileObj(size, x, y, type, solid, column, row, color) {
   this.tick = function(hero){
     if(this.type == ICE ){
       if(this.entity.yOffset > -30 && heroOnIce(hero, this)){
-        this.time += meltRate;
+        this.time -= .012;
         this.entity.yOffset -= meltRate;
-        //this.entity.y += meltRate; This makes it hard for walking.
       } else if (this.entity.yOffset < -30){
         this.active = false;
       }
