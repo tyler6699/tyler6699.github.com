@@ -74,27 +74,9 @@ function tileObj(size, x, y, type, solid, column, row, color) {
     ctx.translate(this.entity.x - camera.entity.x, this.entity.y - camera.entity.y);
     ctx.rotate(this.entity.angle);
 
-    if(this.type == PORTAL && this.active){
-      this.time += .001;
-      ctx.globalAlpha = getAlhpa(this.time);
-    } else if(this.type == ICE){
-      ctx.globalAlpha = this.time;
-    }
+    this.setTileAlphas();
 
-    if((this.type == LEFTA || this.type == RIGHTA) && this.active){
-      this.time += 0.01;
-      if(this.time < .2){
-        this.sx=120;
-        this.sy=30;
-      } else if(this.time < .4) {
-        this.sx=90;
-        this.sy=30;
-      } else {
-        this.sx=0;
-        this.sy=0;
-      }
-      if(this.time > .6) this.time=0;
-    }
+    this.animBelt();
 
     if(this.image == null){
         ctx.fillStyle = this.color;
@@ -118,12 +100,38 @@ function tileObj(size, x, y, type, solid, column, row, color) {
     }
   }
 
-  function heroOnIce (hero, ice){
-    if(ice.entity != null){
-      return rectColiding(hero.entity.x, hero.entity.y + 20, hero.entity.width, hero.entity.height, ice.entity.x, ice.entity.y, ice.entity.width, ice.entity.height);
-    } else {
-      return false;
+  this.animBelt = function(){
+    if((this.type == LEFTA || this.type == RIGHTA) && this.active){
+      this.time += 0.01;
+      if(this.time < .2){
+        this.sx=120;
+        this.sy=30;
+      } else if(this.time < .4) {
+        this.sx=90;
+        this.sy=30;
+      } else {
+        this.sx=0;
+        this.sy=0;
+      }
+      if(this.time > .6) this.time=0;
     }
+  }
+
+  this.setTileAlphas = function(){
+    if(this.type == PORTAL && this.active){
+      this.time += .001;
+      ctx.globalAlpha = getAlhpa(this.time);
+    } else if(this.type == ICE){
+      ctx.globalAlpha = this.time;
+    }
+  }
+}
+
+function heroOnIce (hero, ice){
+  if(ice.entity != null){
+    return rectColiding(hero.entity.x, hero.entity.y + 20, hero.entity.width, hero.entity.height, ice.entity.x, ice.entity.y, ice.entity.width, ice.entity.height);
+  } else {
+    return false;
   }
 }
 
