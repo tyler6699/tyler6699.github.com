@@ -12,6 +12,7 @@ var canvasW = 600;
 var canvasH = 400;
 var camera;
 var gameStart = false;
+this.introTime=0;
 
 // Called by body onload on index page
 function startGame() {
@@ -77,12 +78,17 @@ function updateGameArea() {
 
   if(gameStart){
     mainGame.clear();
-    level.draw(hero, camera);
-    hero.tick(camera);
-    hero.newPos(level.tiles);
-    hero.update(camera);
+    level.draw(hero, camera, intro);
+
+    if(intro.done){
+      hero.tick(camera);
+      hero.newPos(level.tiles, intro);
+      hero.update(camera);
+    }
     camera.newPos(hero, level);
+    intro.trans(canvasW, canvasH);
   } else {
+    mainGame.clear();
     intro.tick();
   }
 }

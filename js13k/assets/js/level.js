@@ -15,7 +15,7 @@ function level(canvasW, canvasH, id) {
   var L = 9;
   var R = 10;
 
-  this.draw = function(hero, camera){
+  this.draw = function(hero, camera, intro){
     for (i = 0; i < this.backTiles.length; i++) {
       var tile = this.backTiles[i];
       tile.update(camera);
@@ -25,7 +25,7 @@ function level(canvasW, canvasH, id) {
     for (i = 0; i < this.tiles.length; i++) {
       var tile = this.tiles[i];
       tile.update(camera);
-      tile.tick(hero);
+      if(intro.done) tile.tick(hero);
     }
 
     // Coins
@@ -50,6 +50,7 @@ function level(canvasW, canvasH, id) {
             // Last Level - Reset to 0
             if(hero.currentLevel == 4 ) hero.currentLevel = 0;
             // Reset the level
+            intro.reset();
             this.reset(hero);
           }
         }
@@ -64,6 +65,7 @@ function level(canvasW, canvasH, id) {
       hero.reset = false;
       hero.active = false;
       this.active = false;
+      intro.reset();
       this.reset(hero);
     }
   }
@@ -135,7 +137,6 @@ function level(canvasW, canvasH, id) {
                   [0,0,0,0,8,0],
                   [0,3,0,0,2,2],
                   [5,5,5,5,4,4]]);
-
   // 2
   this.levels.push([[1,2,2,2,2,1],
                 [1,2,2,2,2,1],

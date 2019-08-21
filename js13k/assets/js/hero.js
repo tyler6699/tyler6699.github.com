@@ -33,7 +33,7 @@ function heroObj(width, height, color, x, y, type) {
     ctx.restore();
   }
 
-  this.newPos = function(tiles) {
+  this.newPos = function(tiles, intro) {
     gravity = this.onLadder && !this.exitLadder ? 0 : defaultG;
 
     // Update hitbox X and Y
@@ -134,6 +134,7 @@ function heroObj(width, height, color, x, y, type) {
       playSound(FALLFX,1);
       this.entity.y = this.startY;
       this.entity.x = this.startX;
+      intro.reset();
       this.reset=true;
     }
   }
