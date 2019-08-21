@@ -17,7 +17,8 @@ function heroObj(width, height, color, x, y, type) {
   var jPower = 0;
   var maxJPower = 19;
   var touchingY = false;
-  var gravity = 6;
+  var defaultG = 6;
+  var gravity = defaultG;
   var maxDrop = 400;
   var ladderUp = false;
   var ladderDown = false;
@@ -33,7 +34,7 @@ function heroObj(width, height, color, x, y, type) {
   }
 
   this.newPos = function(tiles) {
-    gravity = this.onLadder && !this.exitLadder ? 0 : 6;
+    gravity = this.onLadder && !this.exitLadder ? 0 : defaultG;
 
     // Update hitbox X and Y
     this.hbX1 = this.entity.x;
@@ -44,6 +45,9 @@ function heroObj(width, height, color, x, y, type) {
     // Calculate new position
     var newX = this.entity.x + (hPower * this.speed);
     var newY = this.entity.y + gravity - jPower;
+    var falling = false;
+
+    if(newY > this.entity.y) falling = true;
 
     if(this.onLeftA){
       newX -= 3;
@@ -92,9 +96,11 @@ function heroObj(width, height, color, x, y, type) {
           if(t.oneWay){
             if (this.entity.y + this.entity.height <= t.entity.y){
               canMoveY = false;
+              if(falling) this.entity.y = t.entity.y - this.entity.height;
             }
           } else {
             canMoveY = false;
+            if(falling) this.entity.y = t.entity.y - this.entity.height;
           }
         } else if(t.type == LADDER || t.type == LADDERTOP){
           this.onLadder = true;

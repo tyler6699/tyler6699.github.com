@@ -8,8 +8,8 @@ var level;
 var hero;
 var controllers = [];
 var buttonsPressed = [];
-var canvasW = 800;
-var canvasH = 600;
+var canvasW = 600;
+var canvasH = 400;
 var camera;
 var gameStart = false;
 
@@ -30,7 +30,7 @@ var mainGame = {
         this.canvas.width = canvasW;
         this.canvas.height = canvasH;
         this.context = this.canvas.getContext("2d");
-        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        document.body.insertBefore(this.canvas, document.body.childNodes[4]);
         this.frameNo = 0;
         this.interval = setInterval(updateGameArea, 20);
         // Keyboard
