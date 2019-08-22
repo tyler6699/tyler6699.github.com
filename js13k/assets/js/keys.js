@@ -28,3 +28,5 @@ var COINFX=1;
 var JUMPFX=2;
 var FALLFX=3;
 var PORTALFX=4;
+// PARTICLES;
+var DUST=0;

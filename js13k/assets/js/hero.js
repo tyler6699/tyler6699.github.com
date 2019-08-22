@@ -12,6 +12,9 @@ function heroObj(width, height, color, x, y, type) {
   this.exitLadder = false;
   this.onLeftA = false;
   this.onRightA = false
+  this.image = new Image();
+  this.image.src = atlas;
+  this.fx = [];
   var hPower = 0;
   var maxSpeed = 3;
   var jPower = 0;
@@ -22,6 +25,8 @@ function heroObj(width, height, color, x, y, type) {
   var maxDrop = 400;
   var ladderUp = false;
   var ladderDown = false;
+  var ladderTopDiff = 0;
+  var fallTime = 0;
 
   // Render
   this.update = function(camera) {
@@ -31,9 +36,21 @@ function heroObj(width, height, color, x, y, type) {
     ctx.fillStyle = color;
     ctx.fillRect(this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height);
     ctx.restore();
+
+    // FX
+    for (i = 0; i < this.fx.length; i++) {
+      var f = this.fx[i];
+      f.tick();
+      f.update(camera);
+
+      if (f.entity.active == false) this.fx.splice(i,1);
+    }
   }
 
   this.newPos = function(tiles, intro) {
+    ladderTopDiff = 0;
+    var oldY = this.entity.y;
+    var wasFalling = this.falling;
     gravity = this.onLadder && !this.exitLadder ? 0 : defaultG;
 
     // Update hitbox X and Y
@@ -47,12 +64,22 @@ function heroObj(width, height, color, x, y, type) {
     var newY = this.entity.y + gravity - jPower;
     var falling = false;
 
-    if(newY > this.entity.y) falling = true;
-
+    // Add dust to running on conveyors
     if(this.onLeftA){
       newX -= 3;
+      if(hPower > 3 && this.fx.length < 10){
+        this.fx.push(new fx(this, DUST, LEFT, true));
+      }
     } else if(this.onRightA){
       newX += 3;
+      if(hPower < -3 && this.fx.length < 10){
+        this.fx.push(new fx(this, DUST, RIGHT, true));
+      }
+    }
+
+    if(fallTime > 3.5){
+      this.fx.push(new fx(this, DUST, RIGHT, true));
+      this.fx.push(new fx(this, DUST, LEFT, true));
     }
 
     if(this.onLadder){
@@ -96,11 +123,15 @@ function heroObj(width, height, color, x, y, type) {
           if(t.oneWay){
             if(this.entity.y + this.entity.height <= t.entity.y){
               canMoveY = false;
-              if(falling) this.entity.y = t.entity.y - this.entity.height;
+              if(!this.jumping){
+                this.entity.y = t.entity.y - this.entity.height;
+              }
             }
           } else {
             canMoveY = false;
-            if(falling) this.entity.y = t.entity.y - this.entity.height;
+            if(!this.jumping){
+              this.entity.y = t.entity.y - this.entity.height;
+            }
           }
         } else if(t.type == LADDER || t.type == LADDERTOP){
           this.onLadder = true;
@@ -110,8 +141,9 @@ function heroObj(width, height, color, x, y, type) {
       if(t.type == LADDERTOP){
         if(rectColiding(this.hbX1, newY+28, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
           this.exitLadder = true;
+          ladderTopDiff = t.entity.y - newY;
         }
-      } else if(t.type == LEFTA){
+      } else if(t.type == LEFTA){ // CONVEYORS
         if(rectColiding(this.hbX1, newY+10, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
           this.onLeftA = true;
         }
@@ -137,9 +169,22 @@ function heroObj(width, height, color, x, y, type) {
       intro.reset();
       this.reset=true;
     }
+
+    // Are we falling?
+    this.falling = this.entity.y != oldY;
+    if(this.falling != wasFalling && touchingY && jPower == 0){
+      this.fx.push(new fx(this, DUST, LEFT, false));
+      this.fx.push(new fx(this, DUST, RIGHT, false));
+    }
+
+    // Add fall wind
+    if(!this.onLadder && !this.exitLadder && !touchingY) {
+      fallTime += 0.1;
+    } else {
+      fallTime = 0;
+    }
   }
 
-  // logic
   this.tick = function() {
     if (hPower > 0) {
       hPower -= 0.3;
@@ -196,6 +241,8 @@ function heroObj(width, height, color, x, y, type) {
     jumping = false;
     jPower = 0;
     this.active = true;
+    this.fx = [];
+    fallTime=0;
   }
 
   this.updateHitbox = function(){
@@ -209,11 +256,15 @@ function heroObj(width, height, color, x, y, type) {
   }
 
   this.moveUp = function(){
-    if(jPower == 0 && (touchingY == true || this.exitLadder == true)){
+    if(jPower == 0 && (touchingY == true || (this.exitLadder == true && ladderTopDiff <= 15))){
       this.jumping = true;
       jPower = maxJPower;
       playSound(JUMPFX,1);
     }
     if(this.onLadder){ ladderUp = true; }
+  }
+
+  this.gethPower = function(){
+    return hPower;
   }
 }

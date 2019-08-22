@@ -1,11 +1,11 @@
-function entityObj(width, height, color, x, y, type) {
+function entityObj(w, h, color, x, y, type) {
     this.type = type;
-    this.width = width;
-    this.height = height;
-    this.mhWidth = width/-2;
-    this.mhHeight = height/-2;
-    this.hWidth = width/2;
-    this.hHeight = height/2;
+    this.width = w;
+    this.height = h;
+    this.mhWidth = w/-2;
+    this.mhHeight = h/-2;
+    this.hWidth = w/2;
+    this.hHeight = h/2;
     this.yOffset = 0;
     this.angle = 0;
     this.x = x;

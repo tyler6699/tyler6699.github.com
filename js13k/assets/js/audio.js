@@ -5,12 +5,8 @@ var oscArr = [];
 function playSound(name, vol){
   m = audioCtx.createBuffer(1,96e3,48e3);
   gainNode = audioCtx.createGain();
-
   b = m.getChannelData(0)
-  for(i=96e3;i--;){
-    b[i]=getSound(name,i);
-  }
-
+  for(i=96e3;i--;){ b[i]=getSound(name,i);}
   s = audioCtx.createBufferSource();
   s.buffer = m;
   s.connect(gainNode);
@@ -40,7 +36,6 @@ getSound = function (name,i){
   default:
     return 1;
   }
-
   return val;
 }
 
