@@ -55,6 +55,10 @@ function heroObj(width, height, color, x, y, type) {
     var wasFalling = this.falling;
     gravity = this.onLadder && !this.exitLadder ? 0 : defaultG;
 
+    // Ladders kill jump speed
+    if(this.onLadder && !this.exitLadder){
+      jPower = 0;
+    }
     // Update hitbox X and Y
     this.hbX1 = this.entity.x;
     this.hbY1 = this.entity.y;
@@ -112,6 +116,8 @@ function heroObj(width, height, color, x, y, type) {
 
     for (i = 0; i < tiles.length; i++) {
       t = tiles[i];
+
+      // X Move
       if(t.isSolid && t.active){
         if(rectColiding(newX, this.hbY1, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
           if(!t.oneWay){
@@ -120,6 +126,7 @@ function heroObj(width, height, color, x, y, type) {
         }
       }
 
+      // Y MOVE
       if(rectColiding(this.hbX1, newY, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
         if(t.isSolid && t.active){
           if(t.oneWay){ // JUMP THROUGH
@@ -132,7 +139,9 @@ function heroObj(width, height, color, x, y, type) {
           } else {
             canMoveY = false;
             if(!this.jumping){ // SNAP TO Y
-              this.entity.y = t.entity.y - this.entity.height;
+              if(this.entity.y + this.entity.height < t.entity.y){
+                this.entity.y = t.entity.y - this.entity.height;
+              }
             }
           }
         } else if(t.type == LADDER || t.type == LADDERTOP){

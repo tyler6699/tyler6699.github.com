@@ -34,8 +34,6 @@ function tileObj(size, x, y, type, solid, column, row) {
   case LADDERTOP:
     this.draw = false;
     this.isSolid = false;
-    this.entity.height = 16;
-    this.entity.y += 16;
     break;
   case LEDGE:
     this.sx=120;
