@@ -32,7 +32,7 @@ function intro() {
             ctx = mainGame.context;
             ctx.save();
             ctx.translate(i*32, j*32);
-            ctx.fillStyle = "#2d1b00";
+            ctx.fillStyle = "#1e606e";
             ctx.fillRect(this.introTime/2, this.introTime/2, 32-this.introTime, 32-this.introTime);
             ctx.restore();
           }

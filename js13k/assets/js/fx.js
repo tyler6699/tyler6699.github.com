@@ -27,7 +27,7 @@ function fx(hero, type, direction, flipV) {
     }
 
     y = hero.entity.y + (2*this.sh);
-    this.entity = new entityObj(this.sw, this.sh, null, x, y, type);
+    this.entity = new entityObj(this.sw, this.sh, x, y, type);
 
     this.tick = function() {
       if(this.entity.active){

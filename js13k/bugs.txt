@@ -1,0 +1,3 @@
+BUGS
+
+Ladders touching blocks - you can go through the blocks

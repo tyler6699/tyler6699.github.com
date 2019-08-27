@@ -1,4 +1,4 @@
-function entityObj(w, h, color, x, y, type) {
+function entityObj(w, h, x, y, type) {
     this.type = type;
     this.width = w;
     this.height = h;
@@ -10,7 +10,6 @@ function entityObj(w, h, color, x, y, type) {
     this.angle = 0;
     this.x = x;
     this.y = y;
-    this.color = color;
     this.active = true;
 
     // Render

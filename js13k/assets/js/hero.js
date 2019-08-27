@@ -1,5 +1,5 @@
 function heroObj(width, height, color, x, y, type) {
-  this.entity = new entityObj(width, height, color, x, y, "hero");
+  this.entity = new entityObj(width, height, x, y, "hero");
   this.speed = 1;
   this.color = color;
   this.startX = x;
@@ -18,7 +18,7 @@ function heroObj(width, height, color, x, y, type) {
   var hPower = 0;
   var maxSpeed = 3;
   var jPower = 0;
-  var maxJPower = 19;
+  var maxJPower = 17;
   var touchingY = false;
   var defaultG = 6;
   var gravity = defaultG;
@@ -33,7 +33,9 @@ function heroObj(width, height, color, x, y, type) {
     ctx = mainGame.context;
     ctx.save();
     ctx.translate(this.entity.x - camera.entity.x, this.entity.y - camera.entity.y);
-    ctx.fillStyle = color;
+    ctx.fillStyle = "#196127";
+    // 60 60
+    // 14w x 26h
     ctx.fillRect(this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height);
     ctx.restore();
 
@@ -120,7 +122,7 @@ function heroObj(width, height, color, x, y, type) {
 
       if(rectColiding(this.hbX1, newY, this.entity.width, this.entity.height, t.entity.x, t.entity.y, t.entity.width, t.entity.height)){
         if(t.isSolid && t.active){
-          if(t.oneWay){
+          if(t.oneWay){ // JUMP THROUGH
             if(this.entity.y + this.entity.height <= t.entity.y){
               canMoveY = false;
               if(!this.jumping){
@@ -129,7 +131,7 @@ function heroObj(width, height, color, x, y, type) {
             }
           } else {
             canMoveY = false;
-            if(!this.jumping){
+            if(!this.jumping){ // SNAP TO Y
               this.entity.y = t.entity.y - this.entity.height;
             }
           }
