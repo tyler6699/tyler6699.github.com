@@ -28,7 +28,11 @@ var COINFX=1;
 var JUMPFX=2;
 var FALLFX=3;
 var PORTALFX=4;
+var DIEFX=5;
 // PARTICLES;
 var DUST=0;
 // ENEMIES
 var WALKER=0;
+var SHOOTER=1;
+var FOLLOW=2;
+var JUMPER=3;

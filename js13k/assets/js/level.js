@@ -29,10 +29,10 @@ function level(canvasW, canvasH, id) {
       if(intro.done) tile.tick(hero);
     }
 
-    // Collision Tiles
+    // Enemies
     for (i = 0; i < this.enemies.length; i++) {
       var e = this.enemies[i];
-      e.tick();
+      e.tick(hero);
       e.update(camera);
     }
 
@@ -85,6 +85,7 @@ function level(canvasW, canvasH, id) {
     this.tiles = [];
     this.backTiles = [];
     this.coins = [];
+    this.enemies = [];
     levelArray = this.levels[id];
 
     var rows = levelArray.length;
@@ -108,6 +109,7 @@ function level(canvasW, canvasH, id) {
           this.startX = xx;
           this.startY= yy;
         } else if (Array.isArray(type)){
+          console.log(yy);
           this.enemies.push( new enemyObj(xx, yy, type) );
         }
 
@@ -132,12 +134,13 @@ function level(canvasW, canvasH, id) {
   // Setup Levels
   // 0
   E = [60,60,WALKER];
+  F = [30,30,WALKER];
   this.levels.push([[0,0,0,4,4,4,0,0,0,0,0,E,0,0,0,0,0,0,0,0],
                     [0,0,1,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0],
                     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                     [1,1,0,7,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                     [0,0,1,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                    [0,0,0,6,1,L,L,L,1,0,0,0,7,0,0,0,0,0,0,0],
+                    [0,0,0,6,1,L,L,L,1,0,F,0,7,0,0,0,0,0,0,0],
                     [1,0,0,6,0,0,0,0,1,4,4,4,6,1,R,R,R,1,0,1],
                     [1,0,0,6,0,0,0,0,1,0,0,0,6,1,0,2,0,0,0,1],
                     [1,0,0,1,1,1,0,0,1,0,3,0,6,1,1,1,1,4,4,1],
