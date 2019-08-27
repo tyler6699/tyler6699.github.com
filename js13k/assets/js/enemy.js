@@ -19,25 +19,41 @@ function enemyObj(x, y, enemy) {
   }
 
   this.tick = function(hero){
-    if(type == WALKER){
-      if(heroColliding(this)){
-        if(!hero.reset)playSound(DIEFX,1);
-        hero.reset = true;
-      }
-      if(dir == RIGHT){
-        this.entity.x += speed;
-        if(this.entity.x >= this.maxRight) dir = LEFT;
-      } else {
-        this.entity.x -= speed;
-        if(this.entity.x <= this.maxLeft) dir = RIGHT;
-      }
+    this.checkDie(hero);
 
+    if(type == WALKER){
+      this.moveSide2Side();
     } else if(type == SHOOTER){
 
     } else if(type == FOLLOW){
-
+      this.follow();
     } else if(type == JUMPER){
 
+    }
+  }
+
+  this.follow = function(){
+    if(this.entity.x > hero.entity.x && this.entity.x >= this.maxLeft){
+      this.entity.x -= speed;
+    } else if(this.entity.x < hero.entity.x && this.entity.x <= this.maxRight - this.entity.width) {
+      this.entity.x += speed;
+    }
+  }
+
+  this.moveSide2Side = function(){
+    if(dir == RIGHT){
+      this.entity.x += speed;
+      if(this.entity.x >= this.maxRight) dir = LEFT;
+    } else {
+      this.entity.x -= speed;
+      if(this.entity.x <= this.maxLeft) dir = RIGHT;
+    }
+  }
+
+  this.checkDie = function(hero){
+    if(heroColliding(this)){
+      if(!hero.reset)playSound(DIEFX,1);
+      hero.reset = true;
     }
   }
 
