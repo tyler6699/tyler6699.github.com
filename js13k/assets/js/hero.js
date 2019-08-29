@@ -33,9 +33,9 @@ function heroObj(width, height, color, x, y, type) {
     ctx = mainGame.context;
     ctx.save();
     ctx.translate(this.entity.x - camera.entity.x, this.entity.y - camera.entity.y);
+    // COLOURS
+    // #ebedf0 #c6e48b #7bc96f #239a3b #196127
     ctx.fillStyle = "#196127";
-    // 60 60
-    // 14w x 26h
     ctx.fillRect(this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height);
     ctx.restore();
 
@@ -44,7 +44,6 @@ function heroObj(width, height, color, x, y, type) {
       var f = this.fx[i];
       f.tick();
       f.update(camera);
-
       if (f.entity.active == false) this.fx.splice(i,1);
     }
   }
@@ -57,7 +56,7 @@ function heroObj(width, height, color, x, y, type) {
 
     // Ladders kill jump speed
     if(this.onLadder && !this.exitLadder) jPower = 0;
-    
+
     // Update hitbox X and Y
     this.hbX1 = this.entity.x;
     this.hbY1 = this.entity.y;
@@ -260,7 +259,7 @@ function heroObj(width, height, color, x, y, type) {
   }
 
   function updateHitbox(){
-    // Centre used for checking hero current block
+    // Centre Position
     hero.hbX = hero.entity.x + hero.entity.hWidth;
     hero.hbY = hero.entity.y + hero.entity.hHeight / 2;
   }

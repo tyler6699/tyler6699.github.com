@@ -21,8 +21,8 @@ function enemyObj(x, y, enemy) {
     ctx.fillStyle = "RED";
     ctx.fillRect(this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height);
     // Show Hitbox
-    ctx.fillStyle = "WHITE";
-    ctx.fillRect(this.entity.mhWidth + hitboxOffset/2, this.entity.mhHeight + hitboxOffset/2, this.entity.width - hitboxOffset, this.entity.height - hitboxOffset);
+    //ctx.fillStyle = "WHITE";
+    //ctx.fillRect(this.entity.mhWidth + hitboxOffset/2, this.entity.mhHeight + hitboxOffset/2, this.entity.width - hitboxOffset, this.entity.height - hitboxOffset);
     ctx.restore();
   }
 
