@@ -4,10 +4,15 @@ function enemyObj(x, y, enemy) {
   var h = 25;
   var dir = RIGHT;
   var speed = 1;
+  var jPower = 0;
+  var maxJPower = 10;
+  var hitboxOffset = 10;
   this.entity = new entityObj(w, h, x, y, type);
   this.entity.y += 29 -h;
   this.maxLeft = x - enemy[0] - 1;
   this.maxRight = x + enemy[1] + w + (29 - w);
+  this.jumping = false;
+  var startY = this.entity.y;
 
   this.update = function(camera){
     ctx = mainGame.context;
@@ -15,6 +20,9 @@ function enemyObj(x, y, enemy) {
     ctx.translate(this.entity.x - camera.entity.x, this.entity.y - camera.entity.y);
     ctx.fillStyle = "RED";
     ctx.fillRect(this.entity.mhWidth, this.entity.mhHeight, this.entity.width, this.entity.height);
+    // Show Hitbox
+    ctx.fillStyle = "WHITE";
+    ctx.fillRect(this.entity.mhWidth + hitboxOffset/2, this.entity.mhHeight + hitboxOffset/2, this.entity.width - hitboxOffset, this.entity.height - hitboxOffset);
     ctx.restore();
   }
 
@@ -28,7 +36,11 @@ function enemyObj(x, y, enemy) {
     } else if(type == FOLLOW){
       this.follow();
     } else if(type == JUMPER){
-
+      this.follow();
+      this.jump();
+    } else if(type == WALKJUMPER){
+      this.moveSide2Side();
+      this.jump();
     }
   }
 
@@ -50,8 +62,24 @@ function enemyObj(x, y, enemy) {
     }
   }
 
+  this.jump = function(){
+    if(hero.jumping && !this.jumping && this.entity.y == startY){
+      this.jumping = true;
+      jPower = maxJPower;
+    } else if(jPower > 0){
+      this.entity.y -= jPower;
+      jPower --;
+    } else if(this.jumping && jPower <= 0){
+      this.entity.y += 6;
+      if(this.entity.y > startY){
+        this.jumping = false;
+        this.entity.y = startY;
+      }
+    }
+  }
+
   this.checkDie = function(hero){
-    if(heroColliding(this)){
+    if(entityColiding(hero.entity, 0, this.entity, hitboxOffset)){
       if(!hero.reset)playSound(DIEFX,1);
       hero.reset = true;
     }

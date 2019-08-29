@@ -22,7 +22,7 @@ function heroObj(width, height, color, x, y, type) {
   var touchingY = false;
   var defaultG = 6;
   var gravity = defaultG;
-  var maxDrop = 400;
+  var maxDrop = 700; // FIX
   var ladderUp = false;
   var ladderDown = false;
   var ladderTopDiff = 0;
@@ -56,9 +56,8 @@ function heroObj(width, height, color, x, y, type) {
     gravity = this.onLadder && !this.exitLadder ? 0 : defaultG;
 
     // Ladders kill jump speed
-    if(this.onLadder && !this.exitLadder){
-      jPower = 0;
-    }
+    if(this.onLadder && !this.exitLadder) jPower = 0;
+    
     // Update hitbox X and Y
     this.hbX1 = this.entity.x;
     this.hbY1 = this.entity.y;

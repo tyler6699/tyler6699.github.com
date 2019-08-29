@@ -149,6 +149,11 @@ function heroColliding(e){
   hero.hbY > e.entity.y
 }
 
+function entityColiding(e1, offset1, e2, offset2){
+  return rectColiding(e1.x + offset1/2, e1.y + offset1/2, e1.width - offset1, e1.height - offset1,
+                      e2.x + offset2/2, e2.y + offset2/2, e2.width - offset2, e2.height - offset2)
+}
+
 function rectColiding(rx, ry, rw, rh, r2x, r2y, r2w, r2h){
   return (rx < r2x + r2w &&
      rx + rw > r2x &&

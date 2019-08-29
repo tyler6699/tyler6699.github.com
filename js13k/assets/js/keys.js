@@ -36,3 +36,4 @@ var WALKER=0;
 var SHOOTER=1;
 var FOLLOW=2;
 var JUMPER=3;
+var WALKJUMPER=4;
