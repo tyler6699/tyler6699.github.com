@@ -1,5 +1,6 @@
 function heroObj(width, height, color, x, y, type) {
   this.entity = new entityObj(width, height, x, y, "hero");
+  this.maxLives = 5;
   this.lives = 5;
   this.speed = 1;
   this.color = color;
@@ -276,5 +277,10 @@ function heroObj(width, height, color, x, y, type) {
 
   this.gethPower = function(){
     return hPower;
+  }
+
+  this.resetHero = function(){
+    this.currentLevel = 0;
+    this.lives = this.maxLives;
   }
 }

@@ -12,7 +12,7 @@ function hud() {
     ctx.font = "20px Verdana";
     ctx.fillStyle = "#c4f0c2";
     ctx.fillText("Lives: " + hero.lives,10,28);
-    ctx.fillText("Time: " + getSeconds(timeElapsed),470,28);
+    ctx.fillText("Time: " + getSeconds(timeElapsed),470,25);
     ctx.restore();
   }
 }

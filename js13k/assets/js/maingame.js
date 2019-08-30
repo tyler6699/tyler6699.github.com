@@ -7,6 +7,7 @@ var mainGame;
 var level;
 var hero;
 var hud;
+var clock;
 var controllers = [];
 var buttonsPressed = [];
 var canvasW = 600;
@@ -29,6 +30,7 @@ function startGame() {
   intro = new intro();
   mainGame.start();
   hud = new hud();
+  clock = new clock();
 }
 
 var mainGame = {
@@ -96,11 +98,19 @@ function updateGameArea() {
       hero.tick(camera);
       hero.newPos(level.tiles, intro);
       level.tick(hero, intro);
+      clock.tick(delta);
     }
     hero.update(camera);
     camera.newPos(hero, level);
     intro.trans(canvasW, canvasH);
-    hud.update(canvasW, hero, timeElapsed);
+    hud.update(canvasW, hero, clock.currentTime);
+
+    if(clock.timeOver || hero.lives < 0){
+      gameStart = false;
+      clock.reset();
+      level.reset(hero);
+      hero.resetHero();
+    }
   } else {
     mainGame.clear();
     intro.tick();
