@@ -87,7 +87,6 @@ function updateGameArea() {
   timeElapsed += delta;
 
   // Update Gamepads
-  // Please test this Bod
   navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
 
   if(gameStart){
