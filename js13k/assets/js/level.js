@@ -16,7 +16,7 @@ function level(canvasW, canvasH, id) {
   var L = 9;
   var R = 10;
 
-  this.draw = function(hero, camera, intro){
+  this.draw = function(hero, camera){
     for (i = 0; i < this.backTiles.length; i++) {
       var tile = this.backTiles[i];
       tile.update(camera);
@@ -26,20 +26,37 @@ function level(canvasW, canvasH, id) {
     for (i = 0; i < this.tiles.length; i++) {
       var tile = this.tiles[i];
       tile.update(camera);
-      if(intro.done) tile.tick(hero);
-    }
-
-    // Enemies
-    for (i = 0; i < this.enemies.length; i++) {
-      var e = this.enemies[i];
-      e.tick(hero);
-      e.update(camera);
     }
 
     // Coins
     for (i = 0; i < this.coins.length; i++) {
       var coin = this.coins[i];
       coin.update(camera);
+    }
+
+    // Enemies
+    for (i = 0; i < this.enemies.length; i++) {
+      var e = this.enemies[i];
+      e.update(camera);
+    }
+  }
+
+  this.tick = function(hero, intro){
+    // Collision Tiles
+    for (i = 0; i < this.tiles.length; i++) {
+      var tile = this.tiles[i];
+      tile.tick(hero);
+    }
+
+    // Enemies
+    for (i = 0; i < this.enemies.length; i++) {
+      var e = this.enemies[i];
+      e.tick(hero)
+    }
+
+    // Coins
+    for (i = 0; i < this.coins.length; i++) {
+      var coin = this.coins[i];
 
       if(coin.type == COIN && heroColliding(coin) && this.active && coin.active){
         playSound(COINFX,1);
@@ -112,7 +129,7 @@ function level(canvasW, canvasH, id) {
           this.enemies.push( new enemyObj(xx, yy, type) );
         }
 
-        // Always push a tile to the back
+        // Decor Tiles
         if(Math.random() > .8){
           tile = new tileObj(tileSize, xx, yy, WALL, false, col, row);
           this.backTiles.push(tile);
@@ -121,6 +138,7 @@ function level(canvasW, canvasH, id) {
     }
 
     // Update the HERO
+    // Remove a life
     if(hero != null){
       hero.resetPos(this.startX, this.startY);
     }

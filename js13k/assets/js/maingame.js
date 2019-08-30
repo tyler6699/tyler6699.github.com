@@ -90,10 +90,11 @@ function updateGameArea() {
 
   if(gameStart){
     mainGame.clear();
-    level.draw(hero, camera, intro);
+    level.draw(hero, camera);
     if(intro.done){
       hero.tick(camera);
       hero.newPos(level.tiles, intro);
+      level.tick(hero, intro);
     }
     hero.update(camera);
     camera.newPos(hero, level);
