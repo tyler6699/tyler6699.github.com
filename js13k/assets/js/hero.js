@@ -1,5 +1,6 @@
 function heroObj(width, height, color, x, y, type) {
   this.entity = new entityObj(width, height, x, y, "hero");
+  this.lives = 5;
   this.speed = 1;
   this.color = color;
   this.startX = x;
@@ -252,6 +253,7 @@ function heroObj(width, height, color, x, y, type) {
     this.active = true;
     this.fx = [];
     fallTime=0;
+    this.lives--;
   }
 
   this.updateHitbox = function(){

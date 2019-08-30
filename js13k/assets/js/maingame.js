@@ -1,18 +1,22 @@
 // ╔═══════════════════════════════╗
-// ║ HTML 5 Game by @CarelessLabs  ║
+// ║ JS13K Entry by @CarelessLabs  ║
 // ╚═══════════════════════════════╝
 var debug = false;
-var offset = 70;
+var offset = 100;
 var mainGame;
 var level;
 var hero;
+var hud;
 var controllers = [];
 var buttonsPressed = [];
 var canvasW = 600;
 var canvasH = 400;
 var camera;
 var gameStart = false;
-this.introTime=0;
+var lastDT = Date.now();
+var currentDT = Date.now();
+var timeElapsed = 0;
+var delta=0;
 
 // Called by body onload on index page
 function startGame() {
@@ -23,6 +27,7 @@ function startGame() {
   camera.newPos(hero, level);
   intro = new intro();
   mainGame.start();
+  hud = new hud();
 }
 
 var mainGame = {
@@ -73,6 +78,11 @@ var mainGame = {
 }
 
 function updateGameArea() {
+  // Delta
+  lastDT = currentDT;
+  currentDT = Date.now();
+  delta = currentDT - lastDT;
+  timeElapsed += delta;
   // Update Gamepads
   navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
 
@@ -86,6 +96,7 @@ function updateGameArea() {
     hero.update(camera);
     camera.newPos(hero, level);
     intro.trans(canvasW, canvasH);
+    hud.update(canvasW, hero, timeElapsed);
   } else {
     mainGame.clear();
     intro.tick();
