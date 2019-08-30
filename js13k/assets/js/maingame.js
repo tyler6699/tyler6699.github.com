@@ -36,6 +36,7 @@ var mainGame = {
         this.canvas.width = canvasW;
         this.canvas.height = canvasH;
         this.context = this.canvas.getContext("2d");
+        this.canvas.classList.add("screen");
         document.body.insertBefore(this.canvas, document.body.childNodes[4]);
         this.frameNo = 0;
         this.interval = setInterval(updateGameArea, 20);
@@ -83,6 +84,7 @@ function updateGameArea() {
   currentDT = Date.now();
   delta = currentDT - lastDT;
   timeElapsed += delta;
+
   // Update Gamepads
   navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
 
