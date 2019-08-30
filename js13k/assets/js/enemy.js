@@ -86,7 +86,6 @@ function enemyObj(x, y, enemy) {
         playSound(DIEFX,1);
       }
       hero.reset = true;
-
     }
   }
 

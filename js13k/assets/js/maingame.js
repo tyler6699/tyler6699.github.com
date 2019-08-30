@@ -100,6 +100,7 @@ function updateGameArea() {
       if(level.active == false){
         level.active = true;
         clock.setStartTime();
+        console.log("Level: " + hero.currentLevel + " Lives: " + hero.lives + " Current: " + clock.currentTime + " Prev: " + clock.prevTime);
       }
       hero.tick(camera);
       hero.newPos(level.tiles, intro);
@@ -114,11 +115,17 @@ function updateGameArea() {
     hud.update(canvasW, hero, clock.currentTime);
 
     // Time up or out of lives
-    if(clock.timeOver || hero.lives < 0){
+    if(hero.lives < 0){
       gameStart = false;
       clock.reset();
       hero.resetHero();
       level.reset(hero);
+    } else if (clock.timeOver){
+      if(!hero.reset){
+        hero.lives--;
+        hero.reset = true;
+        clock.setStartTime();
+      }
     }
 
   } else {

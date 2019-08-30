@@ -69,7 +69,10 @@ function level(canvasW, canvasH, id) {
             coin.active = true;
           } else if(coin.active && heroColliding(coin)){
             // Update Clock prev time
+            clock.levelTimes[hero.currentLevel] = getSeconds(clock.levelTime);
+            console.log(clock.levelTimes);
             clock.prevTime = clock.currentTime;
+
             playSound(PORTALFX,1);
             this.showPortal=false;
             hero.currentLevel ++;
@@ -99,6 +102,7 @@ function level(canvasW, canvasH, id) {
   }
 
   this.reset = function(hero){
+    this.showPortal = false;
     this.active = false;
     var id = hero != null ? hero.currentLevel : 0;
     maxCoinCount = 0;
@@ -142,7 +146,6 @@ function level(canvasW, canvasH, id) {
     }
 
     // Update the HERO
-    // Remove a life
     if(hero != null){
       hero.resetPos(this.startX, this.startY);
     }
