@@ -9,6 +9,7 @@ function level(canvasW, canvasH, id) {
   this.canvasHalfH = canvasH / 2;
   this.showPortal=false;
   this.levels = [];
+  this.active = false;
   var tileSize = 30;
   var coinCount=0;
   var maxCoinCount=0;
@@ -41,7 +42,7 @@ function level(canvasW, canvasH, id) {
     }
   }
 
-  this.tick = function(hero, intro){
+  this.tick = function(hero, intro, clock){
     // Collision Tiles
     for (i = 0; i < this.tiles.length; i++) {
       var tile = this.tiles[i];
@@ -67,6 +68,8 @@ function level(canvasW, canvasH, id) {
           if(!coin.active){
             coin.active = true;
           } else if(coin.active && heroColliding(coin)){
+            // Update Clock prev time
+            clock.prevTime = clock.currentTime;
             playSound(PORTALFX,1);
             this.showPortal=false;
             hero.currentLevel ++;
@@ -96,6 +99,7 @@ function level(canvasW, canvasH, id) {
   }
 
   this.reset = function(hero){
+    this.active = false;
     var id = hero != null ? hero.currentLevel : 0;
     maxCoinCount = 0;
     coinCount = 0;
@@ -145,7 +149,6 @@ function level(canvasW, canvasH, id) {
 
     // Trigger Level Song
     if(audioCtx != null){ playMusic(); }
-    this.active = true;
   }
 
   // Setup Levels
@@ -155,16 +158,16 @@ function level(canvasW, canvasH, id) {
   J = [30,30,WALKJUMPER];
   this.levels.push([[0,0,0,0,0,0,0,0,0,0,0,E,0,0,0,0,0,0,0,0],
                     [0,0,1,7,1,1,0,0,0,1,1,1,1,1,1,0,0,0,0,0],
-                    [0,0,0,6,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0],
-                    [0,0,0,6,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0],
-                    [0,0,0,6,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0],
                     [0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                    [0,0,0,6,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0],
-                    [0,0,0,6,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0],
-                    [0,0,0,6,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0],
                     [0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                    [0,0,0,6,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0],
-                    [0,0,0,6,0,0,0,0,2,0,F,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                    [0,0,0,6,0,0,0,0,0,0,F,0,0,0,0,0,0,0,0,0],
                     [1,1,1,6,1,1,0,0,4,4,4,4,1,0,0,0,0,0,0,0],
                     [0,0,1,6,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
                     [1,0,1,6,1,L,L,L,1,0,J,0,7,0,0,0,0,0,0,0],

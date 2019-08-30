@@ -174,6 +174,7 @@ function heroObj(width, height, color, x, y, type) {
     // Fallen off the screen
     if(this.entity.y > maxDrop){
       playSound(FALLFX,1);
+      this.lives --;
       this.entity.y = this.startY;
       this.entity.x = this.startX;
       intro.reset();
@@ -253,7 +254,6 @@ function heroObj(width, height, color, x, y, type) {
     this.active = true;
     this.fx = [];
     fallTime=0;
-    this.lives--;
   }
 
   this.updateHitbox = function(){

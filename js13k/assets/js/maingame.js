@@ -94,23 +94,33 @@ function updateGameArea() {
   if(gameStart){
     mainGame.clear();
     level.draw(hero, camera);
+
+    // Logic
     if(intro.done){
+      if(level.active == false){
+        level.active = true;
+        clock.setStartTime();
+      }
       hero.tick(camera);
       hero.newPos(level.tiles, intro);
-      level.tick(hero, intro);
+      level.tick(hero, intro, clock);
       clock.tick(delta);
     }
+
+    // Draw
     hero.update(camera);
     camera.newPos(hero, level);
     intro.trans(canvasW, canvasH);
     hud.update(canvasW, hero, clock.currentTime);
 
+    // Time up or out of lives
     if(clock.timeOver || hero.lives < 0){
       gameStart = false;
       clock.reset();
-      level.reset(hero);
       hero.resetHero();
+      level.reset(hero);
     }
+
   } else {
     mainGame.clear();
     intro.tick();

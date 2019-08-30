@@ -81,8 +81,12 @@ function enemyObj(x, y, enemy) {
 
   this.checkDie = function(hero){
     if(entityColiding(hero.entity, 0, this.entity, hitboxOffset)){
-      if(!hero.reset)playSound(DIEFX,1);
+      if(!hero.reset){
+        hero.lives--;
+        playSound(DIEFX,1);
+      }
       hero.reset = true;
+
     }
   }
 
