@@ -7,6 +7,7 @@ function enemyObj(x, y, enemy) {
   var jPower = 0;
   var maxJPower = 10;
   var hitboxOffset = 10;
+
   this.entity = new entityObj(w, h, x, y, type);
   this.entity.y += 29 -h;
   this.maxLeft = x - enemy[0] - 1;
@@ -70,7 +71,7 @@ function enemyObj(x, y, enemy) {
       this.entity.y -= jPower;
       jPower --;
     } else if(this.jumping && jPower <= 0){
-      this.entity.y += 6;
+      this.entity.y += defaultG;
       if(this.entity.y > startY){
         this.jumping = false;
         this.entity.y = startY;

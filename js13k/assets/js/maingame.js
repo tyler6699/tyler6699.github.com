@@ -17,6 +17,7 @@ var lastDT = Date.now();
 var currentDT = Date.now();
 var timeElapsed = 0;
 var delta=0;
+var defaultG = 6;
 
 // Called by body onload on index page
 function startGame() {
@@ -86,6 +87,7 @@ function updateGameArea() {
   timeElapsed += delta;
 
   // Update Gamepads
+  // Please test this Bod
   navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
 
   if(gameStart){

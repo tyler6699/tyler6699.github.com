@@ -21,7 +21,6 @@ function heroObj(width, height, color, x, y, type) {
   var jPower = 0;
   var maxJPower = 17;
   var touchingY = false;
-  var defaultG = 6;
   var gravity = defaultG;
   var maxDrop = 700; // FIX
   var ladderUp = false;
