@@ -106,6 +106,8 @@ function updateGameArea() {
       hero.newPos(level.tiles, intro);
       level.tick(hero, intro, clock);
       clock.tick(delta);
+    //} else {
+      //clock.currentTime = clock.prevTime;
     }
 
     // Draw
@@ -113,18 +115,21 @@ function updateGameArea() {
     camera.newPos(hero, level);
     intro.trans(canvasW, canvasH);
     hud.update(canvasW, hero, clock.currentTime);
-
-    // Time up or out of lives
+    
+    // Out of lives
     if(hero.lives < 0){
       gameStart = false;
       clock.reset();
       hero.resetHero();
       level.reset(hero);
-    } else if (clock.timeOver){
+    }
+
+    // Out of time
+    if (clock.timeOver){
       if(!hero.reset){
+        clock.setStartTime();
         hero.lives--;
         hero.reset = true;
-        clock.setStartTime();
       }
     }
 
