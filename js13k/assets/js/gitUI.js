@@ -15,7 +15,15 @@ function gitUI() {
     ctx.save();
     ctx.font = "16px Verdana";
     ctx.fillStyle = "#c4f0c2";
-    ctx.fillText("careless (master) $",60, 95);
+    //
+    // ╔═══════════════════════════════╗
+    // ║ JS13K Entry by @CarelessLabs  ║
+    // ╚═══════════════════════════════╝
+    //
+    ctx.fillText("╔═══════════════════════════════╗",60, 95);
+    ctx.fillText("║ JS13K Entry by @CarelessLabs  ║",60, 120);
+    ctx.fillText("╚═══════════════════════════════╝",60, 140);
+    ctx.fillText("careless (master) $",60, 150);
     ctx.restore();
   }
 
