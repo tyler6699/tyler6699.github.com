@@ -28,9 +28,9 @@ function startGame() {
   hero = new heroObj(25, 25, "green", level.startX, level.startY);
   camera.newPos(hero, level);
   intro = new intro();
-  mainGame.start();
   hud = new hud();
   clock = new clock();
+  mainGame.start();
 }
 
 var mainGame = {
@@ -96,7 +96,7 @@ function updateGameArea() {
     level.draw(hero, camera);
 
     // Logic
-    if(intro.done){
+    if(intro.done && intro.gitUI.done){
       if(level.active == false){
         level.active = true;
         clock.setStartTime();
@@ -106,16 +106,18 @@ function updateGameArea() {
       hero.newPos(level.tiles, intro);
       level.tick(hero, intro, clock);
       clock.tick(delta);
-    //} else {
-      //clock.currentTime = clock.prevTime;
+    } else {
+      if(clock.currentTime != clock.prevTime) clock.currentTime = clock.prevTime;
+      intro.gitUI.update(canvasW, canvasH, hero, delta);
+      intro.trans(canvasW, canvasH);
     }
 
     // Draw
     hero.update(camera);
     camera.newPos(hero, level);
-    intro.trans(canvasW, canvasH);
+
     hud.update(canvasW, hero, clock.currentTime);
-    
+
     // Out of lives
     if(hero.lives < 0){
       gameStart = false;
@@ -133,8 +135,11 @@ function updateGameArea() {
       }
     }
 
+    // Git Interface
+    intro.gitUI.tick(delta);
+
   } else {
     mainGame.clear();
-    intro.tick();
+    intro.tick(delta);
   }
 }

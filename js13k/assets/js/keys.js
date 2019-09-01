@@ -10,6 +10,8 @@ var D=68;
 var LMB=0;
 var RMB=2;
 var SPACE=32;
+var ONE=49;
+var TWO=50;
 // TILES
 var WALL=0;
 var BRICK=1;
