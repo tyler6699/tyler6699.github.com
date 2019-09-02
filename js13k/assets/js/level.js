@@ -10,6 +10,7 @@ function level(canvasW, canvasH, id) {
   this.showPortal=false;
   this.levels = [];
   this.active = false;
+  this.complete = false;
   var tileSize = 30;
   var coinCount=0;
   var maxCoinCount=0;
@@ -75,14 +76,13 @@ function level(canvasW, canvasH, id) {
 
             playSound(PORTALFX,1);
             this.showPortal=false;
-            hero.currentLevel ++;
+            this.complete = true;
             hero.active = false;
             this.active = false;
             // Last Level - Reset to 0
             if(hero.currentLevel == 4 ) hero.currentLevel = 0;
             // Reset the level
             intro.reset();
-            this.reset(hero);
           }
         }
       }
@@ -102,6 +102,7 @@ function level(canvasW, canvasH, id) {
   }
 
   this.reset = function(hero){
+    this.complete = false;
     this.showPortal = false;
     this.active = false;
     var id = hero != null ? hero.currentLevel : 0;

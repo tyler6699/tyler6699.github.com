@@ -106,16 +106,15 @@ function updateGameArea() {
       hero.newPos(level.tiles, intro);
       level.tick(hero, intro, clock);
       clock.tick(delta);
+      // Draw
+      hero.update(camera);
     } else {
       if(clock.currentTime != clock.prevTime) clock.currentTime = clock.prevTime;
-      intro.gitUI.update(canvasW, canvasH, hero, delta);
+      intro.gitUI.update(canvasW, canvasH, hero, delta, clock, level);
       intro.trans(canvasW, canvasH);
     }
 
-    // Draw
-    hero.update(camera);
     camera.newPos(hero, level);
-
     hud.update(canvasW, hero, clock.currentTime);
 
     // Out of lives
@@ -136,7 +135,7 @@ function updateGameArea() {
     }
 
     // Git Interface
-    intro.gitUI.tick(delta);
+    intro.gitUI.tick(delta, level, hero);
 
   } else {
     mainGame.clear();
