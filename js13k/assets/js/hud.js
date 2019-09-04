@@ -13,7 +13,7 @@ function hud() {
     ctx.fillStyle = "#c4f0c2";
     ctx.fillText("Lives: " + hero.lives,10,28);
     ctx.fillText("Time: " + getSeconds(timeElapsed),470,25);
-    ctx.fillText("Level: " + hero.currentLevel,300,25);
+    ctx.fillText("Level: " + hero.currentLevel,250,25);
     ctx.restore();
   }
 }

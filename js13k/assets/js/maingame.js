@@ -100,16 +100,15 @@ function updateGameArea() {
       if(level.active == false){
         level.active = true;
         clock.setStartTime();
-        console.log("Level: " + hero.currentLevel + " Lives: " + hero.lives + " Current: " + clock.currentTime + " Prev: " + clock.prevTime);
+        //console.log("Level: " + hero.currentLevel + " Lives: " + hero.lives + " Current: " + clock.currentTime + " Prev: " + clock.prevTime);
       }
       hero.tick(camera);
       hero.newPos(level.tiles, intro);
       level.tick(hero, intro, clock);
-      clock.tick(delta);
+      clock.tick(delta, clock);
       // Draw
       hero.update(camera);
     } else {
-      if(clock.currentTime != clock.prevTime) clock.currentTime = clock.prevTime;
       intro.gitUI.update(canvasW, canvasH, hero, delta, clock, level);
       intro.trans(canvasW, canvasH);
     }
@@ -135,8 +134,7 @@ function updateGameArea() {
     }
 
     // Git Interface
-    intro.gitUI.tick(delta, level, hero);
-
+    intro.gitUI.tick(delta, level, clock, hero);
   } else {
     mainGame.clear();
     intro.tick(delta);

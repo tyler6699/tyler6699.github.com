@@ -1,7 +1,9 @@
 function gitUI() {
   this.time = 0;
   this.done = false;
-  this.branches = [];
+  this.calculatedTime = false;
+  this.newRecord = false;
+  this.newRecordText="";
 
   this.update = function(canvasW, canvasH, hero, delta, clock, level){
     ctx = mainGame.context;
@@ -18,54 +20,64 @@ function gitUI() {
     ctx.fillStyle = "#c4f0c2";
     ctx.fillText("remote https://github.com/tyler6699",60, 95);
     ctx.fillText("Please select an option",60, 120);
-    if(clock.levelTimes[hero.currentLevel] != null){
-      ctx.fillText("1. git commit -a -m 'Level: " + hero.currentLevel +" done'",60, 145);
-    } else {
-      if(this.branches[hero.currentLevel] == null){
-        ctx.fillText("1. git checkout -b level_" + hero.currentLevel,60, 145);
-      } else {
-        ctx.fillText("1. git checkout level_" + hero.currentLevel,60, 145);
+    var no = 1;
 
-      }
+    if(this.newRecord){
+      ctx.fillText(this.newRecordText,60, 145 + (no * 25));
+      no++;
     }
-    ctx.fillText("2. git reset --hard",60, 170);
-    ctx.fillText("3. git branch",60, 195);
-    if(hero.currentLevel == 0 && this.branches[0] == null){
-      ctx.fillText("careless (master) $",60, 245);
-    } else {
-      ctx.fillText("careless (level_" + hero.currentLevel + ") $",60, 245);
-    }
+
+    ctx.fillText("1. Play level " + hero.currentLevel,60, 145 + (no * 25));
+    no++;
+    ctx.fillText("2. Retry",60, 145 + (no * 25));
+
     ctx.restore();
   }
 
-  this.tick = function(delta, level){
+  this.tick = function(delta, level, clock, hero){
     if(!this.done){
+      if(!this.calculatedTime){
+        clock.calcTime();
+        this.calculatedTime = true;
+      }
+
       this.time += delta;
+
       if(mainGame.keys){
         if(mainGame.keys[ONE]){
+          level.complete = false;
           this.done = true;
-          if(this.branches[hero.currentLevel] == null){
-            this.branches[hero.currentLevel] = true;
-            console.log(this.branches);
-          }
-          if(level.complete){
-            // Reset the level
-            if(hero.currentLevel < level.levels.length-1){
-              hero.currentLevel ++;
-            } else {
-              hero.currentLevel = 0;
-            }
-
-            level.reset(hero);
-          }
         } else if(mainGame.keys[TWO]){
-          this.done = true;
+  
+        }
+
+        if(level.complete){
+          // Update Scores
+          this.newRecord = false;
+
+          console.log("Level: " + hero.currentLevel + " Complete Time: " + clock.levelTime);
+          if (clock.levelTimes[hero.currentLevel] == null || clock.levelTimes[hero.currentLevel] > clock.levelTime){
+            clock.levelTimes[hero.currentLevel] = clock.levelTime;
+            this.newRecord = true;
+            this.newRecordText = "NEW RECORD LEVEL " + hero.currentLevel + " Time: " + getSeconds(clock.levelTime);
+          }
+          clock.calcTime();
+
+          // Reset the level
+          if(hero.currentLevel < level.levels.length-1){
+            hero.currentLevel ++;
+          } else {
+            hero.currentLevel = 0;
+          }
+          level.complete = false;
+          level.reset(hero);
         }
       }
     }
   }
 
   this.reset = function(){
+    this.calculatedTime = false;
     this.done = false;
     this.time = 0;
   }

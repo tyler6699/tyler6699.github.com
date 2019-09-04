@@ -7,6 +7,7 @@ function heroObj(width, height, color, x, y, type) {
   this.startX = x;
   this.startY = y;
   this.currentLevel=0;
+  this.prevLevel=null;
   this.active = false;
   this.reset = false;
   this.jumping = false;
