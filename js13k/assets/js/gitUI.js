@@ -6,6 +6,14 @@ function gitUI() {
   this.newRecordText="";
 
   this.update = function(canvasW, canvasH, hero, delta, clock, level){
+    if(!this.calculatedTime){
+      if(clock.levelTimes[hero.currentLevel] != null){
+        clock.currentTime = clock.currentTime + clock.levelTimes[hero.currentLevel];
+        console.log("Adjust time");
+      }
+      this.calculatedTime = true;
+    }
+
     ctx = mainGame.context;
     ctx.save();
     ctx.translate(0,0);
@@ -59,7 +67,7 @@ function gitUI() {
             this.newRecord = true;
             this.newRecordText = "NEW RECORD LEVEL " + hero.currentLevel + " Time: " + getSeconds(clock.levelTime);
           }
-          //clock.calcTime();
+          clock.calcTime();
 
           // Reset the level
           if(hero.currentLevel < level.levels.length-1){
@@ -69,16 +77,9 @@ function gitUI() {
           }
           level.complete = false;
           level.reset(hero);
-
-          if(!this.calculatedTime){
-            if(clock.levelTimes[hero.currentLevel] != null){
-              clock.currentTime = clock.currentTime + clock.levelTimes[hero.currentLevel];
-            }
-            this.calculatedTime = true;
-          }
-
         }
       }
+
     }
   }
 
