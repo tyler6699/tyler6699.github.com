@@ -1,5 +1,5 @@
 function clock() {
-  this.maxTime = 3000.00;
+  this.maxTime = 10000.00;
   this.currentTime = this.maxTime;
   this.timeOver = false;
   this.prevTime = this.maxTime;
@@ -23,7 +23,7 @@ function clock() {
   }
 
   this.setStartTime = function(){
-    this.currentTime = this.prevTime;
+    this.calcTime();
     this.levelTime = 0;
     this.timeOver = false;
   }

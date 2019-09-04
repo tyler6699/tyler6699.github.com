@@ -36,32 +36,30 @@ function gitUI() {
 
   this.tick = function(delta, level, clock, hero){
     if(!this.done){
-      if(!this.calculatedTime){
-        clock.calcTime();
-        this.calculatedTime = true;
-      }
-
       this.time += delta;
 
       if(mainGame.keys){
         if(mainGame.keys[ONE]){
           level.complete = false;
           this.done = true;
+          this.newRecordText="";
+          this.newRecord = false;
         } else if(mainGame.keys[TWO]){
-  
+
         }
 
         if(level.complete){
           // Update Scores
           this.newRecord = false;
+          this.newRecordText = "";
 
-          console.log("Level: " + hero.currentLevel + " Complete Time: " + clock.levelTime);
-          if (clock.levelTimes[hero.currentLevel] == null || clock.levelTimes[hero.currentLevel] > clock.levelTime){
+          //console.log("Level: " + hero.currentLevel + " Complete Time: " + clock.levelTime);
+          if (!clock.timeOver && clock.levelTimes[hero.currentLevel] == null || clock.levelTimes[hero.currentLevel] > clock.levelTime){
             clock.levelTimes[hero.currentLevel] = clock.levelTime;
             this.newRecord = true;
             this.newRecordText = "NEW RECORD LEVEL " + hero.currentLevel + " Time: " + getSeconds(clock.levelTime);
           }
-          clock.calcTime();
+          //clock.calcTime();
 
           // Reset the level
           if(hero.currentLevel < level.levels.length-1){
@@ -71,6 +69,14 @@ function gitUI() {
           }
           level.complete = false;
           level.reset(hero);
+
+          if(!this.calculatedTime){
+            if(clock.levelTimes[hero.currentLevel] != null){
+              clock.currentTime = clock.currentTime + clock.levelTimes[hero.currentLevel];
+            }
+            this.calculatedTime = true;
+          }
+
         }
       }
     }
