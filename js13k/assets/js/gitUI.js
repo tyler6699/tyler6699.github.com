@@ -32,9 +32,11 @@ function gitUI() {
     ctx.fillText("Please select an option",60, 120);
     var no = 1;
 
-    ctx.fillText(this.text1,60, 145 + (no * 25));
-    no++;
-    ctx.fillText(this.text2,60, 145 + (no * 25));
+    if(this.text1 != ""){
+      ctx.fillText(this.text1,60, 145 + (no * 25));
+      no++;
+      ctx.fillText(this.text2,60, 145 + (no * 25));
+    }
 
     if(this.text3 != ""){
       no++;
@@ -52,7 +54,48 @@ function gitUI() {
     ctx.restore();
   }
 
-  this.tick = function(delta, level, clock, hero){    
+  this.tick = function(delta, level, clock, hero){
+    if(this.setScores){
+      this.setScores = false;
+      if(hero!= null && !hero.died && !hero.fell){
+        // Update Scores
+        this.newRecord = false;
+        this.text1 = "";
+        this.text2 = "             TIME: " + getSecondsFixed(clock.levelTime, 3);
+        this.text3 = "";
+
+        console.log("Level: " + hero.currentLevel + " Complete Time: " + clock.levelTime);
+        if (!clock.timeOver && clock.levelTimes[hero.currentLevel] == null || clock.levelTimes[hero.currentLevel] > clock.levelTime){
+          this.text1 = " NEW RECORD LEVEL: " + hero.currentLevel;
+          this.newRecord = true;
+          if(clock.levelTimes[hero.currentLevel] != null){
+            this.text3 = "  PREVIOUS RECORD: " + getSecondsFixed(clock.levelTimes[hero.currentLevel],3);
+          }
+          clock.levelTimes[hero.currentLevel] = clock.levelTime;
+        } else {
+          this.newRecord = false;
+          this.text1 = "SLOWER TIME LEVEL: " + hero.currentLevel;
+          if(clock.levelTimes[hero.currentLevel] != null){
+            this.text3 = "   CURRENT RECORD: " + getSecondsFixed(clock.levelTimes[hero.currentLevel], 3);
+          }
+        }
+      } else {
+        this.text2 = "";
+        this.text3 = "";
+
+        // Fall or Died
+        if(hero.fell) {
+          this.text1 = "You fell to your death.";
+        } else if(hero.died) {
+          this.text1 = "Try not to die!";
+        }
+      }
+
+      hero.died = false;
+      hero.fell = false;
+      clock.calcTime();
+    }
+
     if(!this.done){
       this.time += delta;
 
@@ -74,32 +117,6 @@ function gitUI() {
           level.reset(hero);
         }
       }
-    }
-    if(this.setScores){
-      this.setScores = false;
-      // Update Scores
-      this.newRecord = false;
-      this.text1 = "";
-      this.text2 = "             TIME: " + getSecondsFixed(clock.levelTime, 3);
-      this.text3 = "";
-
-      console.log("Level: " + hero.currentLevel + " Complete Time: " + clock.levelTime);
-      if (!clock.timeOver && clock.levelTimes[hero.currentLevel] == null || clock.levelTimes[hero.currentLevel] > clock.levelTime){
-        this.text1 = " NEW RECORD LEVEL: " + hero.currentLevel;
-        this.newRecord = true;
-        if(clock.levelTimes[hero.currentLevel] != null){
-          this.text3 = "  PREVIOUS RECORD: " + getSecondsFixed(clock.levelTimes[hero.currentLevel],3);
-        }
-        clock.levelTimes[hero.currentLevel] = clock.levelTime;
-      } else {
-        this.newRecord = false;
-        console.log(clock.levelTimes);
-        this.text1 = "SLOWER TIME LEVEL: " + hero.currentLevel;
-        if(clock.levelTimes[hero.currentLevel] != null){
-          this.text3 = "   CURRENT RECORD: " + getSecondsFixed(clock.levelTimes[hero.currentLevel], 3);
-        }
-      }
-      clock.calcTime();
     }
   }
 

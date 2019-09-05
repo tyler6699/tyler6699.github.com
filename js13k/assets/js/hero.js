@@ -2,6 +2,8 @@ function heroObj(width, height, color, x, y, type) {
   this.entity = new entityObj(width, height, x, y, "hero");
   this.maxLives = 5;
   this.lives = 5;
+  this.died = false;
+  this.fell = false;
   this.speed = 1;
   this.color = color;
   this.startX = x;
@@ -174,8 +176,10 @@ function heroObj(width, height, color, x, y, type) {
 
     // Fallen off the screen
     if(this.entity.y > maxDrop){
+      intro.gitUI.setScores = true;
       playSound(FALLFX,1);
       this.lives --;
+      this.fell = true;
       this.entity.y = this.startY;
       this.entity.x = this.startX;
       intro.reset();

@@ -27,8 +27,8 @@ function enemyObj(x, y, enemy) {
     ctx.restore();
   }
 
-  this.tick = function(hero){
-    this.checkDie(hero);
+  this.tick = function(hero, intro){
+    this.checkDie(hero, intro);
 
     if(type == WALKER){
       this.moveSide2Side();
@@ -79,10 +79,12 @@ function enemyObj(x, y, enemy) {
     }
   }
 
-  this.checkDie = function(hero){
+  this.checkDie = function(hero, intro){
     if(entityColiding(hero.entity, 0, this.entity, hitboxOffset)){
       if(!hero.reset){
         hero.lives--;
+        hero.died = true;
+        intro.gitUI.setScores = true;
         playSound(DIEFX,1);
       }
       hero.reset = true;

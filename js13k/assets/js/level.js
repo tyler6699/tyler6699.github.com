@@ -53,7 +53,7 @@ function level(canvasW, canvasH, id) {
     // Enemies
     for (i = 0; i < this.enemies.length; i++) {
       var e = this.enemies[i];
-      e.tick(hero)
+      e.tick(hero, intro)
     }
 
     // Coins
