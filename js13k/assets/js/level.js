@@ -71,7 +71,7 @@ function level(canvasW, canvasH, id) {
           } else if(coin.active && heroColliding(coin)){
             // Update Clock prev time
             clock.prevTime = clock.currentTime;
-
+            intro.gitUI.setScores = true;
             playSound(PORTALFX,1);
             this.showPortal=false;
             this.complete = true;
@@ -182,5 +182,11 @@ function level(canvasW, canvasH, id) {
                     [0,0,0,0,0,0],
                     [0,0,0,0,8,0],
                     [0,3,0,0,2,2],
+                    [5,5,5,5,4,4]]);
+  // 2
+  this.levels.push([[0,7,0,2,0,0],
+                    [0,6,1,1,0,0],
+                    [0,6,0,0,8,0],
+                    [0,3,0,0,0,0],
                     [5,5,5,5,4,4]]);
 }

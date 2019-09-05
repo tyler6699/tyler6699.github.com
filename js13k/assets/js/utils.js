@@ -34,3 +34,7 @@ function rectColiding(rx, ry, rw, rh, r2x, r2y, r2w, r2h){
 function getSeconds(ms){
   return (ms/1000).toFixed(1);
 }
+
+function getSecondsFixed(ms, x){
+  return (ms/1000).toFixed(x);
+}

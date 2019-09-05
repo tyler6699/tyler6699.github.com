@@ -29,7 +29,6 @@ function clock() {
   }
 
   this.calcTime = function(){
-      console.log("Calc time");
     if(this.levelTimes.length > 0){
       this.currentTime = this.maxTime - this.levelTimes.reduce((a, b) => a + b);
     } else {
