@@ -1,12 +1,15 @@
 function gitUI() {
+  this.showLevel=false;
   this.time = 0;
-  this.done = false;
+  this.done= false;
   this.setScores=false;
   this.calculatedTime = false;
   this.newRecord = false;
   this.text1="";
   this.text2="";
   this.text3="";
+  this.pressWait=0;
+  this.maxWait=.3;
 
   this.update = function(canvasW, canvasH, hero, delta, clock, level){
     if(!this.calculatedTime){
@@ -29,27 +32,43 @@ function gitUI() {
     ctx.font = "16px Monaco";
     ctx.fillStyle = "#c4f0c2";
     ctx.fillText("remote https://github.com/tyler6699",60, 95);
-    ctx.fillText("Please select an option",60, 120);
     var no = 1;
 
-    if(this.text1 != ""){
-      ctx.fillText(this.text1,60, 145 + (no * 25));
-      no++;
-      ctx.fillText(this.text2,60, 145 + (no * 25));
-    }
+    if(!this.showLevel){
+      if(this.text1 != ""){
+        ctx.fillText(this.text1,60, 120 + (no * 25));
+        no++;
+        ctx.fillText(this.text2,60, 120 + (no * 25));
+      }
 
-    if(this.text3 != ""){
+      if(this.text3 != ""){
+        no++;
+        ctx.fillText(this.text3,60, 120 + (no * 25));
+      }
+
+      no+= 2;
+      var cLevel = level.complete ? hero.currentLevel+1 : hero.currentLevel;
+      if(level.complete && hero.currentLevel == level.levels.length-1){
+        cLevel = 0;
+      }
+      ctx.fillText("Please select an option",60, 120  + (no * 25));
       no++;
-      ctx.fillText(this.text3,60, 145 + (no * 25));
+      ctx.fillText("1. Play level " + cLevel,60, 120 + (no * 25));
+      no++;
+      ctx.fillText("2. Retry",60, 120 + (no * 25));
+      no++;
+      ctx.fillText("3. Level Select",60, 120 + (no * 25));
+    } else {
+      this.text1 = "1. Back";
+      ctx.fillText(this.text1,60, 120 + (no * 25));
+      no++;
+      for(i = 0; i < level.levels.length; i++){
+        no++;
+        var t = clock.levelTimes[i] == null ? "Not Completed" : clock.levelTimes[i];
+        ctx.fillText("Level: " + i + ". " + t,60, 120 + (no * 25));
+      }
+      this.text1="";
     }
-    no+= 2;
-    var cLevel = level.complete ? hero.currentLevel+1 : hero.currentLevel;
-    if(level.complete && hero.currentLevel == level.levels.length-1){
-      cLevel = 0;
-    }
-    ctx.fillText("1. Play level " + cLevel,60, 145 + (no * 25));
-    no++;
-    ctx.fillText("2. Retry",60, 145 + (no * 25));
 
     ctx.restore();
   }
@@ -64,7 +83,7 @@ function gitUI() {
         this.text2 = "             TIME: " + getSecondsFixed(clock.levelTime, 3);
         this.text3 = "";
 
-        console.log("Level: " + hero.currentLevel + " Complete Time: " + clock.levelTime);
+        //console.log("Level: " + hero.currentLevel + " Complete Time: " + clock.levelTime);
         if (!clock.timeOver && clock.levelTimes[hero.currentLevel] == null || clock.levelTimes[hero.currentLevel] > clock.levelTime){
           this.text1 = " NEW RECORD LEVEL: " + hero.currentLevel;
           this.newRecord = true;
@@ -98,9 +117,12 @@ function gitUI() {
 
     if(!this.done){
       this.time += delta;
-
-      if(mainGame.keys && (mainGame.keys[ONE] || mainGame.keys[TWO])){
+      this.pressWait -= delta/1000;
+      //console.log(this.pressWait);
+      if(mainGame.keys && !this.showLevel && this.pressWait <= 0){
+        // ONE
         if(mainGame.keys[ONE]){
+          console.log("pressed one");
           if(level.complete){
             if(hero.currentLevel < level.levels.length-1){
               hero.currentLevel ++;
@@ -111,10 +133,24 @@ function gitUI() {
           this.done = true;
           level.complete = false;
           level.reset(hero);
+        // TWO
         } else if(mainGame.keys[TWO]){
           level.complete = false;
           this.done = true;
           level.reset(hero);
+        // THREE
+        } else if(mainGame.keys[THREE]){
+          this.showLevel = true;
+        }
+
+        if(mainGame.keys[ONE] || mainGame.keys[TWO] || mainGame.keys[THREE]){
+          this.pressWait = this.maxWait;
+        }
+      } else if(mainGame.keys && this.showLevel) {
+        if(mainGame.keys[ONE]){
+          this.showLevel = false;
+          this.pressWait = this.maxWait;
+          console.log("back");
         }
       }
     }

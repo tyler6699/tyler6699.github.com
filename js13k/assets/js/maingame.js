@@ -39,6 +39,10 @@ var mainGame = {
         this.canvas.width = canvasW;
         this.canvas.height = canvasH;
         this.context = this.canvas.getContext("2d");
+        // PixelArt Sharp
+        this.context.mozImageSmoothingEnabled = false;
+        this.context.webkitImageSmoothingEnabled = false;
+        this.context.imageSmoothingEnabled = false;
         this.canvas.classList.add("screen");
         document.body.insertBefore(this.canvas, document.body.childNodes[4]);
         this.frameNo = 0;
