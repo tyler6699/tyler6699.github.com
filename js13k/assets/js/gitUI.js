@@ -31,14 +31,17 @@ function gitUI() {
     ctx.save();
     ctx.font = "16px Monaco";
     ctx.fillStyle = "#c4f0c2";
-    ctx.fillText("remote https://github.com/tyler6699",60, 95);
+    fillMixedText(ctx, [{ text: "================= " , fillStyle: '#5ab9a8'},{ text: "CarelessLabs"},{ text: " ================= ", fillStyle: '#5ab9a8'}], 60, 95);
     var no = 1;
+    var offset = 0;
 
     if(!this.showLevel){
       if(this.text1 != ""){
         ctx.fillText(this.text1,60, 120 + (no * 25));
         no++;
         ctx.fillText(this.text2,60, 120 + (no * 25));
+      } else {
+        offset -=25;
       }
 
       if(this.text3 != ""){
@@ -51,21 +54,21 @@ function gitUI() {
       if(level.complete && hero.currentLevel == level.levels.length-1){
         cLevel = 0;
       }
-      ctx.fillText("Please select an option",60, 120  + (no * 25));
+      fillMixedText(ctx, [{ text: "::: MENU :::" , fillStyle: '#5ab9a8'}], 60, 120  + (no * 25) + offset);
       no++;
-      ctx.fillText("1. Play level " + cLevel,60, 120 + (no * 25));
+      ctx.fillText("1. Play level " + cLevel,60, 120 + (no * 25) + offset);
       no++;
-      ctx.fillText("2. Retry",60, 120 + (no * 25));
+      ctx.fillText("2. Retry",60, 120 + (no * 25) + offset);
       no++;
-      ctx.fillText("3. Level Select",60, 120 + (no * 25));
+      ctx.fillText("3. Level Select",60, 120 + (no * 25) + offset);
     } else {
       this.text1 = "1. Back";
-      ctx.fillText(this.text1,60, 120 + (no * 25));
+      ctx.fillText(this.text1,60, 120 + (no * 25) + offset);
       no++;
       for(i = 0; i < level.levels.length; i++){
         no++;
         var t = clock.levelTimes[i] == null ? "Not Completed" : clock.levelTimes[i];
-        ctx.fillText("Level: " + i + ". " + t,60, 120 + (no * 25));
+        ctx.fillText("Level: " + i + ". " + t,60, 120 + (no * 25) + offset);
       }
       this.text1="";
     }
@@ -91,6 +94,9 @@ function gitUI() {
             this.text3 = "  PREVIOUS RECORD: " + getSecondsFixed(clock.levelTimes[hero.currentLevel],3);
           }
           clock.levelTimes[hero.currentLevel] = clock.levelTime;
+        } else if(clock.timeOver) {
+          this.text1 = "Out of time!";
+          this.text2= "";
         } else {
           this.newRecord = false;
           this.text1 = "SLOWER TIME LEVEL: " + hero.currentLevel;
@@ -112,17 +118,20 @@ function gitUI() {
 
       hero.died = false;
       hero.fell = false;
+      console.log("UI calcTime");
       clock.calcTime();
+
+      // reset Clock timeOver
+      clock.timeOver = false;
     }
 
     if(!this.done){
       this.time += delta;
       this.pressWait -= delta/1000;
-      //console.log(this.pressWait);
+
       if(mainGame.keys && !this.showLevel && this.pressWait <= 0){
         // ONE
         if(mainGame.keys[ONE]){
-          console.log("pressed one");
           if(level.complete){
             if(hero.currentLevel < level.levels.length-1){
               hero.currentLevel ++;
@@ -150,7 +159,7 @@ function gitUI() {
         if(mainGame.keys[ONE]){
           this.showLevel = false;
           this.pressWait = this.maxWait;
-          console.log("back");
+
         }
       }
     }

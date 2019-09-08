@@ -11,9 +11,17 @@ function hud() {
     ctx.save();
     ctx.font = "20px Verdana";
     ctx.fillStyle = "#c4f0c2";
-    ctx.fillText("Lives: " + hero.lives,10,28);
-    ctx.fillText("Time: " + getSeconds(timeElapsed),470,25);
-    ctx.fillText("Level: " + hero.currentLevel,250,25);
+    fillMixedText(ctx, [{ text: "Lives: " },{ text: hero.lives, fillStyle: '#5ab9a8' }], 10, 28);
+
+    if(hero.active){
+      fillMixedText(ctx, [{ text: "Time: " },{ text: getSecondsFixed(timeElapsed, 2), fillStyle: '#5ab9a8' }], 470, 25);
+    } else {
+      fillMixedText(ctx, [{ text: "Time: " },{ text: "-.-", fillStyle: '#5ab9a8' }], 470, 25);
+    }
+
+    args = [{ text: "Level: " },{ text: hero.currentLevel, fillStyle: '#5ab9a8' }];
+    fillMixedText(ctx, args, 250, 25);
+
     ctx.restore();
   }
 }

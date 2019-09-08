@@ -1,5 +1,5 @@
 function clock() {
-  this.maxTime = 10000.00;
+  this.maxTime = 5000.00;
   this.currentTime = this.maxTime;
   this.timeOver = false;
   this.prevTime = this.maxTime;
@@ -23,9 +23,10 @@ function clock() {
   }
 
   this.setStartTime = function(){
+    console.log("Clock calcTime");
     this.calcTime();
     this.levelTime = 0;
-    this.timeOver = false;
+    // Time Over set in GUI
   }
 
   this.calcTime = function(){
@@ -34,5 +35,6 @@ function clock() {
     } else {
       this.currentTime = this.maxTime;
     }
+    console.log("Time Left: " + this.currentTime);
   }
 }

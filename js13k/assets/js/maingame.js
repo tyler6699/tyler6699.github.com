@@ -132,6 +132,7 @@ function updateGameArea() {
     if (clock.timeOver){
       if(!hero.reset){
         clock.setStartTime();
+        intro.gitUI.setScores = true;
         hero.lives--;
         hero.reset = true;
       }

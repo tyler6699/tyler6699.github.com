@@ -38,3 +38,17 @@ function getSeconds(ms){
 function getSecondsFixed(ms, x){
   return (ms/1000).toFixed(x);
 }
+
+const fillMixedText = (ctx, args, x, y) => {
+  let defaultFillStyle = ctx.fillStyle;
+  let defaultFont = ctx.font;
+
+  ctx.save();
+  args.forEach(({ text, fillStyle, font }) => {
+    ctx.fillStyle = fillStyle || defaultFillStyle;
+    ctx.font = font || defaultFont;
+    ctx.fillText(text, x, y);
+    x += ctx.measureText(text).width;
+  });
+  ctx.restore();
+};
