@@ -1,5 +1,5 @@
 function clock() {
-  this.maxTime = 5000.00;
+  this.maxTime = 100000.00;
   this.currentTime = this.maxTime;
   this.timeOver = false;
   this.prevTime = this.maxTime;

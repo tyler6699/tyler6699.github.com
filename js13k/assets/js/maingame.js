@@ -118,7 +118,7 @@ function updateGameArea() {
     }
 
     camera.newPos(hero, level);
-    hud.update(canvasW, hero, clock.currentTime);
+    hud.update(canvasW, hero, clock.currentTime, level);
 
     // Out of lives
     if(hero.lives < 0){
