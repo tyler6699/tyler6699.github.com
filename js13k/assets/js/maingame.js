@@ -133,7 +133,7 @@ function updateGameArea() {
       if(!hero.reset){
         clock.setStartTime();
         intro.gitUI.setScores = true;
-        hero.lives--;
+        // hero.lives--;
         hero.reset = true;
       }
     }
