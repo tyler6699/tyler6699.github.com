@@ -43,6 +43,7 @@ function tileObj(size, x, y, type, solid, column, row) {
     this.sy=30;
     break;
   case ICE:
+    this.oneWay = true;
     this.time = 1;
     this.sx=30;
     this.sy=30;
