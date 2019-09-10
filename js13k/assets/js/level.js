@@ -78,7 +78,7 @@ function level(canvasW, canvasH, id) {
             hero.active = false;
             this.active = false;
             // Last Level - Reset to 0
-            if(hero.currentLevel == 4 ) hero.currentLevel = 0;
+            if(hero.currentLevel == 6 ) hero.currentLevel = -1;
             // Reset the level
             intro.reset();
           }
