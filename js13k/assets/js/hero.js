@@ -1,7 +1,7 @@
 function heroObj(width, height, color, x, y, type) {
   this.entity = new entityObj(width, height, x, y, "hero");
-  this.maxLives = 5;
-  this.lives = 5;
+  this.maxLives = 99;
+  this.lives = 99;
   this.died = false;
   this.fell = false;
   this.speed = 1;

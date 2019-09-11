@@ -93,7 +93,7 @@ function tileObj(size, x, y, type, solid, column, row) {
 
   this.tick = function(hero){
     if(this.type == ICE ){
-      if(this.entity.yOffset > -30 && heroOnIce(hero, this)){
+      if(this.entity.yOffset > -30 && heroOnIce(hero, this) && hero.entity.y < this.entity.y){
         this.time -= .012;
         this.entity.yOffset -= meltRate;
       } else if (this.entity.yOffset < -30){
