@@ -47,7 +47,7 @@ var mainGame = {
         this.context.webkitImageSmoothingEnabled = false;
         this.context.imageSmoothingEnabled = false;
         this.canvas.classList.add("screen");
-        document.body.insertBefore(this.canvas, document.body.childNodes[4]);
+        document.body.insertBefore(this.canvas, document.body.childNodes[6]);
         this.frameNo = 0;
         this.interval = setInterval(updateGameArea, 20);
         // Keyboard
