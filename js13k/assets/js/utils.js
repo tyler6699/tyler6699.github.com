@@ -42,7 +42,6 @@ function getSecondsFixed(ms, x){
 const fillMixedText = (ctx, args, x, y) => {
   let defaultFillStyle = ctx.fillStyle;
   let defaultFont = ctx.font;
-
   ctx.save();
   args.forEach(({ text, fillStyle, font }) => {
     ctx.fillStyle = fillStyle || defaultFillStyle;

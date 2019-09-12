@@ -105,15 +105,14 @@ function tileObj(size, x, y, type, solid, column, row) {
   this.animBelt = function(){
     if((this.type == LEFTA || this.type == RIGHTA) && this.active){
       this.time += 0.01;
+      this.sx=0;
+      this.sy=0;
       if(this.time < .2){
         this.sx=120;
         this.sy=30;
       } else if(this.time < .4) {
         this.sx=90;
         this.sy=30;
-      } else {
-        this.sx=0;
-        this.sy=0;
       }
       if(this.time > .6) this.time=0;
     }

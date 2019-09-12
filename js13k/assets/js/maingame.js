@@ -19,6 +19,8 @@ var currentDT = Date.now();
 var timeElapsed = 0;
 var delta=0;
 var defaultG = 6;
+var music=true;
+var mTime=0;
 
 // Called by body onload on index page
 function startGame() {
@@ -30,6 +32,7 @@ function startGame() {
   intro = new intro();
   hud = new hud();
   clock = new clock();
+  genAudio();
   mainGame.start();
 }
 
@@ -91,11 +94,23 @@ function updateGameArea() {
   currentDT = Date.now();
   delta = currentDT - lastDT;
   timeElapsed += delta;
-
   // Update Gamepads
   navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
 
   if(gameStart){
+    if(music && songLoaded){
+      console.log("Play");
+      audio.play();
+      music=false;
+    } else {
+      mTime += delta;
+      if(mTime > 90000){
+        console.log("Restart");
+        audio.currentTime = 0;
+        audio.play();
+        mTime=0;
+      }
+    }
     mainGame.clear();
     level.draw(hero, camera);
 
@@ -118,7 +133,7 @@ function updateGameArea() {
     }
 
     camera.newPos(hero, level);
-    hud.update(canvasW, hero, clock.currentTime, level);
+    hud.update(canvasW, hero, clock, level);
 
     // Out of lives
     if(hero.lives < 0){
