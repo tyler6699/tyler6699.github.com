@@ -1,5 +1,5 @@
 function clock() {
-  this.winTime = 250000.00
+  this.winTime = 230000.00
   this.maxTime = 300000.00;
   this.currentTime = this.maxTime;
   this.timeOver = false;
@@ -24,7 +24,6 @@ function clock() {
   }
 
   this.setStartTime = function(){
-    console.log("Clock calcTime");
     this.calcTime();
     this.levelTime = 0;
     // Time Over set in GUI
@@ -36,10 +35,13 @@ function clock() {
     } else {
       this.currentTime = this.maxTime;
     }
-    console.log("Time Left: " + this.currentTime);
   }
 
   this.totalTime = function(){
-    return clock.levelTimes.reduce((a, b) => a + b);
+    if (clock.levelTimes[0] != null){
+        return clock.levelTimes.reduce((a, b) => a + b);
+    } else {
+      return 0;
+    }
   }
 }

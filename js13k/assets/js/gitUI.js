@@ -58,12 +58,11 @@ function gitUI() {
       no++;
       ctx.fillText("1. Play level " + cLevel,60, 120 + (no * 25) + offset);
       no++;
-      ctx.fillText("2. Retry",60, 120 + (no * 25) + offset);
+      ctx.fillText("2. Retry level " + hero.currentLevel,60, 120 + (no * 25) + offset);
       no++;
       ctx.fillText("3. Level Times",60, 120 + (no * 25) + offset);
     } else {
-      this.text1 = "1. Back";
-      ctx.fillText(this.text1,60, 100 + (no * 25) + offset);
+      ctx.fillText("1. Back",60, 100 + (no * 25) + offset);
       no++;
       var j = 1;
       var col=0;
@@ -84,7 +83,6 @@ function gitUI() {
         }
         j++;
       }
-      this.text1="";
       ctx.fillText("Total: " + getSecondsFixed(clock.totalTime(),2), 350, 350);
     }
 
@@ -101,7 +99,6 @@ function gitUI() {
         this.text2 = "             TIME: " + getSecondsFixed(clock.levelTime, 3);
         this.text3 = "";
 
-        //console.log("Level: " + hero.currentLevel + " Complete Time: " + clock.levelTime);
         if (!clock.timeOver && clock.levelTimes[hero.currentLevel] == null || clock.levelTimes[hero.currentLevel] > clock.levelTime){
           this.text1 = " NEW RECORD LEVEL: " + hero.currentLevel;
           this.newRecord = true;
@@ -133,7 +130,6 @@ function gitUI() {
 
       hero.died = false;
       hero.fell = false;
-      console.log("UI calcTime");
       clock.calcTime();
 
       // reset Clock timeOver
@@ -151,10 +147,14 @@ function gitUI() {
             if(hero.currentLevel < level.levels.length-1){
               hero.currentLevel ++;
             } else {
+              // Looping back to level ZERO!
               if(clock.totalTime() <= clock.winTime){
-                console.log("All Levels Completed in the time!");
+                hero.winner = true;
+                console.log("Winner!");
               } else {
-                console.log("All Levels Completed too slowly!");
+                hero.loser = true;
+                hero.maxSpeed += 5;
+                console.log("Speed boost!");
               }
               hero.currentLevel = 0;
             }
@@ -179,7 +179,6 @@ function gitUI() {
         if(mainGame.keys[ONE]){
           this.showLevel = false;
           this.pressWait = this.maxWait;
-
         }
       }
     }

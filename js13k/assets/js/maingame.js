@@ -99,13 +99,11 @@ function updateGameArea() {
 
   if(gameStart){
     if(music && songLoaded){
-      console.log("Play");
       audio.play();
       music=false;
     } else {
       mTime += delta;
       if(mTime > 90000){
-        console.log("Restart");
         audio.currentTime = 0;
         audio.play();
         mTime=0;
