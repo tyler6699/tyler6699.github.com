@@ -31,7 +31,11 @@ function gitUI() {
     ctx.save();
     ctx.font = "16px Monaco";
     ctx.fillStyle = "#c4f0c2";
-    fillMixedText(ctx, [{ text: "================= " , fillStyle: '#5ab9a8'},{ text: "CarelessLabs"},{ text: " ================= ", fillStyle: '#5ab9a8'}], 60, 95);
+    var c = "#5ab9a8";
+    fillMixedText(ctx, [{ text: "=========== " , fillStyle: c},{ text: "Code & Art: @CarelessLabs"},{ text: " ===========", fillStyle: c}], 60, 95);
+    if(hero.loser) ctx.fillText(" Extra Speed ++",380, 120);
+    fillMixedText(ctx, [{ text: "============== " , fillStyle: c},{ text: "Music: @ModalModule"},{ text: " ==============", fillStyle: c}], 60, 350);
+
     var no = 1;
     var offset = 0;
 
@@ -83,7 +87,7 @@ function gitUI() {
         }
         j++;
       }
-      ctx.fillText("Total: " + getSecondsFixed(clock.totalTime(),2), 350, 350);
+      ctx.fillText("Total: " + getSecondsFixed(clock.totalTime(),2) + " Win: 230" , 310, 320);
     }
 
     ctx.restore();
@@ -150,11 +154,9 @@ function gitUI() {
               // Looping back to level ZERO!
               if(clock.totalTime() <= clock.winTime){
                 hero.winner = true;
-                console.log("Winner!");
               } else {
                 hero.loser = true;
-                hero.maxSpeed += 5;
-                console.log("Speed boost!");
+                hero.maxSpeed = 4;
               }
               hero.currentLevel = 0;
             }

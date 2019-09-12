@@ -7,13 +7,16 @@ function intro() {
     ctx = mainGame.context;
     ctx.font = "30px Arial";
     fillMixedText(ctx, [{ text: "=========== " , fillStyle: '#5ab9a8'},{ text: "CarelessLabs"},{ text: " =========== ", fillStyle: '#5ab9a8'}], 10, 50);
-    mainGame.context.fillText("                     PRESS SPACE",10,300);
+    fillMixedText(ctx, [{ text: "=================================" , fillStyle: '#5ab9a8'}], 10, 350);
+    if(ready){
+        mainGame.context.fillText("              === PRESS SPACE ===",10,300);
+    } else {
+        mainGame.context.fillText("     Rewinding the cassette tape",10,300);
+    }
 
     if (mainGame.keys && mainGame.keys[SPACE]) {
       // Setup Audio Context on a user input
-      if(audioCtx == null){
-        audioCtx = new AudioContext();
-      }
+      if(audioCtx == null) audioCtx = new AudioContext();
       gameStart = true;
     }
   }
