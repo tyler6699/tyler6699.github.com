@@ -60,17 +60,32 @@ function gitUI() {
       no++;
       ctx.fillText("2. Retry",60, 120 + (no * 25) + offset);
       no++;
-      ctx.fillText("3. Level Select",60, 120 + (no * 25) + offset);
+      ctx.fillText("3. Level Times",60, 120 + (no * 25) + offset);
     } else {
       this.text1 = "1. Back";
-      ctx.fillText(this.text1,60, 120 + (no * 25) + offset);
+      ctx.fillText(this.text1,60, 100 + (no * 25) + offset);
       no++;
+      var j = 1;
+      var col=0;
+      var row=no + 20;
+      no = 0;
       for(i = 0; i < level.levels.length; i++){
         no++;
-        var t = clock.levelTimes[i] == null ? "Not Completed" : clock.levelTimes[i];
-        ctx.fillText("Level: " + i + ". " + t,60, 120 + (no * 25) + offset);
+        var t = clock.levelTimes[i] == null ? "--" : getSecondsFixed(clock.levelTimes[i],2);
+        if(i < 10){
+          ctx.fillText("0" + i + ". " + t,60 + (col* 110), 120 + (no * 25) + offset + row);
+        } else {
+          ctx.fillText(i + ". " + t,60 + (col* 110), 120 + (no * 25) + offset + row);
+        }
+        if(j==6){
+          j=0;
+          no=0;
+          col ++;
+        }
+        j++;
       }
       this.text1="";
+      ctx.fillText("Total: " + getSecondsFixed(clock.totalTime(),2), 350, 350);
     }
 
     ctx.restore();
@@ -136,6 +151,11 @@ function gitUI() {
             if(hero.currentLevel < level.levels.length-1){
               hero.currentLevel ++;
             } else {
+              if(clock.totalTime() <= clock.winTime){
+                console.log("All Levels Completed in the time!");
+              } else {
+                console.log("All Levels Completed too slowly!");
+              }
               hero.currentLevel = 0;
             }
           }

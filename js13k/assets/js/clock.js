@@ -1,5 +1,6 @@
 function clock() {
-  this.maxTime = 400000.00;
+  this.winTime = 250000.00
+  this.maxTime = 300000.00;
   this.currentTime = this.maxTime;
   this.timeOver = false;
   this.prevTime = this.maxTime;
@@ -36,5 +37,9 @@ function clock() {
       this.currentTime = this.maxTime;
     }
     console.log("Time Left: " + this.currentTime);
+  }
+
+  this.totalTime = function(){
+    return clock.levelTimes.reduce((a, b) => a + b);
   }
 }
