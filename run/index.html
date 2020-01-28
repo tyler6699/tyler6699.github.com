@@ -74,7 +74,8 @@
           <li class="active"><a data-toggle="tab" href="#home">Pace</a></li>
           <li><a data-toggle="tab" href="#menu1">Speed</a></li>
           <li><a data-toggle="tab" href="#menu2">Time</a></li>
-					<li><a data-toggle="tab" href="#menu3">Settings</a></li>
+					<li><a data-toggle="tab" href="#menu3">Distance</a></li>
+					<li><a data-toggle="tab" href="#menu4">Settings</a></li>
         </ul>
         <!-- TABS -->
         <div class="tab-content">
@@ -297,8 +298,54 @@
           	</div>
 					</div>
 
-					<!-- SETTINGS TAB -->
+					<!-- TAB 04 -->
 					<div id="menu3" class="tab-pane fade">
+						<div class="panel panel-default">
+							<div class="panel-heading">Distance</div>
+							<div class="panel-body">
+								<form>
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon" id="timelbl">Hour</span>
+											<input type="number" name="hour" id="dstHour" required="required" class="form-control calcDst" value="0" max="59" min="0">
+											<span class="input-group-addon">Min</span>
+											<input type="number" name="minute" id="dstMinute" required="required" class="form-control calcDst" value="0" max="59" min="0">
+											<span class="input-group-addon">Sec</span>
+											<input type="number" name="second" id="dstSecond" required="required" class="form-control calcDst" value="0" max="59" min="0">
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">Speed</span>
+											<input type="number" name="speed" id="dstSpeed" required="required" class="form-control calcDst" value="0" min="0">
+											<span class="input-group-addon">-</span>
+											<select id="dstUnitSpd" class="form-control calcDst">
+													<option value="mph">MPH</option>
+													<option value="kmh">KMH</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group">
+											<div class="alert alert-info" role="alert">
+												<p class="text-left">
+													<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+													<span id="outputDistMile">Miles: 0</span>
+												</p>
+												<p class="text-left">
+													<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+													<span id="outputDistKM">KM: 0</span>
+												</p>
+											</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+					<!-- SETTINGS TAB -->
+					<div id="menu4" class="tab-pane fade">
 						<div class="panel panel-default">
 							<div class="panel-heading">Settings</div>
 							<div class="panel-body">
@@ -343,7 +390,7 @@
 	<script src="../index_files/jquery.js"></script>
 	<script src="../index_files/bootstrap.js"></script>
   <script src="../index_files/slider.js"></script>
-  <script src="../index_files/runcalc.js?v=1.014"></script>
+  <script src="../index_files/runcalc.js?v=1.015"></script>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-114991742-1"></script>
 	<script>

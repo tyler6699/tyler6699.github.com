@@ -49,6 +49,7 @@ var km2miles = 0.6213711922;
 var miles2km = 1.609344;
 var precision = 3;
 var splitSeconds = false;
+calcDistance();
 
 $(document).ready(function() {
   console.log( "CarelessLabs Running Calculator" );
@@ -88,6 +89,10 @@ $(document).ready(function() {
 
   $('.calcSpd').on('input', function() {
     calcTimeSpeed();
+  });
+
+  $('.calcDst').on('input', function() {
+    calcDistance();
   });
 
   $("#secSlider").slider({
@@ -327,6 +332,30 @@ function calcPace(unit){
 
     $("#paceTime").text(timeStr);
   }
+}
+
+// DISTANCE TABS
+function calcDistance(){
+  // distance
+  var totalMiles = 0;
+  var totalKMs = 0;
+  var hour = $("#dstHour").val();
+  var minute = $("#dstMinute").val();
+  var second = $("#dstSecond").val();
+  var dstSpeed = $("#dstSpeed").val();
+  var dstUnitSpd = $("#dstUnitSpd").val();
+  var totalSeconds = (+hour) * 60 * 60 + (+minute) * 60 + (+second);
+
+  if(dstUnitSpd == "kmh"){
+    totalKMs = (dstSpeed/3600) * totalSeconds;
+    totalMiles = totalKMs * km2miles;
+  } else {
+    totalMiles = (dstSpeed/3600) * totalSeconds;
+    totalKMs = totalMiles * miles2km;
+  }
+
+  $("#outputDistMile").text("Miles: " + totalMiles.toFixed(precision));
+  $("#outputDistKM").text("KMs: " + totalKMs.toFixed(precision));
 }
 
 // Convert time in seconds to hh:mm:ss.split
