@@ -63,16 +63,22 @@
 			<div class="row show-grid icons">
 				<div class="col-md-3"></div>
 				<div class="col-md-2">
-					<a class="fa fa-info icon-large" href="about.html" ></a>
-					<div class="tooltip fade top in" role="tooltip" id="tooltip525212" style="top: -33px; left: 47px; display: block;"><div class="tooltip-arrow" style="left: 50%;"></div><div class="tooltip-inner">About</div></div>
+					<a class="fa fa-info icon-large" href="about.html" style="width:200px"></a>
+					<div class="tooltip fade top in" role="tooltip" id="about_tip" style="top: -15px; display: block;">
+						<div class="tooltip-arrow" style="left: 50%;"></div><div class="tooltip-inner">About</div>
+					</div>
 				</div>
 				<div class="col-md-2">
-					<a class="fa fa-gamepad icon-large" href="games.html"></a>
-					<div class="tooltip fade top in" role="tooltip" id="tooltip525213" style="top: -33px; left: 60px; display: block;"><div class="tooltip-arrow" style="left: 50%;"></div><div class="tooltip-inner">Games</div></div>
+					<a class="fa fa-gamepad icon-large" href="games.html" style="width:200px"></a>
+					<div class="tooltip fade top in" role="tooltip" id="games_tip" style="top: -15px; display: block;">
+						<div class="tooltip-arrow" style="left: 50%;"></div><div class="tooltip-inner">Games</div>
+					</div>
 				</div>
 				<div class="col-md-2">
-					<a class="icon-large fa fa-wordpress" href="http://carelesslabs.wordpress.com/" target="_blank"></a>
-					<div class="tooltip fade top in" role="tooltip" id="tooltip525214" style="top: -33px; left: 60px; display: block;"><div class="tooltip-arrow" style="left: 50%;"></div><div class="tooltip-inner">Blog</div></div>
+					<a class="icon-large fa fa-wordpress" href="http://carelesslabs.wordpress.com/" style="width:200px" target="_blank"></a>
+					<div class="tooltip fade top in" role="tooltip" id="blog_tip" style="top: -15px; display: block;">
+						<div class="tooltip-arrow" style="left: 50%;"></div><div class="tooltip-inner">Blog</div>
+					</div>
 				</div>
 				<div class="col-md-3"></div>
 			</div>
@@ -103,5 +109,18 @@
 		  gtag('js', new Date());
 		  gtag('config', 'UA-114991742-1');
 		</script>
+		<style>
+			@media (min-width: 992px)  {
+				#about_tip, #games_tip, #blog_tip {
+						left:  60%;
+				}
+			}
+
+			@media (max-width: 991px) {
+				#about_tip, #games_tip, #blog_tip {
+						left:  46%;
+				}
+			}
+		</style>
 	</body>
 </html>
