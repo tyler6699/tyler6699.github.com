@@ -46,8 +46,8 @@ projects = [{
   "imgAlt":"Top view of car driving",
   "categoryList":["topdown","Java","LibGDX"],
   "body":"A work in progress 2D / 3D environment for a topdown GTA style game.",
-  "actionURL":"Blog Post",
-  "actionTitle":"https://carelesslabs.wordpress.com/2017/07/19/zero-hour-gamedev/",
+  "actionURL":"https://carelesslabs.wordpress.com/2017/07/19/zero-hour-gamedev/",
+  "actionTitle":"Blog Post",
   "actionFA":"fab wordpress-simple"
 },
 {
