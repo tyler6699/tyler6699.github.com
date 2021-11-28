@@ -48,7 +48,7 @@ projects = [{
   "body":"A work in progress 2D / 3D environment for a topdown GTA style game.",
   "actionURL":"https://carelesslabs.wordpress.com/2017/07/19/zero-hour-gamedev/",
   "actionTitle":"Blog Post",
-  "actionFA":"fab wordpress-simple"
+  "actionFA":"fab fa-wordpress-simple"
 },
 {
   "id":"libgdx-tutorials",
