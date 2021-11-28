@@ -46,9 +46,9 @@ projects = [{
   "imgAlt":"Top view of car driving",
   "categoryList":["topdown","Java","LibGDX"],
   "body":"A work in progress 2D / 3D environment for a topdown GTA style game.",
-  "actionURL":"test",
-  "actionTitle":"test",
-  "actionFA":"fas fa-link"
+  "actionURL":"Blog Post",
+  "actionTitle":"https://carelesslabs.wordpress.com/2017/07/19/zero-hour-gamedev/",
+  "actionFA":"fab wordpress-simple"
 },
 {
   "id":"libgdx-tutorials",
@@ -160,7 +160,7 @@ projects = [{
   "imgAlt":"Characte stood on the beach",
   "categoryList":["LibGDX,","Java","Procedural"],
   "body":"A multi-player** survival game set on a Island. Still in its early stages, currently has a private test server that allows players to explore. Working on a map editor to produce the final Island for the game. Check out IndieDB, the Blog and Twitter for updates. ** Multiplayer was tested as a proof of concept but never fully implemented.",
-  "actionURL":"https://carelesslabs.co.uk/ff/",
+  "actionURL":"https://www.indiedb.com/games/endure",
   "actionTitle":"IndieDB",
   "actionFA":"fas fa-database"
 },
