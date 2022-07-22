@@ -58,21 +58,29 @@ $(document).ready(function() {
   $('#mplus').click(function() {
     var currValue = $("#minSlider").slider('getValue');
     $("#minSlider").slider('setValue', currValue + 1);
+    var unit = $("#unitEvent").val();
+    calcPace(unit);
   });
 
   $('#mminus').click(function() {
     var currValue = $("#minSlider").slider('getValue');
     $("#minSlider").slider('setValue', currValue - 1);
+    var unit = $("#unitEvent").val();
+    calcPace(unit);
   });
 
   $('#splus').click(function() {
     var currValue = $("#secSlider").slider('getValue');
     $("#secSlider").slider('setValue', currValue + 1);
+    var unit = $("#unitEvent").val();
+    calcPace(unit);
   });
 
   $('#sminus').click(function() {
     var currValue = $("#secSlider").slider('getValue');
     $("#secSlider").slider('setValue', currValue - 1);
+    var unit = $("#unitEvent").val();
+    calcPace(unit);
   });
 
   $('.speedDist').on('click', function() {
