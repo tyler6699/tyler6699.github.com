@@ -15,7 +15,7 @@
   Licensed under The MIT License
   details, see https://opensource.org/licenses/MIT
 
-  Copyright (c) 2018 Ryan Tyler
+  Copyright (c) 2022 Ryan Tyler
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -55,6 +55,26 @@ $(document).ready(function() {
   console.log( "CarelessLabs Running Calculator" );
 
   // Browser Events
+  $('#mplus').click(function() {
+    var currValue = $("#minSlider").slider('getValue');
+    $("#minSlider").slider('setValue', currValue + 1);
+  });
+
+  $('#mminus').click(function() {
+    var currValue = $("#minSlider").slider('getValue');
+    $("#minSlider").slider('setValue', currValue - 1);
+  });
+
+  $('#splus').click(function() {
+    var currValue = $("#secSlider").slider('getValue');
+    $("#secSlider").slider('setValue', currValue + 1);
+  });
+
+  $('#sminus').click(function() {
+    var currValue = $("#secSlider").slider('getValue');
+    $("#secSlider").slider('setValue', currValue - 1);
+  });
+
   $('.speedDist').on('click', function() {
     var distance = $(this).data('distance');
     var unit = $("#unit").val();
@@ -113,7 +133,7 @@ $(document).ready(function() {
     tooltip: 'always',
     step: 1,
     min: 3,
-    max: 20
+    max: 30
   });
 
   $('.calcPace').on('change input', function() {

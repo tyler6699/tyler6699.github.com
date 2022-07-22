@@ -101,6 +101,7 @@
 											</select>
 										</div>
 									</div>
+									<!-- -->
 									<div class="form-group">
 										<div class="input-group">
 											<span class="input-group-addon">Pace</span>
@@ -115,14 +116,20 @@
 										<div class="col-sm-6">
 											<div class="form-group">
 												<div class="input-group">
-													Minutes: <input id="minSlider" class="calcPace" data-slider-id='minutesSlider' type="text" data-slider-value="7"/>
+													Minutes:
+													<i class="fa fa-minus subtract" id="mminus" aria-hidden="true"></i>
+													<input id="minSlider" class="calcPace" data-slider-id='minutesSlider' type="text" data-slider-value="7"/>
+													<i class="fa fa-plus add" id="mplus" aria-hidden="true"></i>
 												</div>
 											</div>
 										</div>
 										<div class="col-sm-6">
 											<div class="form-group">
 												<div class="input-group">
-													Seconds: <input id="secSlider" class="calcPace" data-slider-id='secondsSlider' type="text" data-slider-value="0"/>
+													Seconds:
+													<i class="fa fa-minus subtract" id="sminus" aria-hidden="true"></i>
+													<input id="secSlider" class="calcPace" data-slider-id='secondsSlider' type="text" data-slider-value="0"/>
+													<i class="fa fa-plus add" id="splus" aria-hidden="true"></i>
 												</div>
 											</div>
 										</div>
