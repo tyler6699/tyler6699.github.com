@@ -1,4 +1,17 @@
 projects = [{
+  "id":"js13k-2022",
+  "captionHeading":"JS13k 2022",
+  "captionSubheading":"Soul Jumper",
+  "imgSmall":"https://js13kgames.com/games/soul-jumper/__small.jpg",
+  "imgBig":"https://js13kgames.com/games/soul-jumper/__big.jpg",
+  "imgAlt":"Platformer with a twist",
+  "categoryList":["gamejam","JS13k","JS"],
+  "body":"2022 JS13k gamejam entry. 2D platformer, use your soul as a platform and also rewind its position.",
+  "actionURL":"https://js13kgames.com/entries/soul-jumper",
+  "actionTitle":"Play",
+  "actionFA":"fas fa-gamepad"
+},
+{
   "id":"js13k-2021",
   "captionHeading":"JS13k 2021",
   "captionSubheading":"Space Kitty",
