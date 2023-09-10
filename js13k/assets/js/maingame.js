@@ -19,6 +19,8 @@ var currentDT = Date.now();
 var timeElapsed = 0;
 var delta=0;
 var defaultG = 6;
+var music=true;
+var mTime=0;
 
 // Called by body onload on index page
 function startGame() {
@@ -30,6 +32,7 @@ function startGame() {
   intro = new intro();
   hud = new hud();
   clock = new clock();
+  genAudio();
   mainGame.start();
 }
 
@@ -39,8 +42,12 @@ var mainGame = {
         this.canvas.width = canvasW;
         this.canvas.height = canvasH;
         this.context = this.canvas.getContext("2d");
+        // PixelArt Sharp
+        this.context.mozImageSmoothingEnabled = false;
+        this.context.webkitImageSmoothingEnabled = false;
+        this.context.imageSmoothingEnabled = false;
         this.canvas.classList.add("screen");
-        document.body.insertBefore(this.canvas, document.body.childNodes[4]);
+        document.body.insertBefore(this.canvas, document.body.childNodes[6]);
         this.frameNo = 0;
         this.interval = setInterval(updateGameArea, 20);
         // Keyboard
@@ -87,11 +94,21 @@ function updateGameArea() {
   currentDT = Date.now();
   delta = currentDT - lastDT;
   timeElapsed += delta;
-
   // Update Gamepads
   navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
 
   if(gameStart){
+    if(music && songLoaded){
+      audio.play();
+      music=false;
+    } else {
+      mTime += delta;
+      if(mTime > 90000){
+        audio.currentTime = 0;
+        audio.play();
+        mTime=0;
+      }
+    }
     mainGame.clear();
     level.draw(hero, camera);
 
@@ -114,7 +131,7 @@ function updateGameArea() {
     }
 
     camera.newPos(hero, level);
-    hud.update(canvasW, hero, clock.currentTime);
+    hud.update(canvasW, hero, clock, level);
 
     // Out of lives
     if(hero.lives < 0){
@@ -128,7 +145,8 @@ function updateGameArea() {
     if (clock.timeOver){
       if(!hero.reset){
         clock.setStartTime();
-        hero.lives--;
+        intro.gitUI.setScores = true;
+        // hero.lives--;
         hero.reset = true;
       }
     }

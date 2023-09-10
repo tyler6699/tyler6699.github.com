@@ -15,7 +15,7 @@
   Licensed under The MIT License
   details, see https://opensource.org/licenses/MIT
 
-  Copyright (c) 2018 Ryan Tyler
+  Copyright (c) 2022 Ryan Tyler
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -49,11 +49,40 @@ var km2miles = 0.6213711922;
 var miles2km = 1.609344;
 var precision = 3;
 var splitSeconds = false;
+calcDistance();
 
 $(document).ready(function() {
   console.log( "CarelessLabs Running Calculator" );
 
   // Browser Events
+  $('#mplus').click(function() {
+    var currValue = $("#minSlider").slider('getValue');
+    $("#minSlider").slider('setValue', currValue + 1);
+    var unit = $("#unitEvent").val();
+    calcPace(unit);
+  });
+
+  $('#mminus').click(function() {
+    var currValue = $("#minSlider").slider('getValue');
+    $("#minSlider").slider('setValue', currValue - 1);
+    var unit = $("#unitEvent").val();
+    calcPace(unit);
+  });
+
+  $('#splus').click(function() {
+    var currValue = $("#secSlider").slider('getValue');
+    $("#secSlider").slider('setValue', currValue + 1);
+    var unit = $("#unitEvent").val();
+    calcPace(unit);
+  });
+
+  $('#sminus').click(function() {
+    var currValue = $("#secSlider").slider('getValue');
+    $("#secSlider").slider('setValue', currValue - 1);
+    var unit = $("#unitEvent").val();
+    calcPace(unit);
+  });
+
   $('.speedDist').on('click', function() {
     var distance = $(this).data('distance');
     var unit = $("#unit").val();
@@ -90,6 +119,10 @@ $(document).ready(function() {
     calcTimeSpeed();
   });
 
+  $('.calcDst').on('input', function() {
+    calcDistance();
+  });
+
   $("#secSlider").slider({
     tooltip: 'always',
     step: 1,
@@ -108,7 +141,7 @@ $(document).ready(function() {
     tooltip: 'always',
     step: 1,
     min: 3,
-    max: 20
+    max: 30
   });
 
   $('.calcPace').on('change input', function() {
@@ -327,6 +360,30 @@ function calcPace(unit){
 
     $("#paceTime").text(timeStr);
   }
+}
+
+// DISTANCE TABS
+function calcDistance(){
+  // distance
+  var totalMiles = 0;
+  var totalKMs = 0;
+  var hour = $("#dstHour").val();
+  var minute = $("#dstMinute").val();
+  var second = $("#dstSecond").val();
+  var dstSpeed = $("#dstSpeed").val();
+  var dstUnitSpd = $("#dstUnitSpd").val();
+  var totalSeconds = (+hour) * 60 * 60 + (+minute) * 60 + (+second);
+
+  if(dstUnitSpd == "kmh"){
+    totalKMs = (dstSpeed/3600) * totalSeconds;
+    totalMiles = totalKMs * km2miles;
+  } else {
+    totalMiles = (dstSpeed/3600) * totalSeconds;
+    totalKMs = totalMiles * miles2km;
+  }
+
+  $("#outputDistMile").text("Miles: " + totalMiles.toFixed(precision));
+  $("#outputDistKM").text("KMs: " + totalKMs.toFixed(precision));
 }
 
 // Convert time in seconds to hh:mm:ss.split

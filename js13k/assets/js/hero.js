@@ -1,7 +1,11 @@
 function heroObj(width, height, color, x, y, type) {
   this.entity = new entityObj(width, height, x, y, "hero");
-  this.maxLives = 5;
-  this.lives = 5;
+  this.winner = false;
+  this.loser = false;
+  this.maxLives = 99;
+  this.lives = 99;
+  this.died = false;
+  this.fell = false;
   this.speed = 1;
   this.color = color;
   this.startX = x;
@@ -19,9 +23,9 @@ function heroObj(width, height, color, x, y, type) {
   this.image.src = atlas;
   this.fx = [];
   var hPower = 0;
-  var maxSpeed = 3;
+  this.maxSpeed = 3;
   var jPower = 0;
-  var maxJPower = 17;
+  this.maxJPower = 17;
   var touchingY = false;
   var gravity = defaultG;
   var maxDrop = 700; // FIX
@@ -174,8 +178,10 @@ function heroObj(width, height, color, x, y, type) {
 
     // Fallen off the screen
     if(this.entity.y > maxDrop){
+      intro.gitUI.setScores = true;
       playSound(FALLFX,1);
       this.lives --;
+      this.fell = true;
       this.entity.y = this.startY;
       this.entity.x = this.startX;
       intro.reset();
@@ -215,22 +221,22 @@ function heroObj(width, height, color, x, y, type) {
     }
 
     if (mainGame.keys && (mainGame.keys[LEFT] || mainGame.keys[A])) {
-    if(hPower > -maxSpeed){ hPower --; }
+    if(hPower > -this.maxSpeed){ hPower --; }
     }
 
     if (mainGame.keys && (mainGame.keys[RIGHT] || mainGame.keys[D])) {
-      if(hPower < maxSpeed){ hPower ++; }
+      if(hPower < this.maxSpeed){ hPower ++; }
     }
 
     // CONTROLLERS
     if(controllers.length > 0){
       // LEFT
       if(controllers[0].axes[0] < -.8 || controllers[0].axes[2] < -.8 || controllers[0].buttons[14].pressed){
-        if(hPower > -maxSpeed){ hPower --; }
+        if(hPower > -this.maxSpeed){ hPower --; }
       }
       // RIGHT
       if(controllers[0].axes[0] > .8 || controllers[0].axes[2] > .8 || controllers[0].buttons[15].pressed){
-        if(hPower < maxSpeed){ hPower ++; }
+        if(hPower < this.maxSpeed){ hPower ++; }
       }
       // UP
       if(controllers[0].axes[1] < -.8 || controllers[0].axes[3] < -.8 || controllers[0].buttons[12].pressed){
@@ -270,7 +276,7 @@ function heroObj(width, height, color, x, y, type) {
   this.moveUp = function(){
     if(jPower == 0 && (touchingY == true || (this.exitLadder == true && ladderTopDiff <= 15))){
       this.jumping = true;
-      jPower = maxJPower;
+      jPower = this.maxJPower;
       playSound(JUMPFX,1);
     }
     if(this.onLadder){ ladderUp = true; }

@@ -34,3 +34,20 @@ function rectColiding(rx, ry, rw, rh, r2x, r2y, r2w, r2h){
 function getSeconds(ms){
   return (ms/1000).toFixed(1);
 }
+
+function getSecondsFixed(ms, x){
+  return (ms/1000).toFixed(x);
+}
+
+const fillMixedText = (ctx, args, x, y) => {
+  let defaultFillStyle = ctx.fillStyle;
+  let defaultFont = ctx.font;
+  ctx.save();
+  args.forEach(({ text, fillStyle, font }) => {
+    ctx.fillStyle = fillStyle || defaultFillStyle;
+    ctx.font = font || defaultFont;
+    ctx.fillText(text, x, y);
+    x += ctx.measureText(text).width;
+  });
+  ctx.restore();
+};

@@ -83,30 +83,3 @@ function getDie(i){
   var q = (n-i)/n;
   return Math.sin(i*0.01*Math.sin(0.009*i+Math.sin(i/200))+Math.sin(i/100))*q*q;
 }
-
-//https://xem.github.io/miniMusic/simple.html
-function playMusic(){
-  // Stop all current sounds
-  for(os of oscArr){
-    if(os!=null) os.stop(0);
-  }
-  oscArr = [];
-
-  data = [12,12,11,11,11,10,10,10,11,11,11,12,12,12];
-  audio = new AudioContext();
-  for(d in data){
-    if(data[d]){
-      gain = audio.createGain();
-      osc = audio.createOscillator();
-      oscArr.push(osc);
-      osc.connect(gain);
-      gain.connect(audio.destination);
-      osc.start(d*.4);
-      osc.frequency.setValueAtTime(440*1.06 ** (13-data[d]),d*.4);
-      osc.type='triangle';
-      gain.gain.setValueAtTime(0,d*.4),
-      gain.gain.setTargetAtTime(.0001,d*.4+.38,.005);
-      osc.stop(d*.4+.39);
-    }
-  }
-}

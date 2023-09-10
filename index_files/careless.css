@@ -71,3 +71,5 @@ body{line-height:24px;}
 .divider{border-bottom:1px dashed #ddd;height:1px;margin:10px 0;}
 .list-strip li{background:none repeat scroll 0 0 #4b6f78;border-radius:5px;color:white;margin-bottom:6px;padding:10px;}
 .list-strip li:nth-child(2n){background:none repeat scroll 0 0 #df5c5f;}
+#sminus, #mminus{margin-right: 5px;}
+#splus, #mplus{margin-left: 5px;}

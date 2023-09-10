@@ -24,7 +24,7 @@
   <meta name="keywords" content="running,calculator,calc,speed,average,minute,mile,km,miling,half,marathon,5km,10km">
   <meta name="author" content="Ryan Tyler">
 	<!-- assests -->
-	<link href="http://getbootstrap.com/favicon.ico" rel="icon">
+	<link href="https://getbootstrap.com/favicon.ico" rel="icon">
 	<link href="../index_files/bootstrap.css" rel="stylesheet"><!-- Custom styles for this template -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link href="../index_files/sticky-footer-navbar.css" rel="stylesheet">
@@ -34,8 +34,8 @@
   	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
-	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
-	<link href="../index_files/careless.css" rel="stylesheet">
+	<link href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
+	<link href="../index_files/careless.css?v=0.2" rel="stylesheet">
   <link href="../index_files/slider.css" rel="stylesheet">
 </head>
 <body>
@@ -49,12 +49,6 @@
 				<ul class="nav navbar-nav">
 					<li>
 						<a class="active" href="../index.html">Home</a>
-					</li>
-					<li>
-						<a href="../about.html">About</a>
-					</li>
-					<li>
-						<a href="../games.html">Games</a>
 					</li>
 					<li>
 						<a href="http://carelesslabs.wordpress.com/" target="_blank">Blog</a>
@@ -74,7 +68,8 @@
           <li class="active"><a data-toggle="tab" href="#home">Pace</a></li>
           <li><a data-toggle="tab" href="#menu1">Speed</a></li>
           <li><a data-toggle="tab" href="#menu2">Time</a></li>
-					<li><a data-toggle="tab" href="#menu3">Settings</a></li>
+					<li><a data-toggle="tab" href="#menu3">Distance</a></li>
+					<li><a data-toggle="tab" href="#menu4">Settings</a></li>
         </ul>
         <!-- TABS -->
         <div class="tab-content">
@@ -106,6 +101,7 @@
 											</select>
 										</div>
 									</div>
+									<!-- -->
 									<div class="form-group">
 										<div class="input-group">
 											<span class="input-group-addon">Pace</span>
@@ -120,14 +116,20 @@
 										<div class="col-sm-6">
 											<div class="form-group">
 												<div class="input-group">
-													Minutes: <input id="minSlider" class="calcPace" data-slider-id='minutesSlider' type="text" data-slider-value="7"/>
+													Minutes:
+													<i class="fa fa-minus subtract" id="mminus" aria-hidden="true"></i>
+													<input id="minSlider" class="calcPace" data-slider-id='minutesSlider' type="text" data-slider-value="7"/>
+													<i class="fa fa-plus add" id="mplus" aria-hidden="true"></i>
 												</div>
 											</div>
 										</div>
 										<div class="col-sm-6">
 											<div class="form-group">
 												<div class="input-group">
-													Seconds: <input id="secSlider" class="calcPace" data-slider-id='secondsSlider' type="text" data-slider-value="0"/>
+													Seconds:
+													<i class="fa fa-minus subtract" id="sminus" aria-hidden="true"></i>
+													<input id="secSlider" class="calcPace" data-slider-id='secondsSlider' type="text" data-slider-value="0"/>
+													<i class="fa fa-plus add" id="splus" aria-hidden="true"></i>
 												</div>
 											</div>
 										</div>
@@ -297,8 +299,54 @@
           	</div>
 					</div>
 
-					<!-- SETTINGS TAB -->
+					<!-- TAB 04 -->
 					<div id="menu3" class="tab-pane fade">
+						<div class="panel panel-default">
+							<div class="panel-heading">Distance</div>
+							<div class="panel-body">
+								<form>
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon" id="timelbl">Hour</span>
+											<input type="number" name="hour" id="dstHour" required="required" class="form-control calcDst" value="0" max="59" min="0">
+											<span class="input-group-addon">Min</span>
+											<input type="number" name="minute" id="dstMinute" required="required" class="form-control calcDst" value="0" max="59" min="0">
+											<span class="input-group-addon">Sec</span>
+											<input type="number" name="second" id="dstSecond" required="required" class="form-control calcDst" value="0" max="59" min="0">
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">Speed</span>
+											<input type="number" name="speed" id="dstSpeed" required="required" class="form-control calcDst" value="0" min="0">
+											<span class="input-group-addon">-</span>
+											<select id="dstUnitSpd" class="form-control calcDst">
+													<option value="mph">MPH</option>
+													<option value="kmh">KMH</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group">
+											<div class="alert alert-info" role="alert">
+												<p class="text-left">
+													<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+													<span id="outputDistMile">Miles: 0</span>
+												</p>
+												<p class="text-left">
+													<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+													<span id="outputDistKM">KM: 0</span>
+												</p>
+											</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+					<!-- SETTINGS TAB -->
+					<div id="menu4" class="tab-pane fade">
 						<div class="panel panel-default">
 							<div class="panel-heading">Settings</div>
 							<div class="panel-body">
@@ -343,7 +391,7 @@
 	<script src="../index_files/jquery.js"></script>
 	<script src="../index_files/bootstrap.js"></script>
   <script src="../index_files/slider.js"></script>
-  <script src="../index_files/runcalc.js?v=1.014"></script>
+  <script src="../index_files/runcalc.js?v=1.017"></script>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-114991742-1"></script>
 	<script>

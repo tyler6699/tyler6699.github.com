@@ -1,1 +1,1 @@
-var atlas = "assets/atlas.png";
+var atlas = "atlas.png";

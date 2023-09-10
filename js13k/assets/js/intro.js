@@ -4,15 +4,21 @@ function intro() {
   this.gitUI = new gitUI();
 
   this.tick = function(delta){
-    mainGame.context.font = "30px Arial";
-    mainGame.context.fillText("git reset --hard",10,50);
-    mainGame.context.fillText("PRESS SPACE",10,300);
-
+    ctx = mainGame.context;
+    ctx.font = "30px Arial";
+    fillMixedText(ctx, [{ text: "=========== " , fillStyle: '#5ab9a8'},{ text: "CarelessLabs"},{ text: " =========== ", fillStyle: '#5ab9a8'}], 10, 50);
+    fillMixedText(ctx, [{ text: "=================================" , fillStyle: '#5ab9a8'}], 10, 350);
+    mainGame.context.fillText("AD or Arrows to move",140,120);
+    mainGame.context.fillText("Space or W to Jump",140,160);
+    mainGame.context.fillText("1,2,3 to select options",140,200);
+    if(ready){
+        mainGame.context.fillText("=== PRESS SPACE ===",120,300);
+    } else {
+        mainGame.context.fillText("Rewinding the cassette tape",100,300);
+    }
     if (mainGame.keys && mainGame.keys[SPACE]) {
       // Setup Audio Context on a user input
-      if(audioCtx == null){
-        audioCtx = new AudioContext();
-      }
+      if(audioCtx == null) audioCtx = new AudioContext();
       gameStart = true;
     }
   }

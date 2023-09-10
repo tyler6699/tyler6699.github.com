@@ -301,7 +301,7 @@ class Hero{
 		speed = 1;
 		min_speed = 1;
 		max_speed = 10;
-		idle_img = loadImage("images/meatly_idle"); 
+		idle_img = loadImage("images/meatly_idle.png"); 
 		velocity = 0;
 		jump = false;
 		max_y_velocity = 100;
