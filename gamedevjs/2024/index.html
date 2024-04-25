@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script type="application/javascript">
+    version = Math.floor(Math.random() * 1000);
+    var files = ["song","decor","spawner","particle","enemy","camera","keys","entity","hero","enums","utility","attacks","intro","cart","game","sound"];
+    for (f of files) {
+      document.write("<script type='application/javascript' src='assets/js/" + f + ".js?" + version + "'\><\/script>");
+    }
+  </script>
+  <link rel="stylesheet" href="assets/css/game.css?v=6" />
+</head>
+<body onload="startGame()">
+  <div id="gameControls">
+      <div id="dPad">
+          <button id="up">Up</button>
+          <div id="middleRow">
+              <button id="left">Left</button>
+              <button id="down">Down</button>
+              <button id="right">Right</button>
+          </div>
+      </div>
+      <div id="actionButtons">
+          <button id="aButton">A</button>
+          <button id="bButton">B</button>
+      </div>
+  </div>
+</body>
+</html>
