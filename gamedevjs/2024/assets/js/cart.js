@@ -133,7 +133,7 @@ function Cart() {
         one.update(delta);
         two.update(delta);
         three.update(delta);
-        if(space()){
+        if(space() || processClick){
           this.wave++;
           waveStart=3;
           TIME=0;

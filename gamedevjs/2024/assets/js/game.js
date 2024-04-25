@@ -103,7 +103,6 @@ let mg = {
     window.addEventListener('mouseup', function(e) {
       e.preventDefault();
       setclicks();
-      processClick=true;
 
       if (e.button === 0) {
         leftMB=false;
@@ -155,7 +154,6 @@ function setupControls() {
     document.getElementById('right').addEventListener('touchstart', () => move('right'));
     document.getElementById('right').addEventListener('touchend', () => stopmove('right'));
     document.getElementById('aButton').addEventListener('touchstart', () => action('A'));
-    document.getElementById('bButton').addEventListener('touchstart', () => action('B'));
 }
 
 function move(d) {
@@ -188,8 +186,8 @@ function action(button) {
     if(!gameStarted){
       gameStarted=true;
     }
+    processClick=true;
 }
-
 
 let lastTimestamp = null;
 function updateGameLoop(timestamp) {
