@@ -1,8 +1,35 @@
-projects = [{
+projects = [
+   {
+  "id":"gamedev-js",
+  "captionHeading":"GameDev JS",
+  "captionSubheading":"GameDev JS 2024 Game Jam",
+  "imgSmall":"https://play.js13kgames.com/fort-knight/__big.jpg",
+  "imgBig":"https://play.js13kgames.com/fort-knight/__big.jpg",
+  "imgAlt":"Isometric TopDown",
+  "categoryList":["gamejam","JS13k","JS"],
+  "body":"Vampire Survivors meets pixels!",
+  "actionURL":"https://carelesslabs.itch.io/pixel-power",
+  "actionTitle":"Play",
+  "actionFA":"fas fa-gamepad"
+},
+  {
+  "id":"js13k-2023",
+  "captionHeading":"JS13k 2023",
+  "captionSubheading":"Fort Knight",
+  "imgSmall":"https://play.js13kgames.com/fort-knight/__big.jpg",
+  "imgBig":"https://play.js13kgames.com/fort-knight/__big.jpg",
+  "imgAlt":"Isometric TopDown",
+  "categoryList":["gamejam","JS13k","JS"],
+  "body":"2023 JS13k gamejam entry. 2D isometric top down Knight game.",
+  "actionURL":"https://dev.js13kgames.com/2023/games/fort-knight",
+  "actionTitle":"Play",
+  "actionFA":"fas fa-gamepad"
+},
+{
   "id":"js13k-2022",
   "captionHeading":"JS13k 2022",
   "captionSubheading":"Soul Jumper",
-  "imgSmall":"https://js13kgames.com/games/soul-jumper/__small.jpg",
+  "imgSmall":"https://js13kgames.com/games/soul-jumper/__big.jpg",
   "imgBig":"https://js13kgames.com/games/soul-jumper/__big.jpg",
   "imgAlt":"Platformer with a twist",
   "categoryList":["gamejam","JS13k","JS"],
