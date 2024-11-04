@@ -42,9 +42,11 @@
   loadSprite("bobo", "https://kaboomjs.com/sprites/bobo.png")  // Load the bobo sprite
   loadSprite("grass", "https://kaboomjs.com/sprites/grass.png") // Load the grass sprite for column cap
   loadSound("score", "https://kaboomjs.com/examples/sounds/score.mp3") // Collect Coin
+  loadSound("wooosh", "https://kaboomjs.com/examples/sounds/wooosh.mp3") // fly
   loadSprite("cloud", "https://kaboomjs.com/sprites/cloud.png") // Just clouds
   loadBitmapFont("unscii", "https://kaboomjs.com/examples/fonts/unscii_8x8.png", 8, 8)
-  loadSound("potato", "../PotatoCity.mp3")
+  loadSound("potato", "https://carelesslabs.co.uk/jams/kaplay-2024/PotatoCity.mp3")
+  loadSound("hit", "https://kaboomjs.com/examples/sounds/hit.mp3")
 
   // Constants
   const INITIAL_PIPE_SPEED = 160
@@ -72,8 +74,9 @@
   let SMALLER_GAP_ACTIVE = false
   let smallerGapTime = 0
   let isGameOver = false
-  let highScore = parseInt(localStorage.getItem("highScore")) || 0;
-
+  let highScore = parseInt(localStorage.getItem("highScore")) || 0
+  let music = null
+  let mute = false
   // Set gravity for the game world
   setGravity(GRAVITY)
 
@@ -92,12 +95,47 @@
     DISTANCE_BETWEEN_PIPES=400;
   }
 
+  // Intro scene
+ scene("intro", () => {
+   add([
+     sprite("bird"),
+     pos(width() / 2, height() / 2 - 108),
+     scale(3),
+     anchor("center"),
+    ])
+   // Display intro message
+   add([
+  		text("Press Space."),
+  		pos(width() / 2, height() / 2 + 108),
+  		scale(1),
+  		anchor("center"),
+  	])
+
+   // Set up music
+   music = play("potato", {
+     volume: 0.8,
+     loop: true,
+     paused: true,
+   });
+
+   // Start game and music on space press
+   onKeyPress("space", () => {
+     music.play();
+     go("game", { music });
+   });
+ });
+
   // Main game scene
   scene("game", () => {
-    const music = play("potato", {
-      loop: true,
-      paused: true,
-    })
+    // Toggle music mute on "M" key press
+    onKeyPress("m", () => {
+      mute = !mute
+      if(mute){
+        music.stop()
+      } else {
+        music.play()
+      }
+    });
     // Reset game state at the start of the scene
     resetGame()
     spawnCloud()
@@ -136,7 +174,6 @@
   	])
 
   	wait(rand(6, 12), spawnCloud)
-
   }
 
     // Score tracking
@@ -231,6 +268,7 @@
       if (!isGameOver) {
         bird.jump(JUMP_FORCE)
         if (!SPIN) SPIN = true
+        play("wooosh")
       }
     })
 
@@ -611,7 +649,7 @@
     // Collision with pipes
     bird.onCollide("pipe", (pipe) => {
       if (isGameOver) return
-
+      play("hit")
       if (GRAPED) {
         destroy(pipe) // Break pipe if invincible
       } else {
@@ -632,7 +670,6 @@
       // Restart the game on space press
       onKeyPress("space", () => {
         if (isGameOver) {
-          music.play()
           go("game")
         }
       })
@@ -640,7 +677,7 @@
   })
 
   // Start the game
-  go("game")
+  go("intro")
 </script>
 
 </body>
