@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careless Bean</title>
+    <!-- Kaboom.js Library -->
+    <script src="https://unpkg.com/kaboom@latest/dist/kaboom.js"></script>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #000;
+            height: 100vh;
+            overflow: hidden;
+        }
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Game container -->
+<div id="game-container"></div>
+
+<!-- Your Game Script -->
+<script>
+  // Initialize Kaboom.js with a blue background
+  kaboom({
+    background: [0, 180, 255],
+  })
+
+  // Load assets
+  loadSprite("bird", "https://kaboomjs.com/sprites/bean.png") // The bean - bird
+  loadSprite("pipe", "https://kaboomjs.com/sprites/steel.png") // Used as obstacles
+  loadSprite("coin", "https://kaboomjs.com/sprites/coin.png") // Collectables
+  loadSprite("apple", "https://kaboomjs.com/sprites/apple.png") // COIN RUSH
+  loadSprite("grape", "https://kaboomjs.com/sprites/grape.png") // More difficult
+  loadSprite("bobo", "https://kaboomjs.com/sprites/bobo.png")  // Load the bobo sprite
+  loadSprite("grass", "https://kaboomjs.com/sprites/grass.png") // Load the grass sprite for column cap
+  loadSound("score", "https://kaboomjs.com/examples/sounds/score.mp3") // Collect Coin
+  loadSprite("cloud", "https://kaboomjs.com/sprites/cloud.png") // Just clouds
+  loadBitmapFont("unscii", "https://kaboomjs.com/examples/fonts/unscii_8x8.png", 8, 8)
+  loadSound("potato", "../PotatoCity.mp3")
+
+  // Constants
+  const INITIAL_PIPE_SPEED = 160
+  const JUMP_FORCE = 640
+  const INITIAL_PIPE_GAP = 320
+  let PIPE_GAP = INITIAL_PIPE_GAP
+  const BLOCK_HEIGHT = 60
+  let DISTANCE_BETWEEN_PIPES = 400
+  let distanceSinceLastPipe = 0
+  const SPEED_INCREMENT = 10
+  const GRAVITY = 1200
+  const SMALLER_GAP = 200
+  const SMALLER_GAP_DURATION = 5  // Duration for the smaller gap effect
+  const MISSING_BLOCK_THRESHOLD = 5  // Start removing blocks after 20 points
+  const MISSING_BLOCK_PROB_INCREMENT = 0.9 // Increase missing block probability as score goes up
+  const PATTERN_THRESHOLD = 10 // Score 10 for new pattern
+
+  // Game variables
+  let PIPE_SPEED = INITIAL_PIPE_SPEED
+  let SPIN = false
+  let COINRUSH = false
+  let coinRushTime = 0
+  let GRAPED = false
+  let grapeTime = 0
+  let SMALLER_GAP_ACTIVE = false
+  let smallerGapTime = 0
+  let isGameOver = false
+  let highScore = parseInt(localStorage.getItem("highScore")) || 0;
+
+  // Set gravity for the game world
+  setGravity(GRAVITY)
+
+  // Function to reset the game state
+  function resetGame() {
+    PIPE_SPEED = INITIAL_PIPE_SPEED
+    PIPE_GAP = INITIAL_PIPE_GAP
+    isGameOver = false
+    COINRUSH = false
+    coinRushTime = 0
+    GRAPED = false
+    grapeTime = 0
+    SMALLER_GAP_ACTIVE = false
+    smallerGapTime = 0
+    setGravity(GRAVITY)
+    DISTANCE_BETWEEN_PIPES=400;
+  }
+
+  // Main game scene
+  scene("game", () => {
+    const music = play("potato", {
+      loop: true,
+      paused: true,
+    })
+    // Reset game state at the start of the scene
+    resetGame()
+    spawnCloud()
+
+    // Add the bird (player)
+    const bird = add([
+      sprite("bird"),
+      pos(width()/6, height()/4),
+      area(),
+      body(),
+      rotate(10),
+      anchor("center"),
+    ])
+
+  const highScoreLabel = add([
+      pos(width() / 2, 80),
+      text("High Score: " + highScore, {
+          font: "unscii",
+          size: 26,
+          align: "left",
+      }),
+      z(10),
+  ]);
+
+
+  function spawnCloud() {
+  	const dir = choose([LEFT, RIGHT])
+  	add([
+  		sprite("cloud", { flipX: dir.eq(LEFT) }),
+  		move(dir, rand(20, 60)),
+  		offscreen({ destroy: true }),
+  		pos(dir.eq(LEFT) ? width() : 0, rand(-20, 480)),
+  		anchor("top"),
+  		area(),
+  		z(-50),
+  	])
+
+  	wait(rand(6, 12), spawnCloud)
+
+  }
+
+    // Score tracking
+    let score = 0
+    const scoreLabel = add([
+  		pos(20, 40),
+  		z(10),
+  	    text("Score: " + score, {
+  		// What font to use
+  		font: "unscii",
+  		width: width() - 3 * 2,
+  		size:50,
+  		// Text alignment ("left", "center", "right", default "left")
+  		align: "left",
+  		lineSpacing: 8,
+  		letterSpacing: 4,
+  		// Transform each character for special effects
+  		transform: (idx, ch) => ({
+  			color: hsl2rgb((time() * 0.2 + idx * 0.1) % 1, 0.7, 0.8),
+  			pos: vec2(0, wave(-4, 4, time() * 4 + idx * 0.5)),
+  			scale: wave(1, 1.2, time() * 3 + idx),
+  			angle: wave(-9, 9, time() * 3 + idx),
+  		}),
+  	})
+    ])
+
+    // Coin Rush label
+    const coinRushLabel = add([
+    		pos(20, 120),
+  	    z(10),
+  		text("", {
+  		font: "unscii",
+  		width: width() - 3 * 2,
+  		size: 26,
+  		align: "left",
+  		lineSpacing: 8,
+  		letterSpacing: 4,
+  		// Transform each character for special effects
+  		transform: (idx, ch) => ({
+  			color: hsl2rgb((time() * 0.2 + idx * 0.1) % 1, 0.7, 0.8),
+  			pos: vec2(0, wave(-4, 4, time() * 4 + idx * 0.5)),
+  			scale: wave(1, 1.2, time() * 3 + idx),
+  			angle: wave(-9, 9, time() * 3 + idx),
+  		}),
+  	})
+    ])
+
+    // Grape Power-Up label
+    const grapeLabel = add([
+  	pos(20, 180),
+  	z(10),
+  	text("", {
+  	font: "unscii",
+  	width: width() - 3 * 2,
+  	size: 26,
+  	align: "left",
+  	lineSpacing: 8,
+  	letterSpacing: 4,
+  	// Transform each character for special effects
+  	transform: (idx, ch) => ({
+  		color: hsl2rgb((time() * 0.2 + idx * 0.1) % 1, 0.7, 0.8),
+  		pos: vec2(0, wave(-4, 4, time() * 4 + idx * 0.5)),
+  		scale: wave(1, 1.2, time() * 3 + idx),
+  		angle: wave(-9, 9, time() * 3 + idx),
+  	}),
+  	})
+    ])
+
+    // Smaller Gap Power-Up label
+    const smallerGapLabel = add([
+  	pos(20, 240),
+  	z(10),
+  	text("", {
+  	font: "unscii",
+  	width: width() - 3 * 2,
+  	size: 26,
+  	align: "left",
+  	lineSpacing: 8,
+  	letterSpacing: 4,
+  	// Transform each character for special effects
+  	transform: (idx, ch) => ({
+  		color: hsl2rgb((time() * 0.2 + idx * 0.1) % 1, 0.7, 0.8),
+  		pos: vec2(0, wave(-4, 4, time() * 4 + idx * 0.5)),
+  		scale: wave(1, 1.2, time() * 3 + idx),
+  		angle: wave(-9, 9, time() * 3 + idx),
+  	}),
+  	})
+    ])
+
+    // Control the bird's movement
+    onKeyPress("space", () => {
+      if (!isGameOver) {
+        bird.jump(JUMP_FORCE)
+        if (!SPIN) SPIN = true
+      }
+    })
+
+    // Update the bird's position each frame
+    bird.onUpdate(() => {
+      if (isGameOver) return
+      if (bird.pos.y > height()) gameOver()  // End game if bird falls out of bounds
+
+      if (SPIN && bird.angle < 360) {
+        bird.angle += 600 * dt()
+      } else {
+        SPIN = false
+        bird.angle = 0
+      }
+
+      // Update Coin Rush label if active
+      if (COINRUSH) {
+        coinRushLabel.text = `COIN RUSH! ${Math.ceil(coinRushTime)}s`
+        coinRushTime -= dt()
+        if (coinRushTime <= 0) {
+          COINRUSH = false
+          coinRushLabel.text = ""
+        }
+      }
+
+      // Update Grape Power-Up label if active
+      if (GRAPED) {
+        grapeLabel.text = `INVINCIBLE! ${Math.ceil(grapeTime)}s`
+        grapeTime -= dt()
+        if (grapeTime <= 0) {
+          GRAPED = false
+          grapeLabel.text = ""
+        }
+      }
+
+      // Update Smaller Gap label if active
+      if (SMALLER_GAP_ACTIVE) {
+        smallerGapLabel.text = `DIFFICULTY ++ ${Math.ceil(smallerGapTime)}s`
+        smallerGapTime -= dt()
+        if (smallerGapTime <= 0) {
+          SMALLER_GAP_ACTIVE = false
+          PIPE_GAP = INITIAL_PIPE_GAP
+          smallerGapLabel.text = ""
+        }
+      }
+    })
+
+  function spawnPipes() {
+      if (isGameOver) return;
+      const pipeX = width();
+
+      // Create the parent container for this set of pipes
+      const parent = add([
+          pos(pipeX, 0),
+          move(LEFT, PIPE_SPEED),
+          offscreen({ destroy: true }), // Apply offscreen destroy to the parent
+          "pipeContainer" // Tag it for easier management if needed
+      ]);
+
+  	 if (score >= 40) {
+  		DISTANCE_BETWEEN_PIPES = 1000; // Increase the distance for added difficulty
+  		setGravity(GRAVITY*1.5)
+  	    // Spawn a block at the same y position as the bird
+  	    parent.add([
+  	        sprite("pipe"),
+  	        pos(0, bird.pos.y), // Align block's y position with the bird's y position
+  	        area(),
+  	        "pipe",
+  	    ]);
+
+  	    // Spawn a block 4 blocks above the bird's position
+  	    parent.add([
+  	        sprite("pipe"),
+  	        pos(0, bird.pos.y - 4 * BLOCK_HEIGHT), // 4 blocks higher
+  	        area(),
+  	        "pipe",
+  	    ]);
+
+  	    // Spawn a block 4 blocks below the bird's position
+  	    parent.add([
+  	        sprite("pipe"),
+  	        pos(0, bird.pos.y + 4 * BLOCK_HEIGHT), // 4 blocks lower
+  	        area(),
+  	        "pipe",
+  	    ]);
+
+          // Optionally spawn a coin at a random position for variety
+          randomCoin(parent);
+
+  	} else if (score >= 35) {
+  		DISTANCE_BETWEEN_PIPES=800
+         // Wave pattern for blocks if score is greater than 40
+          const blockCount = SMALLER_GAP_ACTIVE ? 5 : 2; // Use 5 blocks in wave if difficulty mode is active, otherwise 2
+
+          for (let i = 0; i < blockCount; i++) {
+              const initialY = height() / 2 + i * BLOCK_HEIGHT; // Initial vertical position for the wave pattern
+
+              // Add each block with a custom `startY` property
+              const block = parent.add([
+                  sprite("pipe"),
+                  pos(0, initialY),
+                  area(),
+                  "pipe",
+                  {
+                      startY: initialY, // Store initial Y position for wave oscillation
+                  },
+              ]);
+
+              // Make the block move in a wave pattern by adjusting its Y position based on time
+              block.onUpdate(() => {
+                  block.pos.y = block.startY + Math.sin(time() * 2 + i) * 250; // Oscillate with amplitude 50
+              });
+          }
+
+  		// SPAWN COIN
+  		randomCoin(parent)
+
+      } else if (score >= 30) {
+          // Check if difficulty mode (from collecting "bobo") is active
+          const blockCount = SMALLER_GAP_ACTIVE ? 5 : 2; // 5 blocks if difficulty, otherwise 2
+
+          // Spawn two sets of blocks at different heights
+          for (let j = 0; j < 2; j++) {
+              const randomY = rand(PIPE_GAP, height() - PIPE_GAP);
+
+              // Add blocks in the current set
+              for (let i = 0; i < blockCount; i++) {
+                  parent.add([
+                      sprite("pipe"),
+                      pos(0, randomY + i * (BLOCK_HEIGHT + 10)), // Offset each block for spacing
+                      area(),
+                      "pipe",
+                  ]);
+              }
+          }
+
+  		// SPAWN COIN
+  		randomCoin(parent)
+      } else if (score >= PATTERN_THRESHOLD) {
+      // vertical line of 3 blocks
+
+          const blockCount = SMALLER_GAP_ACTIVE ? 5 : 3;
+          const lineY = rand(PIPE_GAP, height() - PIPE_GAP);
+
+          for (let i = 0; i < blockCount; i++) {
+              parent.add([
+                  sprite("pipe"),
+                  pos(0, lineY + i * BLOCK_HEIGHT),
+                  area(),
+  				offscreen({ destroy: true }),
+                  "pipe",
+              ]);
+          }
+
+          const coinY = lineY + (Math.random() < 0.5 ? -BLOCK_HEIGHT : blockCount * BLOCK_HEIGHT);
+          parent.add([
+              sprite("coin"),
+              pos(0, coinY),
+              area(),
+  			offscreen({ destroy: true }),
+              "coin",
+          ]);
+
+      } else {
+          // Standard pipe columns with random missing blocks if score < 20
+
+          const gapCenter = rand(PIPE_GAP, height() - PIPE_GAP);
+          const numTopBlocks = Math.floor((gapCenter - PIPE_GAP / 2) / BLOCK_HEIGHT);
+          const numBottomBlocks = Math.floor((height() - (gapCenter + PIPE_GAP / 2)) / BLOCK_HEIGHT);
+
+          const missingBlockProbability = score >= MISSING_BLOCK_THRESHOLD
+              ? Math.min(0.5, (score - MISSING_BLOCK_THRESHOLD) * MISSING_BLOCK_PROB_INCREMENT)
+              : 0;
+
+          // Add top blocks with potential gaps
+          for (let i = -2; i < numTopBlocks; i++) {
+              if (Math.random() < missingBlockProbability) continue;
+              parent.add([
+                  sprite("pipe"),
+                  pos(0, i * BLOCK_HEIGHT),
+                  area(),
+  				offscreen({ destroy: true }),
+                  "pipe",
+              ]);
+          }
+
+          // Add bottom blocks with potential gaps
+          for (let i = 0; i < numBottomBlocks; i++) {
+              if (Math.random() < missingBlockProbability) continue;
+              parent.add([
+                  sprite("pipe"),
+                  pos(0, height() - (i + 1) * BLOCK_HEIGHT),
+                  area(),
+  				offscreen({ destroy: true }),
+                  "pipe",
+              ]);
+          }
+
+          // Add a coin in the center of the gap
+          parent.add([
+              sprite("coin"),
+              pos(0, gapCenter),
+              area(),
+  			offscreen({ destroy: true }),
+              "coin",
+          ]);
+      }
+
+      if (COINRUSH) {
+          // Spawn extra coins during Coin Rush
+          for (let j = 0; j < 3; j++) {
+              parent.add([
+                  sprite("coin"),
+                  pos(rand(-50, 50), rand(0, height())),
+                  area(),
+  				offscreen({ destroy: true }),
+                  "coin",
+              ]);
+          }
+      }
+  }
+
+  	function randomCoin(parent) {
+  		// SPAWN COIN
+  		parent.add([
+  			sprite("coin"),
+  			pos(rand(-50, 50), rand(0, height())),
+  			area(),
+  			offscreen({ destroy: true }),
+  			"coin",
+  		]);
+  	}
+
+    // Spawn an apple at random intervals
+    function spawnApple() {
+      if (isGameOver) return
+
+      add([
+        sprite("apple"),
+        pos(width(), rand(50, height() - 50)),
+        area(),
+  	  offscreen({ destroy: true }),
+        "apple",
+      ])
+    }
+
+    // Spawn a grape at random intervals
+    function spawnGrape() {
+      if (isGameOver) return
+
+      add([
+        sprite("grape"),
+        pos(width(), rand(50, height() - 50)),
+        area(),
+  	  offscreen({ destroy: true }),
+        "grape",
+      ])
+    }
+
+    // Spawn a bobo at random intervals
+    function spawnBobo() {
+      if (isGameOver) return
+
+      add([
+        sprite("bobo"),
+        pos(width(), rand(50, height() - 50)),
+        area(),
+  	  offscreen({ destroy: true }),
+        "bobo",
+      ])
+    }
+
+    // Set intervals for spawning power-ups
+    loop(10, () => {
+      if (!isGameOver) spawnApple()
+    })
+
+    loop(20, () => {
+      if (!isGameOver) spawnGrape()
+    })
+
+    loop(13, () => {
+      if (!isGameOver) spawnBobo()
+    })
+
+    // Move pipes and check for distance traveled
+    onUpdate(() => {
+      if (isGameOver) return
+
+      const delta = dt() * PIPE_SPEED
+      distanceSinceLastPipe += delta
+
+      if (distanceSinceLastPipe >= DISTANCE_BETWEEN_PIPES) {
+        spawnPipes()
+        distanceSinceLastPipe = 0
+      }
+    })
+
+    // Move pipes to the left
+    onUpdate("pipe", (pipe) => {
+      if (isGameOver) return
+      pipe.move(-PIPE_SPEED*.15, 0)
+    })
+
+    // Move coins to the left at 1.5 times the speed of pipes
+    onUpdate("coin", (coin) => {
+      if (isGameOver) return
+      coin.move(-PIPE_SPEED * 1.5, 0)
+    })
+
+    // Move apples to the left
+    onUpdate("apple", (apple) => {
+      if (isGameOver) return
+      apple.move(-PIPE_SPEED * 1.5, 0)
+    })
+
+    // Move grapes to the left
+    onUpdate("grape", (grape) => {
+      if (isGameOver) return
+      grape.move(-PIPE_SPEED * 1.5, 0)
+    })
+
+    // Move bobos to the left
+    onUpdate("bobo", (bobo) => {
+      if (isGameOver) return
+      bobo.move(-PIPE_SPEED * 1.5, 0)
+    })
+
+    // Collision with coins
+    bird.onCollide("coin", (coin) => {
+      if (isGameOver) return
+
+      destroy(coin)
+      play("score")
+      score += 1
+      scoreLabel.text = "Score: " + score
+      PIPE_SPEED += SPEED_INCREMENT
+
+  	 // Update high score if the current score exceeds it
+      if (score > highScore) {
+          highScore = score;
+          highScoreLabel.text = "High Score: " + highScore
+          localStorage.setItem("highScore", highScore) // Save new high score
+      }
+    })
+
+    // Collision with apple to trigger Coin Rush
+    bird.onCollide("apple", (apple) => {
+      if (isGameOver) return
+
+      destroy(apple)
+      play("score")
+      COINRUSH = true
+      coinRushTime = 10
+    })
+
+    // Collision with grape to trigger invincibility
+    bird.onCollide("grape", (grape) => {
+      if (isGameOver) return
+
+      destroy(grape)
+      play("score")
+      GRAPED = true
+      grapeTime = 10
+    })
+
+    // Collision with bobo to reduce gap size
+    bird.onCollide("bobo", (bobo) => {
+      if (isGameOver) return
+
+      destroy(bobo)
+      play("score")
+      PIPE_GAP = SMALLER_GAP
+      SMALLER_GAP_ACTIVE = true
+      smallerGapTime = SMALLER_GAP_DURATION
+    })
+
+    // Collision with pipes
+    bird.onCollide("pipe", (pipe) => {
+      if (isGameOver) return
+
+      if (GRAPED) {
+        destroy(pipe) // Break pipe if invincible
+      } else {
+        gameOver()
+      }
+    })
+
+    // Game over function
+    function gameOver() {
+  	addKaboom(bird.pos)
+      isGameOver = true
+      setGravity(0)
+      add([
+        text("Game Over - Press Space", 48),
+        pos(center()),
+      ])
+
+      // Restart the game on space press
+      onKeyPress("space", () => {
+        if (isGameOver) {
+          music.play()
+          go("game")
+        }
+      })
+    }
+  })
+
+  // Start the game
+  go("game")
+</script>
+
+</body>
+</html>
