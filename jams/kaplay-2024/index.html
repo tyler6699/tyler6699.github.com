@@ -127,8 +127,29 @@ scene("intro", () => {
   ]);
   // Display intro message
   add([
-    text("Press Space."),
+    text("Press Space (Start & Jump)"),
     pos(width() / 2, height() / 2 + 108),
+    scale(1),
+    anchor("center"),
+  ]);
+
+  add([
+    text("Flappy Bean"),
+    pos(width() / 2, height() / 2 - 300),
+    scale(1),
+    anchor("center"),
+  ]);
+
+  add([
+    text("Game by @Carelesslabs"),
+    pos(width() / 2, height() / 2 - 220),
+    scale(1),
+    anchor("center"),
+  ]);
+
+  add([
+    text("Music Lyrics by Millie"),
+    pos(width() / 2, height() / 2 - 260),
     scale(1),
     anchor("center"),
   ]);
