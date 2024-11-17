@@ -1,5 +1,31 @@
 projects = [
-   {
+{
+  "id":"js13k-2024",
+  "captionHeading":"KaJam 2024",
+  "captionSubheading":"Flappy Bean",
+  "imgSmall":"https://img.itch.zone/aW1nLzE4NDY0MzcxLnBuZw==/300x240%23c/qF9Jzh.png",
+  "imgBig":"https://img.itch.zone/aW1nLzE4NDY0MzcxLnBuZw==/300x240%23c/qF9Jzh.png",
+  "imgAlt":"Flappy Bird Like",
+  "categoryList":["gamejam","kaplay","JS"],
+  "body":"2024 Kajam entry. Simple flappy bird like, made in a few days with the Kaplay JS framework.",
+  "actionURL":"https://carelesslabs.itch.io/flappy-bean",
+  "actionTitle":"Play",
+  "actionFA":"fas fa-gamepad"
+},
+{
+  "id":"js13k-2024",
+  "captionHeading":"JS13k 2024",
+  "captionSubheading":"The Fear Factory",
+  "imgSmall":"https://play.js13kgames.com/the-fear-factory/.c.png",
+  "imgBig":"https://play.js13kgames.com/the-fear-factory/.c.png",
+  "imgAlt":"Isometric TopDown",
+  "categoryList":["gamejam","JS13k","JS"],
+  "body":"2024 JS13k gamejam entry. Isometric parkour game.",
+  "actionURL":"https://js13kgames.com/2024/games/the-fear-factory",
+  "actionTitle":"Play",
+  "actionFA":"fas fa-gamepad"
+},
+{
   "id":"gamedev-js",
   "captionHeading":"GameDev JS",
   "captionSubheading":"GameDev JS 2024 Game Jam",
@@ -12,7 +38,7 @@ projects = [
   "actionTitle":"Play",
   "actionFA":"fas fa-gamepad"
 },
-  {
+{
   "id":"js13k-2023",
   "captionHeading":"JS13k 2023",
   "captionSubheading":"Fort Knight",
