@@ -1,6 +1,6 @@
 projects = [
 {
-  "id":"js13k-2024",
+  "id":"KaJam-2024",
   "captionHeading":"KaJam 2024",
   "captionSubheading":"Flappy Bean",
   "imgSmall":"images/portfolio/flappy-bean.png",
