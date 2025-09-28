@@ -140,7 +140,7 @@ $(document).ready(function() {
   $("#minSlider").slider({
     tooltip: 'always',
     step: 1,
-    min: 3,
+    min: 1,
     max: 30
   });
 
