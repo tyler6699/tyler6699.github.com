@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shopper — Compare the real price</title>
+<meta name="description" content="Compare supermarket offers by price per litre, kilogram or item. A free calculator that works in your browser.">
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#19372e;background:#f5f6f0;font-synthesis:none}*{box-sizing:border-box}body{margin:0}main{max-width:1000px;margin:auto;padding:32px 22px}header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #dae1d5;padding-bottom:22px}.brand{font-size:14px;font-weight:800;letter-spacing:2px}header span:last-child{font-size:12px;color:#64756e}h1{font-size:clamp(34px,6vw,56px);letter-spacing:-2px;margin:36px 0 12px}h1 em{font-family:Georgia,serif;color:#527849;font-weight:400}p{line-height:1.6}.intro{color:#64756e;max-width:640px}.toolbar{display:flex;gap:20px;justify-content:space-between;align-items:end;margin:30px 0 20px;flex-wrap:wrap}label{display:block;font-size:13px;font-weight:650;margin-bottom:7px}input,select,button{font:inherit}input,select{width:100%;min-height:46px;background:#fcfdf9;border:1px solid #cdd8c8;border-radius:8px;padding:10px;color:#19372e}input:focus,select:focus,button:focus-visible{outline:3px solid #b6ce85;outline-offset:2px}.toolbar select{min-width:190px}button{cursor:pointer;border:1px solid #cdd8c8;border-radius:8px;padding:11px 16px;color:#19372e;background:white;font-weight:600;font-size:14px}button:hover{background:#edf3df}button:disabled{cursor:default;opacity:.5}.primary{background:#19372e;color:white;border-color:#19372e}.primary:hover{background:#2d5543}.offers{display:grid;gap:16px}.offer{background:white;border:1px solid #dfe5dc;border-radius:14px;padding:22px}.offer-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}.offer-top input{font-size:18px;font-weight:650;max-width:340px}.remove{font-size:12px;padding:8px 10px}.fields{display:grid;grid-template-columns:1fr 1.2fr 1fr 1.2fr;gap:16px}.offer-bottom{margin-top:20px;padding-top:16px;border-top:1px solid #edf0e9;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.unit-price{font-size:23px;font-weight:700;font-variant-numeric:tabular-nums}.detail{font-size:12px;color:#64756e;margin-top:5px}.badges{display:flex;gap:6px;flex-wrap:wrap}.badge{font-size:12px;border-radius:5px;padding:6px 9px;background:#edf3df;color:#245a44;font-weight:650}.badge.lowest{background:#f0f1ef;color:#465448}.winner{border-color:#799951}.actions{display:flex;gap:12px;margin-top:20px}.summary{background:#19372e;color:white;border-radius:14px;padding:24px;margin:24px 0}.summary h2{font-size:18px;margin:0 0 8px}.summary p{margin:0;color:#dce8d4;font-size:14px}.note{font-size:13px;color:#64756e}footer{margin-top:36px;font-size:12px;color:#64756e;border-top:1px solid #dae1d5;padding-top:20px}[hidden]{display:none!important}@media(max-width:600px){main{padding:22px 16px}.fields{grid-template-columns:1fr 1fr;gap:14px}.offer{padding:17px}.offer-top input{min-width:0}header span:last-child{max-width:110px;text-align:right}.toolbar{align-items:stretch}.toolbar>div{flex:1}.unit-price{font-size:21px}}
+</style>
+</head>
+<body>
+<main>
+<header><span class="brand">SHOPPER<span aria-hidden="true"> // </span></span><span>A little maths. A better deal.</span></header>
+<h1>Find the <em>real deal.</em></h1>
+<p class="intro">Big packs, small packs, multibuys. Compare what you actually get for your money, not just the number on the shelf.</p>
+<div class="toolbar"><div><label for="category">Compare by</label><select id="category"><option value="volume">Volume · per litre</option><option value="weight">Weight · per kg</option><option value="items">Count · per item</option></select></div><p class="note">Enter the total price for the whole offer.</p></div>
+<div id="offers" class="offers"></div>
+<div class="actions"><button id="add" class="primary" type="button">+ Add offer</button><button id="reset" type="button">Reset example</button></div>
+<section class="summary" aria-live="polite" aria-atomic="true"><h2 id="summary-title">Compare your offers</h2><p id="summary-detail"></p></section>
+<p class="note">Compare like-for-like products. Best value means the lowest price per unit; lowest total price means the smallest spend today. Only count offers you qualify for, and consider how much you will use.</p>
+<footer>Prices in GBP (£). Everything calculates in your browser. No account, database or uploads. Refreshing clears your changes.</footer>
+<noscript><p>Enable JavaScript to compare offers.</p></noscript>
+</main>
+<script>
+'use strict';
+const groups = {
+  volume: { label: 'litre', units: { l: ['Litres (L)', 1], ml: ['Millilitres (ml)', .001], cl: ['Centilitres (cl)', .01] } },
+  weight: { label: 'kg', units: { kg: ['Kilograms (kg)', 1], g: ['Grams (g)', .001] } },
+  items: { label: 'item', units: { item: ['Items', 1] } }
+};
+const offers = document.getElementById('offers');
+const category = document.getElementById('category');
+let nextId = 0;
+const money = n => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: 2, maximumFractionDigits: n > 0 && n < .01 ? 4 : 2 }).format(n);
+const amount = n => new Intl.NumberFormat('en-GB', { maximumFractionDigits: 4 }).format(n);
+// A unit price is always computed from the unrounded total quantity.
+function calculate(quantity, size, factor, price) {
+  if (![quantity, size, factor, price].every(Number.isFinite) || !Number.isInteger(quantity) || quantity < 1 || size <= 0 || factor <= 0 || price < 0) return null;
+  const total = quantity * size * factor;
+  const rate = price / total;
+  return Number.isFinite(total) && total > 0 && Number.isFinite(rate) ? { total, rate, price } : null;
+}
+function addOffer(data = {}) {
+  const id = ++nextId;
+  const group = groups[category.value];
+  const card = document.createElement('section');
+  card.className = 'offer';
+  card.setAttribute('aria-label', `Offer ${id}`);
+  card.innerHTML = `<div class="offer-top"><label class="name-label" for="name-${id}" hidden>Offer name</label><input id="name-${id}" data-field="name" aria-label="Offer name" maxlength="80"><button class="remove" type="button" aria-label="Remove offer ${id}">Remove</button></div><div class="fields"><div><label for="quantity-${id}">Number of packs</label><input id="quantity-${id}" data-field="quantity" type="number" min="1" step="1" inputmode="numeric" required></div><div><label for="size-${id}">${category.value === 'items' ? 'Items per pack' : 'Size per pack'}</label><input id="size-${id}" data-field="size" type="number" min="0" step="${category.value === 'items' ? '1' : 'any'}" inputmode="decimal" required></div><div><label for="unit-${id}">Unit</label><select id="unit-${id}" data-field="unit">${Object.entries(group.units).map(([key, info]) => `<option value="${key}">${info[0]}</option>`).join('')}</select></div><div><label for="price-${id}">Total price (£)</label><input id="price-${id}" data-field="price" type="number" min="0" step="0.01" inputmode="decimal" required></div></div><div class="offer-bottom"><div><div class="unit-price"></div><div class="detail"></div></div><div class="badges"></div></div>`;
+  for (const [key, val] of Object.entries({ name: `Offer ${id}`, quantity: 1, size: '', price: '', unit: Object.keys(group.units)[0], ...data })) card.querySelector(`[data-field="${key}"]`).value = val;
+  card.querySelector('.remove').addEventListener('click', () => {
+    card.remove(); update(); document.getElementById('add').focus();
+  });
+  offers.append(card);
+  update();
+  return card;
+}
+function update() {
+  const group = groups[category.value];
+  const rows = [...offers.children].map(card => {
+    const field = key => card.querySelector(`[data-field="${key}"]`);
+    const fields = ['quantity', 'size', 'price'].map(field);
+    const valid = fields.every(input => input.value !== '' && input.validity.valid);
+    const result = valid ? calculate(Number(field('quantity').value), Number(field('size').value), group.units[field('unit').value][1], Number(field('price').value)) : null;
+    card.classList.remove('winner');
+    card.querySelector('.badges').replaceChildren();
+    card.querySelector('.unit-price').textContent = result ? `${money(result.rate)} / ${group.label}` : 'Enter offer details';
+    card.querySelector('.detail').textContent = result ? `${amount(result.total)} ${group.label}${group.label !== 'kg' && result.total !== 1 ? 's' : ''} total · ${money(result.price)} to pay` : 'Use positive pack counts and sizes, and a price of £0 or more.';
+    return { card, name: field('name').value.trim() || 'Unnamed offer', result };
+  });
+  const valid = rows.filter(row => row.result);
+  const title = document.getElementById('summary-title');
+  const detail = document.getElementById('summary-detail');
+  if (valid.length < 2) {
+    title.textContent = 'Compare your offers';
+    detail.textContent = 'Enter at least two complete offers to see which is best value.';
+    return;
+  }
+  const minRate = Math.min(...valid.map(row => row.result.rate));
+  const minPrice = Math.min(...valid.map(row => row.result.price));
+  const equal = (a, b) => Math.abs(a - b) <= 1e-10 * Math.max(1, Math.abs(a), Math.abs(b));
+  const winners = valid.filter(row => equal(row.result.rate, minRate));
+  for (const row of valid) {
+    const badge = (text, className = '') => { const span = document.createElement('span'); span.className = `badge ${className}`; span.textContent = text; row.card.querySelector('.badges').append(span); };
+    if (equal(row.result.rate, minRate)) { row.card.classList.add('winner'); badge(winners.length > 1 ? 'Joint best value' : 'Best value'); }
+    if (equal(row.result.price, minPrice)) badge('Lowest total price', 'lowest');
+    if (!equal(row.result.rate, minRate)) {
+      const saving = (1 - minRate / row.result.rate) * 100;
+      row.card.querySelector('.detail').textContent += ` · Best offer costs ${saving < .1 ? 'less than 0.1' : amount(Math.round(saving * 10) / 10)}% less per ${group.label}`;
+    }
+  }
+  title.textContent = winners.length === 1 ? `${winners[0].name} is best value` : `${winners.length} offers tie for best value`;
+  detail.textContent = `${money(minRate)} per ${group.label}. Lowest upfront spend: ${money(minPrice)}.${valid.length < rows.length ? ' Incomplete offers are excluded.' : ''} Unit prices are displayed rounded; comparisons use full precision.`;
+}
+function resetExample() {
+  offers.replaceChildren(); nextId = 0;
+  if (category.value === 'volume') {
+    addOffer({ name: 'Two big bottles', quantity: 2, size: 2, unit: 'l', price: 3 });
+    addOffer({ name: 'Single bottle', quantity: 1, size: 1.75, unit: 'l', price: 1.85 });
+  } else if (category.value === 'weight') {
+    addOffer({ name: 'Two small packs', quantity: 2, size: 500, unit: 'g', price: 3 });
+    addOffer({ name: 'Large pack', quantity: 1, size: 1.5, unit: 'kg', price: 4 });
+  } else {
+    addOffer({ name: 'Small pack', quantity: 1, size: 6, price: 2 });
+    addOffer({ name: 'Large pack', quantity: 1, size: 12, price: 3.5 });
+  }
+}
+offers.addEventListener('input', update);
+offers.addEventListener('change', update);
+document.getElementById('add').addEventListener('click', () => addOffer().querySelector('[data-field="name"]').focus());
+document.getElementById('reset').addEventListener('click', resetExample);
+// Keep independent comparisons when switching between incompatible categories.
+const drafts = {};
+let previousCategory = category.value;
+category.addEventListener('change', () => {
+  drafts[previousCategory] = [...offers.children].map(card => Object.fromEntries([...card.querySelectorAll('[data-field]')].map(input => [input.dataset.field, input.value])));
+  previousCategory = category.value;
+  offers.replaceChildren(); nextId = 0;
+  if (drafts[previousCategory]) drafts[previousCategory].forEach(addOffer);
+  else resetExample();
+  update();
+});
+resetExample();
+</script>
+</body>
+</html>
