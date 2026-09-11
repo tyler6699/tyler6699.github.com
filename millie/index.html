@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#123d46">
+  <title>Little Isle — Island Explorer</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231b7180'/%3E%3Cellipse cx='16' cy='23' rx='13' ry='6' fill='%23efdb9c'/%3E%3Cpath d='M16 24V9' stroke='%23876542' stroke-width='4'/%3E%3Cpath d='M4 13Q10 1 16 9Q24 1 29 13Q21 10 16 13Q10 10 4 13' fill='%2379bd65'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="game" aria-label="Island game. Move with WASD or arrow keys. Click nearby trees or rocks to gather resources." tabindex="0"></canvas>
+  <header class="panel brand"><span class="eyebrow">A LITTLE PLACE TO WANDER</span><h1>Little Isle<span>✦</span></h1><div class="status"><i></i> Island explorer</div></header>
+  <aside class="panel inventory" aria-label="Collected resources"><div><span class="resource wood">▰</span><span><small>WOOD</small><b id="wood">0</b></span></div><div><span class="resource stone">◆</span><span><small>STONE</small><b id="stone">0</b></span></div><button id="pause" title="Pause game (Escape)" aria-label="Pause game">Ⅱ</button></aside>
+  <div id="hint" role="status">Welcome ashore. Make yourself at home.</div>
+  <aside class="panel map"><div><span>YOUR LITTLE ISLAND</span><span> N ↑</span></div><canvas id="minimap" width="170" height="150" aria-label="Island map showing your position"></canvas></aside>
+  <footer class="panel controls"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> <em>or arrows to move</em></span><span class="divider"></span><span><span class="mouse">↖</span> <em>Click nearby trees & rocks</em></span></footer>
+  <div id="paused" hidden><div class="panel"><span class="eyebrow">TAKE A BREATHER</span><h2>Island time.</h2><p>Your little adventure can wait.</p><button id="resume">Back to exploring →</button></div></div>
+  <div class="touch"><button data-key="arrowup" aria-label="Move up">↑</button><div><button data-key="arrowleft" aria-label="Move left">←</button><button data-key="arrowdown" aria-label="Move down">↓</button><button data-key="arrowright" aria-label="Move right">→</button></div></div>
+  <section id="island-setup" aria-labelledby="setup-title"><form id="island-form" class="panel setup-card">
+<span class="eyebrow">LITTLE ISLE · STEP 1 OF 2</span><h2 id="setup-title">Make your island.</h2><p>Choose the landscape for your adventure. Trees and rocks are randomly generated on each island.</p>
+<fieldset id="island-settings"><legend>Island shape</legend><div id="island-shapes"></div></fieldset>
+<div class="landscape-options">
+<label>Grass density<select id="grass-density"><option value="0">None</option><option value="400">Sparse</option><option value="1150" selected>Natural</option><option value="2200">Lush</option></select></label>
+<label>Flowers<select id="flower-density"><option value="0">None</option><option value="40" selected>Scattered</option><option value="120">Meadow</option><option value="250">Abundant</option></select></label>
+<label>River<select id="river-type"><option value="none">None</option><option value="gentle">Gentle stream</option><option value="winding">Winding river</option></select></label>
+<label>River width<select id="river-width"><option value="18">Narrow</option><option value="30" selected>Medium</option><option value="44">Wide</option></select></label>
+</div><p>Rivers include bridges so you can explore both banks. Changing island options regenerates the landscape.</p><button class="start-game" type="submit">Next: create your character →</button>
+</form></section><section id="creator" aria-labelledby="creator-title">
+    <div class="panel creator-card">
+      <nav id="appearance-nav" role="tablist" aria-label="Character design categories"></nav>
+      <div class="creator-preview"><span class="eyebrow">LITTLE ISLE · YOUR ADVENTURE</span><h2 id="creator-title">Who's coming ashore?</h2><label class="character-name-label" for="character-name">Character name</label><input id="character-name" name="characterName" form="appearance-form" type="text" maxlength="24" placeholder="Explorer" autocomplete="off"><canvas id="avatar-preview" width="400" height="360" aria-label="Live preview of your character"></canvas><p>A little island. A character that's all you.</p><button id="randomize" type="button">Shuffle appearance ↻</button></div>
+      <form id="appearance-form"><button id="back-island" type="button">← Island options</button><h3 id="category-title">Hair</h3><p>Pick your favourite. Make it yours.</p><div id="appearance-options" role="tabpanel"></div><button class="start-game" type="submit">Let's explore →</button></form>
+    </div>
+  </section>
+  <button id="open-inventory" type="button" aria-haspopup="dialog" aria-controls="backpack" title="Inventory (E)">▣ <span>Inventory</span> <kbd>E</kbd></button>
+  <dialog id="backpack" aria-labelledby="backpack-title">
+    <div class="backpack-heading"><div><span class="eyebrow">YOUR COLLECTION</span><h2 id="backpack-title">Inventory</h2></div><button id="close-inventory" type="button" aria-label="Close inventory">Close ×</button></div>
+    <p id="inventory-owner"></p><button id="show-crafting" type="button" aria-expanded="false" aria-controls="crafting">Crafting · C</button><section id="crafting" hidden aria-label="Crafting recipes"><h3>Craft something</h3><div id="recipes"></div><p id="craft-status" role="status"></p></section><div id="inventory-slots" aria-label="Collected items"></div>
+    <p id="inventory-detail" role="status">Click an item to inspect it.</p><p id="inventory-total"></p>
+  </dialog>
+  <aside id="action-bar" class="panel" aria-label="Action bar" hidden><div id="action-slots" role="group" aria-label="Select an item with 1 to 9 or 0"></div><div id="action-selection" role="status">Empty slot · scroll or press 1–9 / 0</div></aside>
+  <script src="avatar.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
+
+
+
+
