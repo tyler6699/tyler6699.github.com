@@ -39,16 +39,18 @@ tabs.forEach((label, index) => {
     if (key === 'speed') fields += durationFields(key);
     if (key === 'time' || key === 'distance') fields += speedField(key);
     content = `<div class="workspace"><div class="input-panel"><h2>${descriptions[key][0]}</h2><p class="subtext">${descriptions[key][1]}</p>${fields}</div>${result(key, key === 'speed' ? 'AVERAGE SPEED' : key === 'distance' ? 'DISTANCE COVERED' : 'ESTIMATED FINISH TIME')}</div>`;
-    if (key === 'pace') content += `<section class="splits"><div class="split-heading"><h3>Your splits</h3><span id="split-label">Cumulative time · per mile</span></div><div class="table-wrap"><table class="table"><thead><tr><th scope="col" id="split-unit">Mile</th><th scope="col">Elapsed time</th></tr></thead><tbody id="split-rows"></tbody></table></div><button class="btn preset mt-3" id="toggle-splits" type="button" aria-controls="split-rows" aria-expanded="false" hidden>Show all splits</button></section>`;
+    content += `<section class="splits"><div class="split-heading"><h3>Your splits</h3><span id="${key}-split-label">Cumulative time · per mile</span></div><div class="table-wrap"><table class="table"><thead><tr><th scope="col" id="${key}-split-unit">Mile</th><th scope="col">Elapsed time</th></tr></thead><tbody id="${key}-split-rows"></tbody></table></div><button class="btn preset mt-3" id="${key}-toggle-splits" type="button" aria-controls="${key}-split-rows" aria-expanded="false" hidden>Show all splits</button></section>`;
   }
   byId('calculator-panels').insertAdjacentHTML('beforeend', `<div class="tab-pane fade ${index === 0 ? 'show active' : ''}" id="${key}-panel" role="tabpanel" aria-labelledby="${key}-tab" tabindex="0">${content}</div>`);
 });
 
-let allSplits = false;
-byId('toggle-splits').addEventListener('click', () => {
-  allSplits = !allSplits;
-  refresh();
-});
+const allSplits = { pace: false, speed: false, time: false, distance: false };
+for (const key of Object.keys(allSplits)) {
+  byId(`${key}-toggle-splits`).addEventListener('click', () => {
+    allSplits[key] = !allSplits[key];
+    refresh();
+  });
+}
 const unitSelectors = ['default-unit'];
 for (const id of unitSelectors) byId(id).value = defaultUnit;
 const factor = () => defaultUnit === 'mile' ? KM_PER_MILE : 1;
@@ -124,6 +126,27 @@ function show(key, main, note, metrics) {
   byId(`${key}-note`).textContent = note;
   byId(`${key}-metrics`).innerHTML = metrics.map(([n, label]) => `<div class="metric"><strong>${n}</strong><span>${label}</span></div>`).join('');
 }
+const splitPrompts = { pace: 'a distance and pace', speed: 'a distance and duration', time: 'a distance and speed', distance: 'a duration and speed' };
+function renderSplits(key, distanceKm, secondsPerKm) {
+  const unit = defaultUnit;
+  const distance = distanceKm / (unit === 'mile' ? KM_PER_MILE : 1);
+  const perUnit = secondsPerKm * (unit === 'mile' ? KM_PER_MILE : 1);
+  byId(`${key}-split-unit`).textContent = unit === 'mile' ? 'Mile' : 'KM';
+  byId(`${key}-split-label`).textContent = `Cumulative time · per ${unit === 'mile' ? 'mile' : 'km'}`;
+  const rows = [];
+  // Bound rendering for unusually large distances, always including the finish.
+  if (Number.isFinite(distance) && distance > 0 && Number.isFinite(perUnit) && perUnit > 0 && Number.isFinite(distance * perUnit)) {
+    for (let i = 1; i < distance && i <= 500; i++) rows.push(`<tr><td>${i}</td><td>${time(i * perUnit)}</td></tr>`);
+    if (distance > 501) rows.push('<tr><td colspan="2">Intermediate splits omitted after 500</td></tr>');
+    rows.push(`<tr class="finish-row"><td>${clean(distance)} <span class="ms-2">Finish</span></td><td>${time(distance * perUnit)}</td></tr>`);
+  }
+  const toggle = byId(`${key}-toggle-splits`);
+  toggle.hidden = rows.length <= 10;
+  toggle.textContent = allSplits[key] ? 'Show fewer splits' : 'Show all splits';
+  toggle.setAttribute('aria-expanded', String(allSplits[key]));
+  byId(`${key}-split-rows`).innerHTML = (allSplits[key] ? rows : rows.slice(0, 10)).join('') || `<tr><td colspan="2">Enter ${splitPrompts[key]} to see your splits.</td></tr>`;
+}
+
 function refresh() {
   document.querySelectorAll('[data-km]').forEach(button => {
     const active = Math.abs(distances[button.dataset.key] - Number(button.dataset.km)) < 1e-8;
@@ -145,31 +168,18 @@ function refresh() {
   const secondsPerKm = paceSecondsPerKm;
   const paceSpeed = secondsPerKm > 0 ? 3600 / secondsPerKm : NaN;
   show('pace', time(secondsPerKm > 0 ? distances.pace * secondsPerKm : NaN), 'Hours : minutes : seconds', [[decimal(paceSpeed / factor()), speedLabel]]);
-  const unit = defaultUnit;
-  const distance = distances.pace / (unit === 'mile' ? KM_PER_MILE : 1);
-  const perUnit = secondsPerKm * (unit === 'mile' ? KM_PER_MILE : 1);
-  byId('split-unit').textContent = unit === 'mile' ? 'Mile' : 'KM';
-  byId('split-label').textContent = `Cumulative time · per ${unit === 'mile' ? 'mile' : 'km'}`;
-  const rows = [];
-  // Bound rendering for unusually large distances, always including the finish.
-  if (Number.isFinite(distance) && distance > 0 && perUnit > 0) {
-    for (let i = 1; i < distance && i <= 500; i++) rows.push(`<tr><td>${i}</td><td>${time(i * perUnit)}</td></tr>`);
-    if (distance > 501) rows.push('<tr><td colspan="2">Intermediate splits omitted after 500</td></tr>');
-    rows.push(`<tr class="finish-row"><td>${clean(distance)} <span class="ms-2">Finish</span></td><td>${time(distance * perUnit)}</td></tr>`);
-  }
-  const toggle = byId('toggle-splits');
-  toggle.hidden = rows.length <= 10;
-  toggle.textContent = allSplits ? 'Show fewer splits' : 'Show all splits';
-  toggle.setAttribute('aria-expanded', String(allSplits));
-  byId('split-rows').innerHTML = (allSplits ? rows : rows.slice(0, 10)).join('') || '<tr><td colspan="2">Enter a distance and pace to see your splits.</td></tr>';
+  renderSplits('pace', distances.pace, secondsPerKm);
   const elapsed = duration('speed');
   const kmh = elapsed > 0 ? distances.speed / elapsed * 3600 : NaN;
   show('speed', `${decimal(kmh / factor())} ${speedLabel}`, 'Average speed', [[time(kmh > 0 ? 3600 / kmh * factor() : NaN), `pace / ${paceLabel}`]]);
+  renderSplits('speed', distances.speed, kmh > 0 ? 3600 / kmh : NaN);
   const speed = speedKmh('time');
   show('time', time(speed > 0 ? distances.time / speed * 3600 : NaN), 'Hours : minutes : seconds', [[decimal(distances.time / factor()), distanceLabel]]);
+  renderSplits('time', distances.time, speed > 0 ? 3600 / speed : NaN);
   refreshUltra();
   refreshByu();
   const covered = speedKmh('distance') * duration('distance') / 3600;
+  renderSplits('distance', covered, speedKmh('distance') > 0 ? 3600 / speedKmh('distance') : NaN);
   show('distance', `${decimal(covered / factor())} ${distanceLabel}`, 'Distance covered', [[decimal(speedKmh('distance') / factor()), speedLabel], [time(duration('distance')), 'duration']]);
 }
 setupUltra();
