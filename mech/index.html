@@ -42,9 +42,8 @@
       host.hidden = true;
       focusButton.hidden = true;
     } else {
-      const loader = document.createElement('script');
-      loader.src = 'careless.walker.GwtDefinition/careless.walker.GwtDefinition.nocache.js';
-      document.body.appendChild(loader);
+      // This legacy GWT loader uses document.write; it must run during parsing.
+      document.write('<script src="careless.walker.GwtDefinition/careless.walker.GwtDefinition.nocache.js"><\/script>');
     }
   </script>
 </body>
