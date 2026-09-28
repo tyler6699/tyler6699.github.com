@@ -34,7 +34,7 @@ window.islandAvatar = (() => {
   const look = Object.fromEntries(Object.keys(options).map(key=>[key,0]));
   look.skin=1;look.hairColor=1;look.clothes=1;
   const customColors={};
-  function draw(c,x,y,scale=1,step=0,swing=0,facing=1,direction='down') {
+  function draw(c,x,y,scale=1,step=0,swing=0,facing=1,direction='down',tool='axe') {
     const back=direction==='up', side=direction==='left'||direction==='right';
     const build=[{width:1,shoulders:12,hips:10},{width:.82,shoulders:11,hips:9},{width:1.08,shoulders:14,hips:9},{width:1.22,shoulders:13,hips:11},{width:1.12,shoulders:12,hips:13}][look.body];
     const color=key=>customColors[key]||colors[key][look[key]];
@@ -42,6 +42,22 @@ window.islandAvatar = (() => {
     const oval=(x,y,rx,ry,fill)=>{c.fillStyle=fill;c.beginPath();c.ellipse(x,y,rx,ry,0,0,Math.PI*2);c.fill();};
     const rect=(x,y,w,h,fill)=>{c.fillStyle=fill;c.fillRect(x,y,w,h);};
     const line=(points,color,width=1)=>{c.strokeStyle=color;c.lineWidth=width;c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.stroke();};
+    function swingTool(){
+      if(!swing)return;
+      const progress=1-Math.min(1,swing/.23);
+      // Keep the head above the grip in every view, including front-facing chops.
+      const angle=side?-1.4+progress*1.1:back?-1.1-progress*.65:-2.05+progress*.8;
+      c.save();c.translate(side?6:10,-17);c.rotate(angle);
+      line([[0,0],[25,0]],'#67492f',5);line([[1,-1],[24,-1]],'#c99a61',2);
+      if(tool==='pickaxe'){
+        c.fillStyle='#b8cfcd';c.beginPath();c.moveTo(22,-14);c.quadraticCurveTo(34,0,22,14);c.lineTo(26,0);c.closePath();c.fill();
+      }else{
+        c.save();if(side||!back)c.scale(1,-1);
+        c.fillStyle='#90aaa9';c.beginPath();c.moveTo(21,-3);c.lineTo(19,-13);c.lineTo(30,-11);c.lineTo(31,1);c.closePath();c.fill();line([[30,-11],[31,1]],'#e0e8dc',2);
+        c.restore();
+      }
+      line([[20,-3],[24,3]],'#e2c48d',2);c.restore();
+    }
     function shoe(x,y){
       if(look.shoes===4){oval(x,y,4.5,2.5,color('skin'));return;}
       if(look.shoes===2)rect(x-3,y-6,6,6,color('shoeColor'));
@@ -54,6 +70,7 @@ window.islandAvatar = (() => {
     if(direction==='left')c.scale(-1,1);
     if(side)c.scale(.8,1);
     oval(0,3,15,6,'#173c3b44');
+    if(back)swingTool();
     if(look.hair===2)oval(0,-29,14,21,color('hairColor'));
     c.save();c.scale(build.width,1);
     if(side){
@@ -173,7 +190,7 @@ window.islandAvatar = (() => {
     if(look.hat===5){oval(side?-3:3,-49,15,6,color('hatColor'));rect(-10,-46,20,3,color('hatAccent'));line([[3,-53],[4,-57]],color('hatAccent'),2);}
     if(look.hat===6){oval(0,-45,16,3,color('hatColor'));rect(-10,-63,20,18,color('hatColor'));rect(-10,-49,20,3,color('hatAccent'));}
     c.restore();
-    if(swing){c.rotate(-swing*5*(side?1:facing));line([[13,-16],[30,-39]],'#926642',4);rect(23,-41,15,8,'#c5d4cc');}
+    if(!back)swingTool();
     c.restore();
   }
   const preview=document.querySelector('#avatar-preview'),p=preview.getContext('2d');
