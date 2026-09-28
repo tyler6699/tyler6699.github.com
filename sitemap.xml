@@ -49,4 +49,8 @@
 </url>
 
 
+<url>
+  <loc>https://carelesslabs.co.uk/journey.html</loc>
+  <priority>0.80</priority>
+</url>
 </urlset>
