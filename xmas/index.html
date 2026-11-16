@@ -60,20 +60,6 @@
   button:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--red-dark); }
   button.ghost { background: rgba(255,255,255,.15); box-shadow: none; }
 
-  /* ===== TEST MODE STYLES (remove with test feature) ===== */
-  .test-bar {
-    position: relative; z-index: 2;
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    background: repeating-linear-gradient(45deg, #ffcc00 0 14px, #222 14px 28px);
-    padding: 6px;
-  }
-  .test-bar label {
-    background: #222; color: #ffcc00; font-weight: 800;
-    padding: 4px 12px; border-radius: 6px; cursor: pointer;
-    display: flex; align-items: center; gap: 8px; font-size: .85rem;
-  }
-  /* ===== END TEST MODE STYLES ===== */
-
   main { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; padding: 16px; }
   .grid {
     display: grid;
@@ -86,7 +72,7 @@
   }
   .door-wrap.big { grid-column: span 2; aspect-ratio: auto; }
   .door-back {
-    position: absolute; inset: 0;
+    position: absolute; inset: 0; z-index: 1;
     border-radius: 12px;
     background: var(--cream); color: var(--green-dark);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -103,6 +89,7 @@
   .door-front {
     position: absolute; inset: 0;
     border-radius: 12px;
+    z-index: 2;
     transform-origin: left center;
     transition: transform .9s cubic-bezier(.3,.7,.3,1);
     backface-visibility: hidden;
@@ -193,12 +180,6 @@
 <body>
 <canvas id="snow"></canvas>
 
-<!-- ===== TEST MODE BAR (remove with test feature) ===== -->
-<div class="test-bar" id="testBar">
-  <label><input type="checkbox" id="testToggle"> TEST MODE: ignore dates &amp; unlock all doors</label>
-</div>
-<!-- ===== END TEST MODE BAR ===== -->
-
 <header>
   <h1>Advent Run Calendar</h1>
   <p class="sub" id="countdown"></p>
@@ -283,20 +264,9 @@
     try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(d)); } catch (e) {}
   }
 
-  /* ===== TEST MODE LOGIC (remove with test feature) ===== */
-  const testToggle = document.getElementById('testToggle');
-  testToggle.checked = sessionStorage.getItem('adventRun2026_test') === '1';
-  testToggle.addEventListener('change', () => {
-    sessionStorage.setItem('adventRun2026_test', testToggle.checked ? '1' : '0');
-    render();
-  });
-  function testMode() { return testToggle.checked; }
-  /* ===== END TEST MODE LOGIC ===== */
-
   /* ---------- Date logic ---------- */
   function today() { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
   function canOpen(day) {
-    if (typeof testMode === 'function' && testMode()) return true; // TEST MODE bypass
     return today() >= new Date(YEAR, MONTH, day);
   }
 
